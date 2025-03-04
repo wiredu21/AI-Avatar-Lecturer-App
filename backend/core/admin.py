@@ -22,14 +22,13 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(Avatar)
 class AvatarAdmin(admin.ModelAdmin):
-    list_display = ('user', 'model_type', 'hair_color', 'skin_tone')
-    list_filter = ('model_type', 'hair_color', 'eye_color', 'skin_tone')
-    search_fields = ('user__username',)
+    list_display = ('name', 'image_url', 'description')
+    search_fields = ('name', 'description')
 
 @admin.register(UniversityContent)
 class UniversityContentAdmin(admin.ModelAdmin):
-    list_display = ('title', 'university', 'course', 'content_type', 'created_at')
-    list_filter = ('university', 'course', 'content_type', 'created_at')
+    list_display = ('title', 'university', 'course', 'content_type', 'date', 'created_at')
+    list_filter = ('university', 'course', 'content_type', 'date', 'created_at')
     search_fields = ('title', 'content')
     date_hierarchy = 'created_at'
 

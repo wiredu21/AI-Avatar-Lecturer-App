@@ -41,18 +41,13 @@ class Course(models.Model):
         return f"{self.code}: {self.title}"
 
 class Avatar(models.Model):
-    """Avatar model for user's virtual assistant customization"""
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='avatar')
-    model_type = models.CharField(max_length=100, default='default')
-    hair_color = models.CharField(max_length=50, default='brown')
-    eye_color = models.CharField(max_length=50, default='blue')
-    skin_tone = models.CharField(max_length=50, default='medium')
-    outfit = models.CharField(max_length=100, default='casual')
-    accessories = models.JSONField(default=dict, blank=True)
-    voice_type = models.CharField(max_length=50, default='neutral')
+    """Avatar model for user customization"""
+    name = models.CharField(max_length=100)
+    image_url = models.URLField()
+    description = models.TextField(blank=True)
     
     def __str__(self):
-        return f"{self.user.username}'s avatar"
+        return self.name
 
 class UniversityContent(models.Model):
     """Model to store scraped or manually added content about universities and courses"""
@@ -60,6 +55,7 @@ class UniversityContent(models.Model):
     course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, blank=True, related_name='content')
     title = models.CharField(max_length=255)
     content = models.TextField()
+    date = models.DateField(auto_now_add=True)
     url_source = models.URLField(blank=True, null=True)
     content_type = models.CharField(max_length=50, choices=[
         ('course_info', 'Course Information'),
