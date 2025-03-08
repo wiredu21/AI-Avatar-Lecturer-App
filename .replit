@@ -13,3 +13,30 @@ deploymentTarget = "cloudrun"
 [[ports]]
 localPort = 3000
 externalPort = 80
+
+[workflows]
+runButton = "Full Stack"
+
+[[workflows.workflow]]
+name = "Backend"
+author = 39136939
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd backend && python manage.py runserver 0.0.0.0:8000"
+
+[[workflows.workflow]]
+name = "Frontend"
+author = 39136939
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd frontend && npm start"
+
+[[workflows.workflow]]
+name = "Full Stack"
+author = 39136939
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd backend && python manage.py runserver 0.0.0.0:8000 & cd frontend && npm start"
