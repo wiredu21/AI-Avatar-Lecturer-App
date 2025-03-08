@@ -2,60 +2,54 @@
 import json
 import random
 
-# This is a placeholder for the actual AI integration
-# In a real implementation, this would connect to an LLM like Llama 3
 class AIResponseGenerator:
+    """
+    A placeholder class for AI response generation
+    In a production environment, this would connect to an LLM like Llama 3
+    """
+    
     def __init__(self):
-        # Simulated knowledge base for quick responses
-        self.knowledge_base = {
-            'greetings': [
+        # Initialize any necessary resources
+        self.responses = {
+            "greeting": [
                 "Hello! How can I help you with your studies today?",
                 "Hi there! What would you like to know about your courses?",
-                "Greetings! I'm VirtuAid, your AI study assistant.",
+                "Welcome to VirtuAId! I'm here to assist with your academic questions."
             ],
-            'course_info': [
-                "This course covers the fundamentals of the subject. Let me know if you need specific details.",
-                "The course is structured around weekly lectures and practical assignments.",
-                "This course has a final exam worth 60% of your grade, with coursework making up the remaining 40%.",
+            "course_info": [
+                "This course covers fundamental concepts in the subject area.",
+                "The course includes both theoretical and practical components.",
+                "This is a comprehensive introduction to the field."
             ],
-            'fallback': [
-                "I don't have that specific information yet. Can you ask something else?",
-                "I'm still learning about that topic. Let me help you with something else.",
-                "I don't have the answer to that question. Would you like to know about the course structure instead?",
+            "fallback": [
+                "I'm not sure about that. Could you please rephrase your question?",
+                "I don't have that information yet. Let me make a note to learn about it.",
+                "That's beyond my current knowledge. Would you like to know about something else?"
             ]
         }
     
-    def generate_response(self, message, course=None, context_data=None):
+    def get_response(self, user_message, context=None):
         """
-        Generate a response to the user's message.
+        Generate a response based on the user message and context
         
-        In a real implementation, this would:
-        1. Call an LLM with the message and context
-        2. Process the response
-        3. Return the formatted response
-        
-        This placeholder version just returns simulated responses.
+        Args:
+            user_message (str): The user's message/query
+            context (dict, optional): Additional context like course, university, etc.
+            
+        Returns:
+            str: The generated response
         """
-        # Simple keyword matching for demo purposes
-        message_lower = message.lower()
+        # In a real implementation, this would send the message to an LLM
+        # and return the response
         
-        if any(word in message_lower for word in ['hello', 'hi', 'hey', 'greetings']):
-            return random.choice(self.knowledge_base['greetings'])
-        
-        elif any(word in message_lower for word in ['course', 'class', 'lecture', 'syllabus', 'exam']):
-            return random.choice(self.knowledge_base['course_info'])
-        
+        # Simple keyword-based response for demonstration
+        user_message = user_message.lower()
+        if any(word in user_message for word in ["hello", "hi", "hey", "greetings"]):
+            return random.choice(self.responses["greeting"])
+        elif any(word in user_message for word in ["course", "class", "subject"]):
+            return random.choice(self.responses["course_info"])
         else:
-            return random.choice(self.knowledge_base['fallback'])
-        
-    def enrich_response_with_course_data(self, response, course_id):
-        """
-        Enhance the response with specific course information.
-        This would integrate with the database to fetch real course data.
-        """
-        # This is a placeholder - in a real implementation, 
-        # you would fetch course details from the database
-        return response
+            return random.choice(self.responses["fallback"])
 
 # Initialize a single instance to be used by views
 ai_response_generator = AIResponseGenerator()

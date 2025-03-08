@@ -70,6 +70,21 @@ class UniversityContent(models.Model):
         return self.title
 
 class ChatHistory(models.Model):
+    """Model to store chat history between users and the AI"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='chat_history')
+    course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, blank=True)
+    message = models.TextField()
+    response = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name_plural = "Chat Histories"
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"Chat with {self.user.username} - {self.created_at.strftime('%Y-%m-%d %H:%M')}"
+
+class ChatHistory(models.Model):
     """Model to store chat history between users and the AI assistant"""
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='chat_history')
     course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, blank=True, related_name='chat_sessions')

@@ -1,4 +1,3 @@
-
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -8,6 +7,12 @@ from .serializers import (
     UserSerializer, UniversitySerializer, CourseSerializer,
     UniversityContentSerializer
 )
+
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .models import University, Course
+from .serializers import UniversitySerializer, CourseSerializer
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
@@ -96,7 +101,7 @@ class ChatHistoryViewSet(viewsets.ModelViewSet):
             })
         
         return serializer
-        
+    
     @action(detail=False, methods=['get'])
     def by_course(self, request):
         course_id = request.query_params.get('course_id', None)
@@ -111,3 +116,34 @@ class ChatHistoryViewSet(viewsets.ModelViewSet):
             {"error": "course_id is required"}, 
             status=status.HTTP_400_BAD_REQUEST
         )
+
+
+class UniversityListAPIView(generics.ListAPIView):
+    """API view to list all universities"""
+    queryset = University.objects.all()
+    serializer_class = UniversitySerializer
+
+class CourseListAPIView(generics.ListAPIView):
+    """API view to list all courses, with optional filtering by university"""
+    serializer_class = CourseSerializer
+
+    def get_queryset(self):
+        queryset = Course.objects.all()
+        university_id = self.request.query_params.get('university_id')
+        if university_id:
+            queryset = queryset.filter(university_id=university_id)
+        return queryset
+
+class ChatAPIView(APIView):
+    """API view for chat interactions with the AI"""
+
+    def post(self, request, *args, **kwargs):
+        # This is a placeholder for AI chat functionality
+        # In a real implementation, this would connect to an LLM like Llama 3
+        user_message = request.data.get('message', '')
+        course_id = request.data.get('course_id')
+
+        # Placeholder response
+        ai_response = f"You asked about course {course_id}: {user_message}"
+
+        return Response({"response": ai_response}, status=status.HTTP_200_OK)
