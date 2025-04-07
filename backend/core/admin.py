@@ -4,7 +4,8 @@ from .models import User, University, Course, Avatar, UniversityContent, ChatHis
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'university', 'is_staff')
+    list_display = ('username', 'email', 'consent_given', 'data_retention_date', 'is_deleted', 'university', 'is_staff')
+    readonly_fields = ('data_retention_date',)
     search_fields = ('username', 'email')
     list_filter = ('university', 'is_staff', 'is_active')
 

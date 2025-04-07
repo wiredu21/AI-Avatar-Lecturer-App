@@ -1,0 +1,123 @@
+/* Full-width chat container */
+.chat-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mobile view adjustments */
+@media (max-width: 768px) {
+  .chat-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 80%;
+    height: 100%;
+    z-index: 50;
+    background-color: white;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .chat-sidebar.open {
+    transform: translateX(0);
+  }
+}
+
+/* Desktop view - custom width for the message thread */
+@media (min-width: 769px) {
+  .w-3\/10 {
+    width: 30%;
+  }
+}
+
+/* Animated gradient background */
+.bg-animated-gradient {
+  background: linear-gradient(-45deg, #38b2ac, #805ad5, #4299e1, #38b2ac);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Floating animation */
+.floating {
+  animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Pulse animation */
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Code block styling */
+.code-block {
+  background-color: #f5f0ff;
+  border-radius: 0.375rem;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  overflow-x: auto;
+  border: 1px solid #d8b4fe;
+}
+
+.code-block code {
+  color: #6d28d9;
+  font-family: monospace;
+}
+
+/* Message bubble styling */
+.message-bubble-user {
+  position: relative;
+  background: linear-gradient(to right, #0d9488, #0f766e);
+  color: white;
+  border-radius: 1rem 1rem 0 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.message-bubble-ai {
+  position: relative;
+  background: linear-gradient(to right, #8b5cf6, #7c3aed);
+  color: white;
+  border-radius: 1rem 1rem 1rem 0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+

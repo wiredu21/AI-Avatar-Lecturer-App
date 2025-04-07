@@ -1,10 +1,62 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
+from .encryption import encrypt_data, decrypt_data
 
 class User(AbstractUser):
     """Extended User model with additional fields for VirtuAid"""
-    bio = models.TextField(blank=True)
+    # GDPR Fields
+    consent_given = models.BooleanField(default=False)
+    data_retention_date = models.DateTimeField(null=True, blank=True)
+    is_deleted = models.BooleanField(default=False)  # Soft delete flag
+    
+    # Email verification
+    email_verified = models.BooleanField(default=False)
+
+    # Encrypted Fields
+    _encrypted_email = models.TextField(blank=True, null=True)
+    _encrypted_bio = models.TextField(blank=True, null=True)
+
+    # Override save() to set data retention date and handle encryption
+    def save(self, *args, **kwargs):
+        if self.consent_given and not self.data_retention_date:
+            self.data_retention_date = timezone.now() + timezone.timedelta(days=365)
+        
+        # Encrypt sensitive fields before saving
+        if hasattr(self, 'email') and self.email:
+            self._encrypted_email = encrypt_data(self.email)
+            self.email = ""  # Clear plaintext email
+        if hasattr(self, 'bio') and self.bio:
+            self._encrypted_bio = encrypt_data(self.bio)
+            self.bio = ""  # Clear plaintext bio
+            
+        super().save(*args, **kwargs)
+
+    # Encryption/Decryption Methods
+    @property
+    def email(self):
+        if self._encrypted_email:
+            return decrypt_data(self._encrypted_email)
+        return super().email
+
+    @email.setter
+    def email(self, value):
+        self._encrypted_email = encrypt_data(value) if value else None
+        super().email = ""  # Clear plaintext email
+
+    @property
+    def bio(self):
+        if self._encrypted_bio:
+            return decrypt_data(self._encrypted_bio)
+        return super().bio
+
+    @bio.setter
+    def bio(self, value):
+        self._encrypted_bio = encrypt_data(value) if value else None
+        super().bio = ""  # Clear plaintext bio
+        
+    # Additional fields
     university = models.ForeignKey('University', on_delete=models.SET_NULL, null=True, blank=True, related_name='students')
     
     def __str__(self):
@@ -73,8 +125,8 @@ class ChatHistory(models.Model):
     """Model to store chat history between users and the AI"""
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='chat_history')
     course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, blank=True)
-    message = models.TextField()
-    response = models.TextField()
+    _encrypted_message = models.TextField()
+    _encrypted_response = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:
@@ -84,19 +136,28 @@ class ChatHistory(models.Model):
     def __str__(self):
         return f"Chat with {self.user.username} - {self.created_at.strftime('%Y-%m-%d %H:%M')}"
 
-class ChatHistory(models.Model):
-    """Model to store chat history between users and the AI assistant"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='chat_history')
-    course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, blank=True, related_name='chat_sessions')
-    message = models.TextField()
-    is_user_message = models.BooleanField(default=True)
-    response = models.TextField(blank=True)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    context_data = models.JSONField(default=dict, blank=True)
-    
-    class Meta:
-        verbose_name_plural = "Chat histories"
-        ordering = ['timestamp']
-    
-    def __str__(self):
-        return f"{self.user.username} - {self.timestamp.strftime('%Y-%m-%d %H:%M')}"
+    @property
+    def message(self):
+        return decrypt_data(self._encrypted_message)
+
+    @message.setter
+    def message(self, value):
+        self._encrypted_message = encrypt_data(value) if value else None
+
+    @property
+    def response(self):
+        return decrypt_data(self._encrypted_response)
+
+    @response.setter
+    def response(self, value):
+        self._encrypted_response = encrypt_data(value) if value else None
+
+    def save(self, *args, **kwargs):
+        # Ensure message and response are encrypted before saving
+        if hasattr(self, 'message') and self.message:
+            self._encrypted_message = encrypt_data(self.message)
+        if hasattr(self, 'response') and self.response:
+            self._encrypted_response = encrypt_data(self.response)
+        super().save(*args, **kwargs)
+
+

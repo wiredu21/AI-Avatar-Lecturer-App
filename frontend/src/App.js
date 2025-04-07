@@ -1,59 +1,34 @@
-
-import React, { useState } from 'react';
-import './App.css';
-import Chat from './components/Chat';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LandingPage from './components/landing-page/LandingPage';
+import LoginPage from './components/login/LoginPage';
+import SignupPage from './components/signup/SignupPage';
+import AboutYouPage from './components/about-you/AboutYouPage';
+import Dashboard from './components/dashboard/Dashboard';
+import Courses from './components/dashboard/Courses';
+import Insights from './components/dashboard/Insights';
+import Settings from './components/dashboard/Settings';
+import Chat from './components/dashboard/Chat';
+import VerifyEmail from './components/verify-email/VerifyEmail';
+import './index.css';
 
 function App() {
-  // Mock state - would come from authentication and course selection in a real app
-  const [selectedCourse, setSelectedCourse] = useState(null);
-  const [userId, setUserId] = useState(1); // Mock user ID
-  
-  // Mock courses - would come from API in a real app
-  const courses = [
-    { id: 1, code: 'CS101', title: 'Introduction to Computer Science' },
-    { id: 2, code: 'MATH201', title: 'Advanced Calculus' },
-    { id: 3, code: 'ENG102', title: 'English Composition' }
-  ];
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>VirtuAid</h1>
-        <p>Your AI University Assistant</p>
-      </header>
-      
-      <main className="App-main">
-        <div className="course-selector">
-          <h2>Select a Course</h2>
-          <div className="course-list">
-            {courses.map(course => (
-              <button
-                key={course.id}
-                className={`course-button ${selectedCourse === course.id ? 'active' : ''}`}
-                onClick={() => setSelectedCourse(course.id)}
-              >
-                {course.code}: {course.title}
-              </button>
-            ))}
-          </div>
-        </div>
-        
-        {selectedCourse ? (
-          <div className="chat-section">
-            <h2>Chat with VirtuAid</h2>
-            <Chat courseId={selectedCourse} userId={userId} />
-          </div>
-        ) : (
-          <div className="select-course-prompt">
-            <p>Please select a course to start chatting</p>
-          </div>
-        )}
-      </main>
-      
-      <footer className="App-footer">
-        <p>&copy; 2023 VirtuAid - AI University Assistant</p>
-      </footer>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/about-you" element={<AboutYouPage />} />
+        <Route path="/verify-email/:uidb64/:token" element={<VerifyEmail />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/courses" element={<Courses />} />
+        <Route path="/dashboard/insights" element={<Insights />} />
+        <Route path="/dashboard/settings" element={<Settings />} />
+        <Route path="/dashboard/chat" element={<Chat />} />
+        {/* Add more routes as needed */}
+      </Routes>
+    </Router>
   );
 }
 

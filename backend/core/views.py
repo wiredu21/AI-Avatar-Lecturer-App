@@ -1,16 +1,18 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from django.contrib.auth import login, authenticate
 from .models import ChatHistory, User, University, Course, UniversityContent
 from .serializers import (
     ChatHistorySerializer, ChatHistoryCreateSerializer,
     UserSerializer, UniversitySerializer, CourseSerializer,
-    UniversityContentSerializer
+    UniversityContentSerializer, UserRegistrationSerializer, UserLoginSerializer
 )
+from .email_utils import send_verification_email, verify_user_email
 
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from .models import University, Course
 from .serializers import UniversitySerializer, CourseSerializer
 
@@ -147,3 +149,69 @@ class ChatAPIView(APIView):
         ai_response = f"You asked about course {course_id}: {user_message}"
 
         return Response({"response": ai_response}, status=status.HTTP_200_OK)
+
+class UserRegistrationView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        serializer = UserRegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            # Create user but set as inactive until email is verified
+            user = serializer.save()
+            user.is_active = False  # Set inactive until email verified
+            user.save()
+            
+            # Send verification email
+            email_sent = send_verification_email(user, request)
+            
+            if email_sent:
+                return Response({
+                    "message": "Registration successful. Please check your email to verify your account.",
+                    "user": UserSerializer(user).data
+                }, status=status.HTTP_201_CREATED)
+            else:
+                # If email sending fails, still create account but inform user
+                return Response({
+                    "message": "Registration successful but verification email could not be sent. Please contact support.",
+                    "user": UserSerializer(user).data
+                }, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class EmailVerificationView(APIView):
+    permission_classes = [permissions.AllowAny]
+    
+    def get(self, request, uidb64, token):
+        """Verify user's email with token"""
+        user = verify_user_email(uidb64, token)
+        
+        if user:
+            # Set email as verified
+            user.email_verified = True
+            user.save()
+            
+            # Log the user in
+            login(request, user)
+            
+            return Response({
+                "message": "Email verified successfully. You are now logged in.",
+                "user": UserSerializer(user).data
+            }, status=status.HTTP_200_OK)
+        
+        return Response({
+            "message": "Invalid or expired verification link."
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+class UserLoginView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        serializer = UserLoginSerializer(data=request.data)
+        if serializer.is_valid():
+            user = authenticate(
+                username=serializer.validated_data['username'],
+                password=serializer.validated_data['password']
+            )
+            login(request, user)
+            return Response(UserSerializer(user).data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

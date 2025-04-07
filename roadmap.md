@@ -1,54 +1,97 @@
 # VirtuAId Roadmap
 
-## Phase 1: MVP Development (Weeks 1-6)
-### Backend Setup
-- [ ] Set up Django project and MySQL database.  
-- [ ] Create models: `User`, `University`, `Course`, `ChatHistory`, `UniversityContent`.  
-- [ ] Implement DRF API endpoints for authentication and chat.  
-- [ ] Integrate Celery for automated web scraping tasks.  
-
-### Frontend Development
-- [ ] Build React components: Login, Signup, Dashboard, Chat Interface.  
-- [ ] Add avatar customization UI with Three.js animations.  
-- [ ] Connect frontend to Django API using Axios.  
-
-### AI Integration
-- [ ] Host Llama 3 locally and create API wrapper for responses.  
-- [ ] Implement prompt engineering to restrict AI responses to course/university topics.  
-
-### Testing & Deployment
-- [ ] Write unit tests for Django models and API endpoints.  
-- [ ] Deploy frontend to Vercel and backend to Render/AWS.  
-- [ ] Performance testing with Locust/JMeter.  
+## Phase 1: Planning & Setup (Q3 2025)
+- **Finalise MVP Scope**
+  - [x] Define core features (user auth, avatar customisation, AI chat, web scraping).
+  - [x] Prioritise University of Northampton and Computer Science for MVP.
+- **Tech Stack Setup**
+  - [x] Set up Django backend with MySQL.
+  - [x] Initialise React frontend with Tailwind CSS.
+  - [x] Configure Llama 3 for local development.
 
 ---
 
-## Phase 2: Post-MVP Enhancements (Weeks 7-12)
+## Phase 2: MVP Development (Q3-Q4 2025)
+### Milestone 1: User Authentication & Onboarding
+- [ ] **User Registration/Login**
+  - Implement email/password auth with Django’s `django.contrib.auth`.
+  - Add email verification via SendGrid.
+- [ ] **Onboarding Flow**
+  - Build "About You" page (personal details form).
+  - Create university/course selection dropdowns (pre-populated with MVP data).
+
+### Milestone 2: AI Integration
+- [ ] **Llama 3 API Setup**
+  - Host Llama 3 locally.
+  - Build DRF endpoints for query handling.
+- [ ] **Response Validation**
+  - Add backend filtering for off-topic queries.
+  - Implement fallback messages.
+
+### Milestone 3: Content Delivery
+- [ ] **Web Scraping Pipeline**
+  - Build scrapers for University of Northampton’s news/events pages (BeautifulSoup/Selenium).
+  - Schedule daily scraping tasks with Celery.
+- [ ] **Database Integration**
+  - Store scraped content in `UniversityContent` table.
+
+### Milestone 4: Avatar & Chat Interface
+- [ ] **Avatar Customisation**
+  - Integrate 8 pre-built avatars (4 male/4 female).
+  - Add voice selection (male/female) with Coqui TTS.
+- [ ] **Chat UI**
+  - Build text/voice input interface (Web Speech API).
+  - Display responses as text + synthesised speech.
+
+### Milestone 5: Dashboard & Profile
+- [ ] **Dashboard**
+  - Develop sidebar navigation (Chat History, University Updates).
+  - Add real-time avatar animations (Lottie/Rhubarb Lip Sync).
+- [ ] **Profile Management**
+  - Enable GDPR-compliant data edits/deletion.
+
+---
+
+## Phase 3: Post-MVP (Q4 2023-Q1 2026)
+### Testing & Deployment
+- [ ] **Performance Testing**
+  - Use Locust/JMeter to ensure <2s response times.
+- [ ] **Security Audits**
+  - Implement data encryption and GDPR compliance checks.
+- [ ] **Deployment**
+  - Host on Vercel.
+  - Set up CI/CD with GitHub Actions.
+
+### Initial User Feedback
+- [ ] **Closed Beta**
+  - Test with 50 University of Northampton Computer Science students.
+  - Collect feedback on response accuracy and UX.
+
+---
+
+## Phase 4: Future Enhancements (2026+)
 ### Feature Expansion
-- [ ] Add third-party authentication (Google, Microsoft).  
-- [ ] Expand university/course options (e.g., 5 more UK universities).  
-- [ ] Implement advanced avatar lip-syncing with Rhubarb Lip Sync.  
+- [ ] **Multi-University Support**
+  - Add 5+ UK universities.
+- [ ] **Course Expansion**
+  - Include 10+ courses (e.g., Engineering, Business).
+- [ ] **Advanced AI**
+  - Fine-tune Llama 3 for academic contexts.
+  - Add LMS integration (e.g., Moodle).
+
+### Monetisation
+- [ ] **Subscription Tiers**
+  - Launch free (basic) and premium (advanced avatars, priority support) tiers.
 
 ### Scalability
-- [ ] Migrate Llama 3 to cloud hosting (AWS SageMaker/Hugging Face).  
-- [ ] Optimize database queries with indexing/caching.  
-
-### User Experience
-- [ ] Add multilingual support for voice input/output.  
-- [ ] Introduce a mobile-responsive design.  
+- [ ] **Cloud Migration**
+  - Host Llama 3 on AWS SageMaker.
+  - Scale MySQL to AWS RDS.
 
 ---
 
-## Phase 3: Long-Term Goals (Months 3-6)
-### Advanced Features
-- [ ] Integrate with learning management systems (e.g., Moodle).  
-- [ ] Build admin dashboard for content moderation and analytics.  
-- [ ] Add peer-to-peer study group functionality.  
-
-### Monetization
-- [ ] Introduce premium tiers (e.g., advanced avatars, priority support).  
-- [ ] Partner with universities for sponsored subscriptions.  
-
-### Community & Compliance
-- [ ] Publish developer API for third-party integrations.  
-- [ ] Achieve ISO 27001 certification for data security.  
+## Key Metrics
+- **Q3 2023:** MVP feature completion.
+- **Q4 2023:** 90% response accuracy for Computer Science queries.
+- **Q1 2024:** 1,000 active users.
+- **2024:** Expand to 5 universities and 10 courses.
