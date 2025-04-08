@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'core',
+    'ai',
 ]
 
 MIDDLEWARE = [
@@ -131,8 +132,25 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'core.User'
 
 # CORS settings
-CORS_ALLOW_ALL_ORIGINS = True  # For development only, set specific origins in production
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = False  # More restrictive
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+]
+CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
+
+# CSRF settings
+CSRF_USE_SESSIONS = True
+CSRF_COOKIE_HTTPONLY = True
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'http://127.0.0.1:3000']
+
+# Session settings
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SECURE = False  # Set to True in production
+SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_SAVE_EVERY_REQUEST = True  # Ensure session is saved on every request
 
 # REST Framework settings
 REST_FRAMEWORK = {
@@ -157,4 +175,13 @@ EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY', '')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@virtuaid.com')
 
 # Frontend URL for verification links
-FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000') 
+FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000')
+
+# AI Settings
+AI_SETTINGS = {
+    'OLLAMA_API_URL': os.getenv('OLLAMA_API_URL', 'http://localhost:11434'),
+    'OLLAMA_MODEL': os.getenv('OLLAMA_MODEL', 'llama3'),
+    'MAX_LENGTH': int(os.getenv('AI_MAX_LENGTH', '512')),
+    'TEMPERATURE': float(os.getenv('AI_TEMPERATURE', '0.7')),
+    'TOP_P': float(os.getenv('AI_TOP_P', '0.9')),
+} 

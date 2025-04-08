@@ -11,6 +11,12 @@ cryptography==42.0.4
 celery==5.3.6
 redis==5.0.1
 
+# AI Integration
+requests==2.31.0
+transformers==4.38.2
+torch==2.2.1
+accelerate==0.27.2
+
 # Development Tools
 python-dotenv==1.0.0
 pytest==8.0.2

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
@@ -28,6 +28,21 @@ export default function SignupPage() {
 
     const password = watch("password");
 
+    // Fetch CSRF token when component mounts
+    useEffect(() => {
+        const fetchCsrfToken = async () => {
+            try {
+                console.log('Fetching CSRF token...');
+                const response = await api.get('/api/auth/csrf/');
+                console.log('CSRF token fetched successfully');
+            } catch (error) {
+                console.error('Error fetching CSRF token:', error);
+            }
+        };
+        
+        fetchCsrfToken();
+    }, []);
+
     const checkPasswordStrength = (password) => {
         let strength = 0;
         if (password.length >= 8) strength += 1;
@@ -51,18 +66,26 @@ export default function SignupPage() {
         return "bg-gray-200";
     };
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (data, e) => {
+        console.log('Starting form submission...');
+        e.preventDefault();
         setIsLoading(true);
         setErrorMessage("");
 
         try {
-            console.log('Attempting to submit form data:', data);
+            console.log('Attempting to submit:', {
+                email: data.email,
+                username: data.email.split('@')[0],
+                password: 'HIDDEN'
+            });
+            console.log('Making API call to /api/auth/register/');
+            
             // Send registration request to API
             const response = await api.post('/api/auth/register/', {
                 username: data.email.split('@')[0], // generate username from email
                 email: data.email,
                 password: data.password,
-                consent_given: data.gdprConsent
+                confirmPassword: data.confirmPassword
             });
 
             console.log('Registration API response:', response);
@@ -159,7 +182,7 @@ export default function SignupPage() {
                     </div>
 
                     {/* Form fields */}
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 text-center">
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 text-center" noValidate>
                         {/* Email Field */}
                         <div className="space-y-2">
                             <Label htmlFor="email" className="text-center block">
@@ -198,8 +221,11 @@ export default function SignupPage() {
                                             message: "Password must be at least 8 characters",
                                         },
                                     })}
+                                    onChange={(e) => {
+                                        register("password").onChange(e);
+                                        checkPasswordStrength(e.target.value);
+                                    }}
                                     className={`text-center ${errors.password ? "border-red-500 focus-visible:ring-red-500" : ""}`}
-                                    onChange={(e) => checkPasswordStrength(e.target.value)}
                                 />
                                 <button
                                     type="button"
@@ -249,7 +275,8 @@ export default function SignupPage() {
                                     type={showConfirmPassword ? "text" : "password"}
                                     placeholder="Confirm your password"
                                     {...register("confirmPassword", {
-                                        validate: (value) => value === password || "The passwords do not match",
+                                        required: "Please confirm your password",
+                                        validate: value => value === watch("password") || "Passwords do not match"
                                     })}
                                     className={`text-center ${errors.confirmPassword ? "border-red-500 focus-visible:ring-red-500" : ""}`}
                                 />
@@ -276,26 +303,33 @@ export default function SignupPage() {
                             {errors.confirmPassword && <p className="text-sm text-red-500">{errors.confirmPassword.message}</p>}
                         </div>
 
-                        {/* GDPR Consent */}
-                        <div className="flex items-start space-x-2">
+                        {/* Terms Checkbox */}
+                        <div className="flex items-center justify-center space-x-2">
                             <Checkbox
-                                id="gdprConsent"
-                                {...register("gdprConsent", {
-                                    required: "You must accept the terms and privacy policy",
+                                id="terms"
+                                {...register("terms", {
+                                    required: "You must accept the terms and privacy policy"
                                 })}
                             />
-                            <Label htmlFor="gdprConsent" className="text-sm leading-tight">
+                            <Label htmlFor="terms" className="text-sm">
                                 I agree to the{" "}
-                                <Link to="/terms" className="text-teal-500 underline hover:text-teal-600">
+                                <Link to="/terms" className="text-teal-500 hover:text-teal-600">
                                     Terms of Service
                                 </Link>{" "}
                                 and{" "}
-                                <Link to="/privacy" className="text-teal-500 underline hover:text-teal-600">
+                                <Link to="/privacy" className="text-teal-500 hover:text-teal-600">
                                     Privacy Policy
                                 </Link>
                             </Label>
                         </div>
-                        {errors.gdprConsent && <p className="text-sm text-red-500">{errors.gdprConsent.message}</p>}
+                        {errors.terms && <p className="text-sm text-red-500 text-center">{errors.terms.message}</p>}
+
+                        {/* Error Message */}
+                        {errorMessage && (
+                            <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                                {errorMessage}
+                            </div>
+                        )}
 
                         {/* Submit Button */}
                         <Button

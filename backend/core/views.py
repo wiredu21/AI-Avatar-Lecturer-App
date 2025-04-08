@@ -16,6 +16,10 @@ from rest_framework.response import Response
 from .models import University, Course
 from .serializers import UniversitySerializer, CourseSerializer
 
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils.decorators import method_decorator
+from django.middleware.csrf import get_token
+
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -150,31 +154,38 @@ class ChatAPIView(APIView):
 
         return Response({"response": ai_response}, status=status.HTTP_200_OK)
 
+@method_decorator(ensure_csrf_cookie, name='dispatch')
 class UserRegistrationView(APIView):
     permission_classes = [permissions.AllowAny]
+    authentication_classes = []  # No authentication required for registration
 
     def post(self, request):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
-            # Create user but set as inactive until email is verified
-            user = serializer.save()
-            user.is_active = False  # Set inactive until email verified
-            user.save()
-            
-            # Send verification email
-            email_sent = send_verification_email(user, request)
-            
-            if email_sent:
+            try:
+                # Create user but set as inactive until email is verified
+                user = serializer.save()
+                user.is_active = False  # Set inactive until email verified
+                user.save()
+                
+                # Send verification email
+                email_sent = send_verification_email(user, request)
+                
+                if email_sent:
+                    return Response({
+                        "message": "Registration successful. Please check your email to verify your account.",
+                        "user": UserSerializer(user).data
+                    }, status=status.HTTP_201_CREATED)
+                else:
+                    # If email sending fails, still create account but inform user
+                    return Response({
+                        "message": "Registration successful but verification email could not be sent. Please contact support.",
+                        "user": UserSerializer(user).data
+                    }, status=status.HTTP_201_CREATED)
+            except Exception as e:
                 return Response({
-                    "message": "Registration successful. Please check your email to verify your account.",
-                    "user": UserSerializer(user).data
-                }, status=status.HTTP_201_CREATED)
-            else:
-                # If email sending fails, still create account but inform user
-                return Response({
-                    "message": "Registration successful but verification email could not be sent. Please contact support.",
-                    "user": UserSerializer(user).data
-                }, status=status.HTTP_201_CREATED)
+                    "message": f"Registration failed: {str(e)}",
+                }, status=status.HTTP_400_BAD_REQUEST)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -215,3 +226,13 @@ class UserLoginView(APIView):
             login(request, user)
             return Response(UserSerializer(user).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@method_decorator(ensure_csrf_cookie, name='dispatch')
+class CsrfTokenView(APIView):
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = []
+
+    def get(self, request):
+        # This will force Django to send the CSRF token in the session
+        csrf_token = get_token(request)
+        return Response({'csrfToken': csrf_token})

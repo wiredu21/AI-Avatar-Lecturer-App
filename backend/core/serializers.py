@@ -52,19 +52,19 @@ class ChatHistoryCreateSerializer(serializers.ModelSerializer):
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
-    confirm_password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
+    confirmPassword = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'confirm_password', 'university']
+        fields = ['username', 'email', 'password', 'confirmPassword']
 
     def validate(self, attrs):
-        if attrs['password'] != attrs['confirm_password']:
+        if attrs['password'] != attrs['confirmPassword']:
             raise serializers.ValidationError({"password": "Password fields didn't match."})
         return attrs
 
     def create(self, validated_data):
-        validated_data.pop('confirm_password')
+        validated_data.pop('confirmPassword')
         user = User.objects.create_user(**validated_data)
         return user
 
