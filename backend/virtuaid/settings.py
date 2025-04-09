@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'core',
     'ai',
+    'content',  # Add the new content app
 ]
 
 MIDDLEWARE = [
@@ -184,4 +185,19 @@ AI_SETTINGS = {
     'MAX_LENGTH': int(os.getenv('AI_MAX_LENGTH', '512')),
     'TEMPERATURE': float(os.getenv('AI_TEMPERATURE', '0.7')),
     'TOP_P': float(os.getenv('AI_TOP_P', '0.9')),
+}
+
+# Celery Configuration
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379/0')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'redis://localhost:6379/0')
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
+
+# Scraping Settings
+SCRAPING_SETTINGS = {
+    'USER_AGENT': 'VirtuAId Bot (+https://virtuaid.com)',
+    'TIMEOUT': 30,  # seconds
+    'MAX_ITEMS_PER_SOURCE': 20,
 } 
