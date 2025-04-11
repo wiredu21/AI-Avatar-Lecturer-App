@@ -22,15 +22,6 @@ class User(AbstractUser):
     def save(self, *args, **kwargs):
         if self.consent_given and not self.data_retention_date:
             self.data_retention_date = timezone.now() + timezone.timedelta(days=365)
-        
-        # Encrypt sensitive fields before saving
-        if hasattr(self, 'email') and self.email:
-            self._encrypted_email = encrypt_data(self.email)
-            self.email = ""  # Clear plaintext email
-        if hasattr(self, 'bio') and self.bio:
-            self._encrypted_bio = encrypt_data(self.bio)
-            self.bio = ""  # Clear plaintext bio
-            
         super().save(*args, **kwargs)
 
     # Encryption/Decryption Methods
@@ -38,24 +29,28 @@ class User(AbstractUser):
     def email(self):
         if self._encrypted_email:
             return decrypt_data(self._encrypted_email)
-        return super().email
-
+        return ""
+    
     @email.setter
     def email(self, value):
-        self._encrypted_email = encrypt_data(value) if value else None
-        super().email = ""  # Clear plaintext email
+        if value:
+            self._encrypted_email = encrypt_data(value)
+        else:
+            self._encrypted_email = None
 
     @property
     def bio(self):
         if self._encrypted_bio:
             return decrypt_data(self._encrypted_bio)
-        return super().bio
+        return ""
 
     @bio.setter
     def bio(self, value):
-        self._encrypted_bio = encrypt_data(value) if value else None
-        super().bio = ""  # Clear plaintext bio
-        
+        if value:
+            self._encrypted_bio = encrypt_data(value)
+        else:
+            self._encrypted_bio = None
+    
     # Additional fields
     university = models.ForeignKey('University', on_delete=models.SET_NULL, null=True, blank=True, related_name='students')
     
