@@ -11,6 +11,7 @@ import Step1PersonalInfo from "./Step1PersonalInfo";
 import Step2AcademicDetails from "./Step2AcademicDetails";
 import Step3AvatarCustomization from "./Step3AvatarCustomization";
 import iconImage from "../../assets/images/icon.png";
+import { userApi } from "../../utils/axios";
 
 // Step messages for the avatar chat bubble
 const stepMessages = [
@@ -24,6 +25,7 @@ export default function AboutYouPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const navigate = useNavigate();
+    const [validationErrors, setValidationErrors] = useState({});
 
     const {
         register,
@@ -40,10 +42,11 @@ export default function AboutYouPage() {
             gender: "",
             nationality: "",
             academicLevel: "",
+            courseYear: "",
             university: "",
             course: "",
             avatar: 0,
-            voiceGender: "female",
+            voiceId: "",
         },
     });
 
@@ -66,16 +69,67 @@ export default function AboutYouPage() {
         let isValid = true;
 
         if (step === 1) {
+            // Check firstName (required, min 3 chars, letters only)
             if (!watch("firstName")) {
                 stepErrors.firstName = "First name is required";
                 isValid = false;
+            } else if (watch("firstName").length < 3) {
+                stepErrors.firstName = "First name must be at least 3 characters";
+                isValid = false;
+            } else if (!/^[A-Za-z\s]+$/.test(watch("firstName"))) {
+                stepErrors.firstName = "First name must contain only letters";
+                isValid = false;
             }
+            
+            // Check surname (required, min 3 chars, letters only)
             if (!watch("surname")) {
                 stepErrors.surname = "Surname is required";
                 isValid = false;
+            } else if (watch("surname").length < 3) {
+                stepErrors.surname = "Surname must be at least 3 characters";
+                isValid = false;
+            } else if (!/^[A-Za-z\s]+$/.test(watch("surname"))) {
+                stepErrors.surname = "Surname must contain only letters";
+                isValid = false;
             }
+            
+            // Check dateOfBirth (required and age >= 18)
+            if (!watch("dateOfBirth")) {
+                stepErrors.dateOfBirth = "Date of birth is required";
+                isValid = false;
+            } else {
+                const dob = new Date(watch("dateOfBirth"));
+                const today = new Date();
+                const eighteenYearsAgo = new Date(today);
+                eighteenYearsAgo.setFullYear(today.getFullYear() - 18);
+                
+                if (dob > eighteenYearsAgo) {
+                    stepErrors.dateOfBirth = "You must be at least 18 years old";
+                    isValid = false;
+                }
+            }
+            
+            // Check gender (required)
+            if (!watch("gender")) {
+                stepErrors.gender = "Please select your gender";
+                isValid = false;
+            }
+            
+            // Check nationality (required)
+            if (!watch("nationality")) {
+                stepErrors.nationality = "Please select your nationality";
+                isValid = false;
+            }
+            
+            // Check academicLevel (required)
             if (!watch("academicLevel")) {
                 stepErrors.academicLevel = "Academic level is required";
+                isValid = false;
+            }
+            
+            // Check courseYear (required)
+            if (!watch("courseYear")) {
+                stepErrors.courseYear = "Please select your course year";
                 isValid = false;
             }
         } else if (step === 2) {
@@ -92,13 +146,19 @@ export default function AboutYouPage() {
                 stepErrors.avatar = "Please select an avatar";
                 isValid = false;
             }
+            if (!watch("voiceId")) {
+                stepErrors.voiceId = "Please select a specific voice for your avatar";
+                isValid = false;
+            }
         }
 
+        setValidationErrors(stepErrors);
         return isValid;
     };
 
     const handleNext = () => {
         if (validateStep(currentStep)) {
+            setValidationErrors({});
             if (currentStep < 3) {
                 setCurrentStep(currentStep + 1);
             } else {
@@ -113,46 +173,119 @@ export default function AboutYouPage() {
         }
     };
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
+        // Validate that both avatar and voice are selected before proceeding
+        if (!data.avatar || !data.voiceId) {
+            const errors = {};
+            if (!data.avatar) errors.avatar = "Please select an avatar";
+            if (!data.voiceId) errors.voiceId = "Please select a specific voice for your avatar";
+            setValidationErrors(errors);
+            return; // Don't proceed if validation fails
+        }
+
         setIsLoading(true);
 
-        // Simulate API call
-        setTimeout(() => {
-            // In a real implementation, save user profile to backend
-            // const response = await fetch('/api/user/profile', {
-            //    method: 'POST',
-            //    headers: { 
-            //        'Content-Type': 'application/json',
-            //        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-            //    },
-            //    body: JSON.stringify(data)
-            // });
+        try {
+            // Log the exact data being sent to the API
+            const profileData = {
+                first_name: data.firstName,
+                surname: data.surname,
+                date_of_birth: data.dateOfBirth,
+                gender: data.gender,
+                nationality: data.nationality,
+                // Send university as a string - the backend will handle lookup
+                university: data.university,
+                course: data.course,
+                course_year: data.courseYear,
+                academic_level: data.academicLevel,
+                // Ensure avatar is an integer
+                avatar: parseInt(data.avatar) || 0,
+                voice_id: data.voiceId
+            };
+            
+            console.log("[DEBUG] AboutYouPage - Data being sent to API:", {
+                rawData: profileData,
+                dateType: typeof data.dateOfBirth,
+                universityType: typeof data.university,
+                avatarType: typeof data.avatar,
+                parsedAvatar: parseInt(data.avatar) || 0
+            });
+            
+            // Save profile to database and await completion
+            const profileResponse = await userApi.saveUserProfile(profileData);
 
-            // Save preferences to localStorage
+            console.log("Profile saved to database:", profileResponse);
+
+            // Also update localStorage for backup
             localStorage.setItem("userProfile", JSON.stringify(data));
-            
-            // Mark that the user has completed onboarding
             localStorage.setItem("isFirstTimeLogin", "false");
+            localStorage.setItem("hasCompletedOnboarding", "true");
             
-            console.log("Profile data submitted:", data);
+            // Set a flag in sessionStorage to indicate we just completed onboarding
+            // This will be used to bypass the onboarding check in DashboardLayout
+            sessionStorage.setItem("justCompletedOnboarding", "true");
+
+            console.log("[DEBUG] AboutYouPage - Flag set:", {
+                sessionFlag: sessionStorage.getItem("justCompletedOnboarding"),
+                localStorageHasCompleted: localStorage.getItem("hasCompletedOnboarding"),
+                localStorageFirstTime: localStorage.getItem("isFirstTimeLogin")
+            });
+
+            console.log("Onboarding completed and flag set!");
             setShowSuccessModal(true);
+        } catch (error) {
+            console.error("Error saving profile:", error);
+            // Show validation errors if returned from the server
+            if (error.response?.data) {
+                console.log("Server validation errors:", error.response.data);
+                setValidationErrors(error.response.data);
+            } else {
+                // Fallback to localStorage-only if API fails
+                localStorage.setItem("userProfile", JSON.stringify(data));
+                localStorage.setItem("isFirstTimeLogin", "false");
+                localStorage.setItem("hasCompletedOnboarding", "true");
+                sessionStorage.setItem("justCompletedOnboarding", "true");
+                setShowSuccessModal(true);
+            }
+        } finally {
             setIsLoading(false);
-        }, 1500);
+        }
     };
 
     const handleContinue = () => {
-        navigate("/dashboard");
+        console.log("[DEBUG] AboutYouPage - Continue button clicked");
+        console.log("[DEBUG] AboutYouPage - Before timeout, flags:", {
+            sessionFlag: sessionStorage.getItem("justCompletedOnboarding"),
+            localStorageHasCompleted: localStorage.getItem("hasCompletedOnboarding")
+        });
+        
+        // We add a small delay before navigating to ensure all state changes have been processed
+        setTimeout(() => {
+            console.log("[DEBUG] AboutYouPage - After timeout, navigating to dashboard");
+            navigate("/dashboard");
+        }, 300);
     };
 
     // Render the current step
     const renderStep = () => {
         switch (currentStep) {
             case 1:
-                return <Step1PersonalInfo control={control} register={register} errors={errors} />;
+                return <Step1PersonalInfo 
+                    control={control} 
+                    register={register} 
+                    errors={{...errors, ...validationErrors}} 
+                />;
             case 2:
-                return <Step2AcademicDetails control={control} watch={watch} errors={errors} />;
+                return <Step2AcademicDetails 
+                    control={control} 
+                    watch={watch} 
+                    errors={{...errors, ...validationErrors}} 
+                />;
             case 3:
-                return <Step3AvatarCustomization control={control} errors={errors} />;
+                return <Step3AvatarCustomization 
+                    control={control} 
+                    errors={{...errors, ...validationErrors}} 
+                />;
             default:
                 return null;
         }
@@ -219,25 +352,6 @@ export default function AboutYouPage() {
 
                 <div className="flex items-center justify-center w-full h-full">
                     <div className="relative">
-                        <motion.div
-                            className="absolute -top-24 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg max-w-[280px] z-10"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{
-                                opacity: 1,
-                                y: 0,
-                                transition: {
-                                    y: {
-                                        repeat: Number.POSITIVE_INFINITY,
-                                        repeatType: "reverse",
-                                        duration: 3,
-                                        ease: "easeInOut",
-                                    },
-                                },
-                            }}
-                        >
-                            <p className="text-gray-900 text-center">{stepMessages[currentStep - 1]}</p>
-                            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-4 h-4 bg-white/90 rotate-45"></div>
-                        </motion.div>
                         <OnboardingAvatar currentStep={currentStep} />
                     </div>
                 </div>
@@ -277,6 +391,24 @@ export default function AboutYouPage() {
                             {renderStep()}
                         </AnimatePresence>
 
+                        {/* Validation Summary */}
+                        {Object.keys(validationErrors).length > 0 && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="p-3 bg-red-50 border border-red-200 rounded-md"
+                            >
+                                <h3 className="text-sm font-medium text-red-800 mb-1">
+                                    Please correct the following errors before proceeding:
+                                </h3>
+                                <ul className="list-disc pl-5 text-xs text-red-700 space-y-1">
+                                    {Object.values(validationErrors).map((error, index) => (
+                                        <li key={index}>{error}</li>
+                                    ))}
+                                </ul>
+                            </motion.div>
+                        )}
+
                         {/* Navigation Buttons */}
                         <div className="flex justify-between pt-4 border-t border-gray-100">
                             <Button
@@ -301,8 +433,13 @@ export default function AboutYouPage() {
                                 </Button>
                             ) : (
                                 <Button
-                                    type="submit"
-                                    disabled={isLoading || !isValid}
+                                    type="button"
+                                    onClick={() => {
+                                        if (validateStep(currentStep)) {
+                                            handleSubmit(onSubmit)();
+                                        }
+                                    }}
+                                    disabled={isLoading}
                                     className="bg-gradient-to-r from-teal-400 to-purple-600 hover:from-teal-500 hover:to-purple-700"
                                 >
                                     {isLoading ? (
@@ -348,6 +485,3 @@ export default function AboutYouPage() {
         </div>
     );
 }
-
-
-

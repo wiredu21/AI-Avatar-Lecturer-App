@@ -2,12 +2,15 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.contrib.auth import login, authenticate
-from .models import ChatHistory, User, University, Course, UniversityContent
+from django.contrib.auth import login, authenticate, logout
+from django.utils import timezone
+from django.db import transaction
+from .models import ChatHistory, User, University, Course, UniversityContent, UserProfile
 from .serializers import (
     ChatHistorySerializer, ChatHistoryCreateSerializer,
     UserSerializer, UniversitySerializer, CourseSerializer,
-    UniversityContentSerializer, UserRegistrationSerializer, UserLoginSerializer
+    UniversityContentSerializer, UserRegistrationSerializer, UserLoginSerializer,
+    UserProfileSerializer
 )
 from .email_utils import send_verification_email, verify_user_email
 
@@ -163,25 +166,20 @@ class UserRegistrationView(APIView):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             try:
-                # Create user but set as inactive until email is verified
+                # Create user and make them active by default
                 user = serializer.save()
-                user.is_active = False  # Set inactive until email verified
+                user.is_active = True  # Make user active immediately
+                user.email_verified = True  # Mark email as verified by default
                 user.save()
                 
-                # Send verification email
-                email_sent = send_verification_email(user, request)
+                # Log in the user immediately after registration
+                login(request, user)
                 
-                if email_sent:
-                    return Response({
-                        "message": "Registration successful. Please check your email to verify your account.",
-                        "user": UserSerializer(user).data
-                    }, status=status.HTTP_201_CREATED)
-                else:
-                    # If email sending fails, still create account but inform user
-                    return Response({
-                        "message": "Registration successful but verification email could not be sent. Please contact support.",
-                        "user": UserSerializer(user).data
-                    }, status=status.HTTP_201_CREATED)
+                return Response({
+                    "message": "Registration successful. You are now logged in.",
+                    "user": UserSerializer(user).data
+                }, status=status.HTTP_201_CREATED)
+                
             except Exception as e:
                 return Response({
                     "message": f"Registration failed: {str(e)}",
@@ -224,7 +222,15 @@ class UserLoginView(APIView):
                 password=serializer.validated_data['password']
             )
             login(request, user)
-            return Response(UserSerializer(user).data)
+            
+            # Return user data with onboarding status
+            return Response({
+                "user": UserSerializer(user).data,
+                "onboarding_status": {
+                    "has_completed_onboarding": user.has_completed_onboarding,
+                    "is_first_time_login": user.is_first_time_login
+                }
+            })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @method_decorator(ensure_csrf_cookie, name='dispatch')
@@ -236,3 +242,171 @@ class CsrfTokenView(APIView):
         # This will force Django to send the CSRF token in the session
         csrf_token = get_token(request)
         return Response({'csrfToken': csrf_token})
+
+class UserLogoutView(APIView):
+    """
+    API view to handle user logout
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def post(self, request):
+        # Use Django's built-in logout function to end the session
+        logout(request)
+        return Response({"message": "Successfully logged out."}, status=status.HTTP_200_OK)
+
+class UserProfileView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get(self, request):
+        """
+        Get the user's profile information
+        """
+        user = request.user
+        try:
+            profile = UserProfile.objects.get(user=user)
+            serializer = UserProfileSerializer(profile)
+            return Response(serializer.data)
+        except UserProfile.DoesNotExist:
+            return Response(
+                {"detail": "Profile not found"}, 
+                status=status.HTTP_404_NOT_FOUND
+            )
+    
+    def post(self, request):
+        """
+        Create or update user profile during onboarding
+        """
+        user = request.user
+        
+        # Get the profile data from request
+        # Use transaction.atomic to ensure both profile and user status update
+        # happen together or not at all
+        with transaction.atomic():
+            # Check if profile exists
+            profile, created = UserProfile.objects.get_or_create(user=user)
+            
+            # Process the data before validation
+            data = request.data.copy()
+            
+            # Log the raw data for debugging
+            print(f"Raw profile data: {data}")
+            
+            # Handle university as a string by finding the corresponding University object
+            university_name = data.get('university')
+            if university_name and isinstance(university_name, str):
+                try:
+                    # Map common university slug/code values to full names for matching
+                    university_mapping = {
+                        'northampton': 'University of Northampton',
+                        'oxford': 'University of Oxford',
+                        'cambridge': 'University of Cambridge',
+                        'imperial': 'Imperial College London',
+                        'ucl': 'University College London',
+                        'lse': 'London School of Economics',
+                        'edinburgh': 'University of Edinburgh',
+                        'manchester': 'University of Manchester',
+                        'bristol': 'University of Bristol',
+                        'warwick': 'University of Warwick',
+                        'glasgow': 'University of Glasgow',
+                    }
+                    
+                    # Try to map the university code to a full name
+                    full_name = university_mapping.get(university_name.lower(), university_name)
+                    
+                    # Try to find the university by name
+                    university = University.objects.filter(name__icontains=full_name).first()
+                    
+                    if not university:
+                        # If not found, create a new university record
+                        university = University.objects.create(
+                            name=full_name,
+                            location='United Kingdom',
+                            website=f'https://www.{university_name}.ac.uk',
+                            description=f'{full_name} - created from onboarding'
+                        )
+                    
+                    # Set the university ID
+                    data['university'] = university.id
+                except Exception as e:
+                    print(f"Error handling university: {e}")
+                    data['university'] = None
+            
+            # Convert avatar to integer if it's a string
+            if 'avatar' in data and isinstance(data['avatar'], str):
+                try:
+                    data['avatar'] = int(data['avatar'])
+                except ValueError:
+                    print(f"Error converting avatar to integer: {data['avatar']}")
+                    data['avatar'] = 0
+            
+            # Ensure all strings are properly handled
+            for field in ['first_name', 'surname', 'gender', 'nationality', 'course', 'course_year', 'academic_level', 'voice_id']:
+                if field in data and data[field] is None:
+                    if field in ['first_name', 'surname']:
+                        # These are required fields
+                        print(f"Required field {field} is None")
+                    else:
+                        # These can be blank
+                        data[field] = ""
+            
+            print(f"Processed profile data: {data}")
+            
+            serializer = UserProfileSerializer(profile, data=data)
+            
+            if serializer.is_valid():
+                # Save the profile
+                serializer.save()
+                
+                # Update the user's onboarding status
+                user.has_completed_onboarding = True
+                user.is_first_time_login = False
+                user.onboarding_completed_date = timezone.now()
+                user.save()
+                
+                return Response({
+                    "message": "Onboarding complete!",
+                    "profile": serializer.data
+                })
+            else:
+                # Will automatically roll back transaction on error
+                print(f"Validation errors: {serializer.errors}")
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserOnboardingStatusView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get(self, request):
+        """
+        Get the user's onboarding status
+        """
+        user = request.user
+        return Response({
+            "has_completed_onboarding": user.has_completed_onboarding,
+            "is_first_time_login": user.is_first_time_login
+        })
+    
+    def patch(self, request):
+        """
+        Update the user's onboarding status
+        """
+        user = request.user
+        
+        # Get status values from request
+        has_completed_onboarding = request.data.get('has_completed_onboarding')
+        is_first_time_login = request.data.get('is_first_time_login')
+        
+        # Update status values if provided
+        if has_completed_onboarding is not None:
+            user.has_completed_onboarding = has_completed_onboarding
+            if has_completed_onboarding:
+                user.onboarding_completed_date = timezone.now()
+        
+        if is_first_time_login is not None:
+            user.is_first_time_login = is_first_time_login
+        
+        user.save()
+        
+        return Response({
+            "has_completed_onboarding": user.has_completed_onboarding,
+            "is_first_time_login": user.is_first_time_login
+        })
