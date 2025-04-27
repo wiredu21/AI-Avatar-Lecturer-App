@@ -8438,3 +8438,7 @@ DEBUG 2025-04-27 08:13:25,187 connectionpool 11500 14464 Starting new HTTP conne
 DEBUG 2025-04-27 08:13:27,242 connectionpool 11500 14464 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
 INFO 2025-04-27 08:13:27,252 basehttp 11500 14464 "GET /api/chat-status/ HTTP/1.1" 200 135
 INFO 2025-04-27 08:13:27,252 basehttp 11500 14464 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 08:18:21,402 autoreload 11500 16812 C:\Users\Kofi Wiredu\VirtuAId\backend\core\models.py changed, reloading.
+INFO 2025-04-27 08:18:21,402 autoreload 11500 16812 C:\Users\Kofi Wiredu\VirtuAId\backend\core\models.py changed, reloading.
+INFO 2025-04-27 08:18:23,018 autoreload 17092 1676 Watching for file changes with StatReloader
+INFO 2025-04-27 08:18:23,018 autoreload 17092 1676 Watching for file changes with StatReloader
