@@ -2,7 +2,7 @@
 .chat-container {
   display: flex;
   flex: 1;
-  width: 100%;
+  width: 90%;
   overflow: hidden;
   background: linear-gradient(to bottom right, #e6f7f5, #f5f0ff);
 }
@@ -262,23 +262,36 @@
 /* Input Container */
 .chat-input-container {
   border-top: 1px solid #38b2ac33;
-  padding: 1rem;
+  padding: 0.5rem;
   background-color: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(5px);
+  width: 90%;
+  margin: 0 auto;
 }
 
-.chat-input-form {
+.chat-form {
   display: flex;
   gap: 0.5rem;
+  width: 100%;
+}
+
+.input-wrapper {
+  display: flex;
+  flex: 1;
+  position: relative;
+  width: 100%;
 }
 
 .chat-input {
   flex: 1;
+  width: 100%;
   padding: 0.75rem;
   border: 1px solid #38b2ac66;
   border-radius: 0.375rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   transition: all 0.2s;
+  resize: none;
+  min-height: 44px;
 }
 
 .chat-input:focus {
@@ -287,7 +300,7 @@
   box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.2);
 }
 
-.voice-button, .send-button {
+.voice-button, .send-button, .mic-button, .recording-stop-button {
   padding: 0.75rem;
   border: 1px solid #38b2ac66;
   border-radius: 0.375rem;
@@ -297,6 +310,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .voice-button {

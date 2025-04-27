@@ -75,6 +75,45 @@ class User(AbstractUser):
         if self.consent_given and not self.data_retention_date:
             self.data_retention_date = timezone.now() + timezone.timedelta(days=365)
         super().save(*args, **kwargs)
+        
+    # Method to handle proper account deletion with anonymization
+    def delete_user(self):
+        """
+        Properly handle user deletion by:
+        1. Marking the account as deleted
+        2. Deactivating the account 
+        3. Anonymizing personal data
+        4. Making password unusable
+        5. Setting retention date for final deletion
+        """
+        import time
+        timestamp = int(time.time())
+        
+        # Mark account as deleted and inactive
+        self.is_deleted = True
+        self.is_active = False
+        
+        # Anonymize user data
+        self.first_name = "Deleted"
+        self.last_name = "User"
+        old_username = self.username
+        self.username = f"deleted_user_{self.id}_{timestamp}"
+        
+        # Anonymize email by clearing encrypted field
+        self._encrypted_email = None
+        
+        # Set retention period if not already set
+        if not self.data_retention_date:
+            self.data_retention_date = timezone.now() + timezone.timedelta(days=30)
+        
+        # Make password unusable
+        self.set_unusable_password()
+        
+        # Save all changes
+        self.save()
+        
+        # Return old username for logging
+        return old_username
 
     # Encryption/Decryption Methods
     @property
@@ -212,6 +251,61 @@ class ChatHistory(models.Model):
             self._encrypted_message = encrypt_data(self.message)
         if hasattr(self, 'response') and self.response:
             self._encrypted_response = encrypt_data(self.response)
+        super().save(*args, **kwargs)
+
+class ChatSession(models.Model):
+    """Model to track chat conversation sessions"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='chat_sessions')
+    title = models.CharField(max_length=255, default="New Conversation")
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
+    is_archived = models.BooleanField(default=False)
+    
+    class Meta:
+        ordering = ['-last_updated']
+        verbose_name = "Chat Session"
+        verbose_name_plural = "Chat Sessions"
+    
+    def __str__(self):
+        return f"{self.title} - {self.user.username} ({self.created_at.strftime('%Y-%m-%d')})"
+
+class ChatMessage(models.Model):
+    """Model to store messages within a chat session"""
+    session = models.ForeignKey(ChatSession, on_delete=models.CASCADE, related_name='messages')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='chat_messages')
+    _encrypted_message = models.TextField()
+    is_user_message = models.BooleanField(default=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, blank=True)
+    context_data = models.JSONField(default=dict, blank=True)  # For storing any additional metadata
+    
+    class Meta:
+        ordering = ['timestamp']
+        verbose_name = "Chat Message"
+        verbose_name_plural = "Chat Messages"
+    
+    def __str__(self):
+        sender = "User" if self.is_user_message else "AI"
+        preview = self.message[:50] + "..." if len(self.message) > 50 else self.message
+        return f"{sender} message: {preview}"
+    
+    @property
+    def message(self):
+        return decrypt_data(self._encrypted_message)
+    
+    @message.setter
+    def message(self, value):
+        self._encrypted_message = encrypt_data(value) if value else None
+    
+    def save(self, *args, **kwargs):
+        # Ensure message is encrypted before saving
+        if hasattr(self, 'message') and self.message:
+            self._encrypted_message = encrypt_data(self.message)
+        
+        # Update the last_updated timestamp on the parent session
+        if self.session:
+            self.session.save()  # This triggers auto_now on last_updated
+            
         super().save(*args, **kwargs)
 
 class UserProfile(models.Model):

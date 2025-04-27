@@ -43,11 +43,13 @@ const ChatComponent = ({ courseId, userId }) => {
   const inputRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const [chatHistory, setChatHistory] = useState([
-    { id: "1", title: "Previous Chat 1", date: new Date(2023, 9, 15), active: true },
-    { id: "2", title: "Previous Chat 2", date: new Date(2023, 9, 12) },
-    { id: "3", title: "Previous Chat 3", date: new Date(2023, 9, 10) },
-  ]);
+  
+  // Chat sessions state
+  const [chatSessions, setChatSessions] = useState([]);
+  const [activeChatSession, setActiveChatSession] = useState(null);
+  const [isLoadingChatSessions, setIsLoadingChatSessions] = useState(false);
+  
+  // UI states
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [renamingChatId, setRenamingChatId] = useState(null);
   const [newChatName, setNewChatName] = useState('');
@@ -73,7 +75,7 @@ const ChatComponent = ({ courseId, userId }) => {
     model: ''
   });
 
-  // Check authentication on mount
+  // Check authentication and fetch chat sessions on mount
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     const authToken = localStorage.getItem('authToken');
@@ -98,6 +100,9 @@ const ChatComponent = ({ courseId, userId }) => {
     
     // Check Ollama service status
     checkOllamaStatus();
+    
+    // Fetch chat sessions
+    fetchChatSessions();
   }, []);
 
   // Add a function to load user profile data
@@ -340,12 +345,59 @@ const ChatComponent = ({ courseId, userId }) => {
     }
   };
 
+  // Format code blocks in messages
+  const formatMessage = (content) => {
+    // Check if message might contain code
+    if (!content.includes('```')) return content;
+    
+    const parts = content.split('```');
+    
+    if (parts.length <= 1) return content;
+    
+    return (
+      <>
+        {parts.map((part, index) => {
+          // Even indices are regular text, odd indices are code blocks
+          if (index % 2 === 0) {
+            return <p key={index}>{part}</p>;
+          } else {
+            // Handle language specification if present
+            const firstLineBreak = part.indexOf('\n');
+            const language = firstLineBreak > 0 ? part.substring(0, firstLineBreak) : '';
+            const code = firstLineBreak > 0 ? part.substring(firstLineBreak + 1) : part;
+            
+            return (
+              <pre key={index} className="code-block">
+                {language && <div className="code-language">{language}</div>}
+                <code>{code}</code>
+              </pre>
+            );
+          }
+        })}
+      </>
+    );
+  };
+
+  // Update the handleSubmit function to work with chat sessions
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
     
     // Get the message to send (either from input or transcription)
     const messageToSend = inputMessage.trim() || transcription.trim();
     if (!messageToSend) return;
+    
+    // Check if we have an active chat session, if not create one
+    let currentSessionId = activeChatSession;
+    if (!currentSessionId) {
+      try {
+        const newSession = await createChatSession();
+        currentSessionId = newSession.id;
+      } catch (error) {
+        console.error('Failed to create a new chat session:', error);
+        // Use a temporary ID if we can't create a session
+        currentSessionId = 'temp-' + Date.now();
+      }
+    }
     
     // Check if Ollama service is available before sending message
     if (!serviceStatus.available) {
@@ -377,7 +429,8 @@ const ChatComponent = ({ courseId, userId }) => {
       id: Date.now(), // temporary ID
       message: messageToSend,
       is_user_message: true,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      chat_session: currentSessionId
     };
     
     setMessages(prev => [...prev, userMessage]);
@@ -387,12 +440,11 @@ const ChatComponent = ({ courseId, userId }) => {
     setIsLoading(true);
 
     try {
-      // Send message to API - no need to manually add auth token, the axios interceptor handles it
-      const response = await axios.post('/api/chat-history/', {
-        course: courseId,
+      // Send message to API with the chat session ID
+      const response = await axios.post('/api/chat-sessions/message/', {
+        session_id: currentSessionId,
         message: messageToSend,
-        is_user_message: true,
-        context_data: {} // Optional context data
+        course: courseId // Optional course context
       });
 
       // Stop any current speech when new message arrives
@@ -406,7 +458,7 @@ const ChatComponent = ({ courseId, userId }) => {
       if (response.data) {
         console.log('Received API response:', response.data);
         
-        // The backend now directly returns the AI response entry
+        // The backend returns the AI response
         const aiResponse = response.data;
         
         // Update messages by removing the temporary user message
@@ -417,14 +469,27 @@ const ChatComponent = ({ courseId, userId }) => {
             id: Date.now() - 100, // Generate stable ID for user message
             message: messageToSend,
             is_user_message: true,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            chat_session: currentSessionId
           },
-          aiResponse // Add the AI response from server
+          {
+            ...aiResponse,
+            chat_session: currentSessionId
+          } // Add the AI response from server
         ]);
         
         // Automatically speak the AI's response if it's not a code block
         if (isTtsSupported && !aiResponse.message.includes('```')) {
           speakMessage(aiResponse.message, aiResponse.id);
+        }
+        
+        // If this is the first message in a new conversation, update the session title
+        if (chatSessions.find(s => s.id === currentSessionId)?.title === "New Conversation") {
+          // Use the first few words as the new title (max 5 words)
+          const newTitle = messageToSend.split(' ').slice(0, 5).join(' ') + 
+            (messageToSend.split(' ').length > 5 ? '...' : '');
+          
+          renameChatSession(currentSessionId, newTitle);
         }
       }
     } catch (error) {
@@ -442,7 +507,8 @@ const ChatComponent = ({ courseId, userId }) => {
           id: Date.now(), 
           message: 'Sorry, there was an error sending your message. Please try again.',
           is_user_message: false,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
+          chat_session: currentSessionId
         }
       ]);
     } finally {
@@ -575,23 +641,14 @@ const ChatComponent = ({ courseId, userId }) => {
     setPreferredVoiceGender(prev => prev === 'female' ? 'male' : 'female');
   };
 
-  const selectChat = (id) => {
-    setChatHistory(prev =>
-      prev.map(chat => ({
-        ...chat,
-        active: chat.id === id
-      }))
-    );
+  // Update the selectChat function to use the new API
+  const selectChat = (sessionId) => {
+    if (!sessionId || sessionId === activeChatSession) return;
     
-    // Simulate loading a different chat
-    setMessages([
-      {
-        id: "loaded-1",
-        message: "This is a previous conversation. How can I help you?",
-        is_user_message: false,
-        timestamp: new Date().toISOString()
-      }
-    ]);
+    setActiveChatSession(sessionId);
+    
+    // Load messages for the selected chat session
+    loadChatSessionMessages(sessionId);
     
     // Close sidebar on mobile after selection
     if (window.innerWidth < 768) {
@@ -599,92 +656,29 @@ const ChatComponent = ({ courseId, userId }) => {
     }
   };
 
+  // Update the startNewChat function to use the new API
   const startNewChat = () => {
-    // Create a new chat and set it as active
-    const newChat = {
-      id: Date.now().toString(),
-      title: "New Conversation",
-      date: new Date(),
-      active: true
-    };
-    
-    setChatHistory(prev =>
-      prev.map(chat => ({
-        ...chat,
-        active: false
-      })).concat(newChat)
-    );
-    
-    // Reset messages
-    setMessages([
-      {
-        id: "new-1",
-        message: "Hello! How can I help you with your studies today?",
-        is_user_message: false,
-        timestamp: new Date().toISOString()
-      }
-    ]);
+    createChatSession();
   };
 
-  // Format code blocks in messages
-  const formatMessage = (content) => {
-    // Check if message might contain code
-    if (!content.includes('```')) return content;
-    
-    const parts = content.split('```');
-    
-    if (parts.length <= 1) return content;
-    
-    return (
-      <>
-        {parts.map((part, index) => {
-          // Even indices are regular text, odd indices are code blocks
-          if (index % 2 === 0) {
-            return <p key={index}>{part}</p>;
-          } else {
-            // Handle language specification if present
-            const firstLineBreak = part.indexOf('\n');
-            const language = firstLineBreak > 0 ? part.substring(0, firstLineBreak) : '';
-            const code = firstLineBreak > 0 ? part.substring(firstLineBreak + 1) : part;
-            
-            return (
-              <pre key={index} className="code-block">
-                {language && <div className="code-language">{language}</div>}
-                <code>{code}</code>
-              </pre>
-            );
-          }
-        })}
-      </>
-    );
-  };
-
-  // Add a handleDeleteChat function to ChatComponent
-  const handleDeleteChat = (e, chatId) => {
+  // Update the handleDeleteChat function to use the new API
+  const handleDeleteChat = (e, sessionId) => {
     // Prevent triggering the parent button's onClick
     e.stopPropagation();
     
-    // Remove the chat from chatHistory
-    setChatHistory(prev => prev.filter(chat => chat.id !== chatId));
-    
-    // If the active chat was deleted, select another chat if available
-    const wasActive = chatHistory.find(chat => chat.id === chatId)?.active;
-    if (wasActive && chatHistory.length > 1) {
-      // Find the first remaining chat
-      const remainingChats = chatHistory.filter(chat => chat.id !== chatId);
-      if (remainingChats.length > 0) {
-        selectChat(remainingChats[0].id);
-      }
+    // Confirm before deleting
+    if (window.confirm("Are you sure you want to delete this conversation? This action cannot be undone.")) {
+      deleteChatSession(sessionId);
     }
   };
-
-  // Add a handleRenameChat function
-  const handleRenameClick = (e, chatId, currentName) => {
+  
+  // Update the handleRenameClick function
+  const handleRenameClick = (e, sessionId, currentName) => {
     // Prevent triggering the parent button's onClick
     e.stopPropagation();
     
     // Set the chat being renamed
-    setRenamingChatId(chatId);
+    setRenamingChatId(sessionId);
     setNewChatName(currentName);
     
     // Focus the input in the next render cycle
@@ -693,16 +687,10 @@ const ChatComponent = ({ courseId, userId }) => {
     }, 0);
   };
   
-  // Function to save the rename
-  const saveRename = (chatId) => {
+  // Update the saveRename function to use the new API
+  const saveRename = (sessionId) => {
     if (newChatName.trim()) {
-      setChatHistory(prev => 
-        prev.map(chat => 
-          chat.id === chatId 
-            ? { ...chat, title: newChatName.trim() } 
-            : chat
-        )
-      );
+      renameChatSession(sessionId, newChatName.trim());
     }
     
     // Reset rename state
@@ -737,6 +725,188 @@ const ChatComponent = ({ courseId, userId }) => {
       };
     }
   }, [renamingChatId]);
+
+  // Fetch all chat sessions for the current user
+  const fetchChatSessions = async () => {
+    try {
+      setIsLoadingChatSessions(true);
+      
+      // Use our axios instance to fetch chat sessions
+      const response = await axios.get('/api/chat-sessions/');
+      
+      if (response.data && Array.isArray(response.data)) {
+        // Sort sessions by most recent first
+        const sortedSessions = response.data.sort((a, b) => 
+          new Date(b.last_updated) - new Date(a.last_updated)
+        );
+        
+        setChatSessions(sortedSessions);
+        
+        // If we have sessions and none is active, set the most recent one as active
+        if (sortedSessions.length > 0 && !activeChatSession) {
+          setActiveChatSession(sortedSessions[0].id);
+          // Load messages for this session
+          await loadChatSessionMessages(sortedSessions[0].id);
+        }
+      } else {
+        // If no sessions returned or invalid data, create a new session
+        await createChatSession();
+      }
+    } catch (error) {
+      console.error('Error fetching chat sessions:', error);
+      // If API fails, show sample data for demo (can be removed in production)
+      const sampleSessions = [
+        { id: "default", title: "New Conversation", created_at: new Date().toISOString(), last_updated: new Date().toISOString() }
+      ];
+      setChatSessions(sampleSessions);
+      setActiveChatSession("default");
+    } finally {
+      setIsLoadingChatSessions(false);
+    }
+  };
+  
+  // Create a new chat session
+  const createChatSession = async (title = "New Conversation") => {
+    try {
+      const response = await axios.post('/api/chat-sessions/', { title });
+      
+      if (response.data && response.data.id) {
+        // Add the new session to the list and set it as active
+        const newSession = response.data;
+        setChatSessions(prev => [newSession, ...prev]);
+        setActiveChatSession(newSession.id);
+        
+        // Clear messages for the new session
+        setMessages([{
+          id: "welcome",
+          message: "Hello! How can I help you with your studies today?",
+          is_user_message: false,
+          timestamp: new Date().toISOString()
+        }]);
+        
+        return newSession;
+      }
+    } catch (error) {
+      console.error('Error creating chat session:', error);
+      
+      // Fallback for demo/development (can be removed in production)
+      const fallbackSession = { 
+        id: `local-${Date.now()}`, 
+        title, 
+        created_at: new Date().toISOString(),
+        last_updated: new Date().toISOString()
+      };
+      
+      setChatSessions(prev => [fallbackSession, ...prev]);
+      setActiveChatSession(fallbackSession.id);
+      
+      // Clear messages for the new session
+      setMessages([{
+        id: "welcome",
+        message: "Hello! How can I help you with your studies today?",
+        is_user_message: false,
+        timestamp: new Date().toISOString()
+      }]);
+      
+      return fallbackSession;
+    }
+  };
+  
+  // Load messages for a specific chat session
+  const loadChatSessionMessages = async (sessionId) => {
+    if (!sessionId) return;
+    
+    try {
+      setIsLoading(true);
+      
+      // Get messages for this chat session
+      const response = await axios.get(`/api/chat-sessions/${sessionId}/messages/`);
+      
+      if (response.data && Array.isArray(response.data)) {
+        // Sort messages by timestamp (oldest first)
+        const sortedMessages = response.data.sort((a, b) => 
+          new Date(a.timestamp) - new Date(b.timestamp)
+        );
+        
+        setMessages(sortedMessages);
+      } else {
+        // If no messages or error, show a welcome message
+        setMessages([{
+          id: "welcome",
+          message: "Hello! How can I help you with your studies today?",
+          is_user_message: false,
+          timestamp: new Date().toISOString()
+        }]);
+      }
+    } catch (error) {
+      console.error('Error loading chat session messages:', error);
+      // Show a friendly message if we can't load the history
+      setMessages([{
+        id: "error",
+        message: "Unable to load chat history. You can start a new conversation below.",
+        is_user_message: false,
+        timestamp: new Date().toISOString(),
+        is_system_message: true
+      }]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  // Delete a chat session
+  const deleteChatSession = async (sessionId) => {
+    if (!sessionId) return;
+    
+    try {
+      await axios.delete(`/api/chat-sessions/${sessionId}/`);
+      // Remove from local state after successful deletion
+      setChatSessions(prev => prev.filter(session => session.id !== sessionId));
+      
+      // If we deleted the active session, select another one
+      if (activeChatSession === sessionId) {
+        const remainingSessions = chatSessions.filter(session => session.id !== sessionId);
+        if (remainingSessions.length > 0) {
+          setActiveChatSession(remainingSessions[0].id);
+          await loadChatSessionMessages(remainingSessions[0].id);
+        } else {
+          // If no sessions left, create a new one
+          await createChatSession();
+        }
+      }
+    } catch (error) {
+      console.error('Error deleting chat session:', error);
+      // For demo/development, remove from UI anyway (can be modified for production)
+      setChatSessions(prev => prev.filter(session => session.id !== sessionId));
+    }
+  };
+  
+  // Rename a chat session
+  const renameChatSession = async (sessionId, newTitle) => {
+    if (!sessionId || !newTitle.trim()) return;
+    
+    try {
+      await axios.patch(`/api/chat-sessions/${sessionId}/`, { title: newTitle });
+      
+      // Update in local state after successful update
+      setChatSessions(prev => 
+        prev.map(session => 
+          session.id === sessionId 
+            ? { ...session, title: newTitle } 
+            : session
+        )
+      );
+    } catch (error) {
+      console.error('Error renaming chat session:', error);
+      // For demo/development, update UI anyway (can be modified for production)
+      setChatSessions(prev => 
+        prev.map(session => 
+          session.id === sessionId 
+            ? { ...session, title: newTitle } 
+            : session
+        )
+      );
+    }
+  };
 
   return (
     <div className="chat-page">
@@ -780,58 +950,79 @@ const ChatComponent = ({ courseId, userId }) => {
           </div>
           
           <div className="chat-history">
-            {chatHistory.map((chat) => (
-              <button
-                key={chat.id}
-                className={`chat-history-item ${chat.active ? 'active' : ''}`}
-                onClick={() => selectChat(chat.id)}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polyline points="12 6 12 12 16 14"></polyline>
-                  </svg>
-                <div className="chat-history-info">
-                  {renamingChatId === chat.id ? (
-                    <input
-                      ref={renameInputRef}
-                      type="text"
-                      className="chat-rename-input"
-                      value={newChatName}
-                      onChange={(e) => setNewChatName(e.target.value)}
-                      onKeyDown={(e) => handleRenameKeyDown(e, chat.id)}
-                      onClick={(e) => e.stopPropagation()}
-                    />
-                  ) : (
-                    <p className="chat-history-title">{chat.title}</p>
-                  )}
-                  <p className="chat-history-date">{chat.date.toLocaleDateString()}</p>
+            {isLoadingChatSessions ? (
+              <div className="loading-sessions">
+                <div className="chat-loading-indicator">
+                  <div className="spinner"></div>
+                  <span>Loading conversations...</span>
                 </div>
-                {renamingChatId !== chat.id && (
-                  <>
-                    <button 
-                      className="chat-rename-button" 
-                      onClick={(e) => handleRenameClick(e, chat.id, chat.title)}
-                      title="Rename chat"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                      </svg>
-                    </button>
-                    <button 
-                      className="chat-delete-button" 
-                      onClick={(e) => handleDeleteChat(e, chat.id)}
-                      title="Delete chat"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="3 6 5 6 21 6"></polyline>
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                      </svg>
-                    </button>
-                  </>
-                )}
-              </button>
-            ))}
+              </div>
+            ) : chatSessions.length === 0 ? (
+              <div className="no-sessions">
+                <p>No conversations yet</p>
+                <button 
+                  onClick={startNewChat}
+                  className="start-chat-button"
+                >
+                  Start a new conversation
+                </button>
+              </div>
+            ) : (
+              chatSessions.map((session) => (
+                <button
+                  key={session.id}
+                  className={`chat-history-item ${session.id === activeChatSession ? 'active' : ''}`}
+                  onClick={() => selectChat(session.id)}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <div className="chat-history-info">
+                    {renamingChatId === session.id ? (
+                      <input
+                        ref={renameInputRef}
+                        type="text"
+                        className="chat-rename-input"
+                        value={newChatName}
+                        onChange={(e) => setNewChatName(e.target.value)}
+                        onKeyDown={(e) => handleRenameKeyDown(e, session.id)}
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    ) : (
+                      <p className="chat-history-title">{session.title}</p>
+                    )}
+                    <p className="chat-history-date">
+                      {new Date(session.created_at || session.date).toLocaleDateString()}
+                    </p>
+                  </div>
+                  {renamingChatId !== session.id && (
+                    <>
+                      <button 
+                        className="chat-rename-button" 
+                        onClick={(e) => handleRenameClick(e, session.id, session.title)}
+                        title="Rename chat"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                      </button>
+                      <button 
+                        className="chat-delete-button" 
+                        onClick={(e) => handleDeleteChat(e, session.id)}
+                        title="Delete chat"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="3 6 5 6 21 6"></polyline>
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                      </button>
+                    </>
+                  )}
+                </button>
+              ))
+            )}
           </div>
           
           <div className="sidebar-footer">
@@ -982,49 +1173,68 @@ const ChatComponent = ({ courseId, userId }) => {
           
           {/* Input Form */}
           <div className="chat-input-container">
-            <form className="chat-input-form" onSubmit={handleSubmit}>
-              <input
-                ref={inputRef}
-                type="text"
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Ask me about your course or university..."
-                disabled={isLoading}
-                className="chat-input"
-              />
-              <button 
-                type="button"
-                onClick={isRecording ? stopRecording : startRecording}
-                className={`voice-button ${isRecording ? 'recording' : ''}`}
-                disabled={isLoading || !isSpeechSupported}
-                title={!isSpeechSupported ? "Speech recognition not supported in your browser" : ""}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                  <line x1="12" y1="19" x2="12" y2="23"></line>
-                  <line x1="8" y1="23" x2="16" y2="23"></line>
-                </svg>
-              </button>
-              <button 
+            <form onSubmit={handleSubmit} className="chat-form">
+              <div className="input-wrapper">
+                <textarea
+                  ref={inputRef}
+                  value={isRecording ? interimTranscript || transcription : inputMessage}
+                  onChange={(e) => setInputMessage(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder={
+                    messages.length <= 1 
+                      ? "Start a new conversation..." 
+                      : "Type a message..."
+                  }
+                  disabled={isRecording || isLoading}
+                  className="chat-input"
+                />
+                
+                {isRecording && (
+                  <button
+                    type="button"
+                    onClick={stopRecording}
+                    className="recording-stop-button"
+                    title="Stop Recording"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="6" y="6" width="12" height="12"></rect>
+                    </svg>
+                  </button>
+                )}
+
+                {!isRecording && isSpeechSupported && (
+                  <button
+                    type="button"
+                    onClick={startRecording}
+                    className="mic-button"
+                    title="Start Recording"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                      <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                      <line x1="12" y1="19" x2="12" y2="23"></line>
+                      <line x1="8" y1="23" x2="16" y2="23"></line>
+                    </svg>
+                  </button>
+                )}
+              </div>
+              
+              <button
                 type="submit"
-                disabled={isLoading || (!inputMessage.trim() && !transcription.trim())} 
                 className="send-button"
+                disabled={isLoading || ((!inputMessage.trim()) && (!transcription.trim()))}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="22" y1="2" x2="11" y2="13"></line>
-                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                </svg>
-                Send
+                {isLoading ? (
+                  <div className="button-spinner"></div>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                )}
               </button>
             </form>
-            <p className="input-helper-text">
-              {isRecording 
-                ? "Click the microphone again to stop recording" 
-                : "Press Enter to send, Shift+Enter for a new line"}
-            </p>
-            </div>
+          </div>
         </div>
       </div>
     </div>

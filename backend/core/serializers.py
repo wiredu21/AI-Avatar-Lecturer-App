@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import ChatHistory, User, Course, University, UniversityContent, Avatar, UserProfile
+from .models import ChatHistory, User, Course, University, UniversityContent, Avatar, UserProfile, ChatSession, ChatMessage
 from django.contrib.auth import authenticate
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -91,6 +91,14 @@ class UserLoginSerializer(serializers.Serializer):
         user = authenticate(username=attrs['username'], password=attrs['password'])
         if not user:
             raise serializers.ValidationError('Invalid credentials')
+        
+        # Check if the user account is deleted or inactive
+        if user.is_deleted:
+            raise serializers.ValidationError('This account has been deleted.')
+        
+        if not user.is_active:
+            raise serializers.ValidationError('This account is deactivated.')
+            
         return attrs
 
 class PasswordChangeSerializer(serializers.Serializer):
@@ -114,3 +122,29 @@ class PasswordChangeSerializer(serializers.Serializer):
         if not user.check_password(value):
             raise serializers.ValidationError("Current password is incorrect.")
         return value
+
+class ChatSessionSerializer(serializers.ModelSerializer):
+    message_count = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = ChatSession
+        fields = ['id', 'title', 'created_at', 'last_updated', 'is_archived', 'message_count']
+        read_only_fields = ['created_at', 'last_updated', 'message_count']
+    
+    def get_message_count(self, obj):
+        return obj.messages.count()
+
+class ChatMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChatMessage
+        fields = ['id', 'session', 'message', 'is_user_message', 'timestamp', 'course', 'context_data']
+        read_only_fields = ['timestamp']
+
+class ChatMessageDetailSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    course = CourseSerializer(read_only=True)
+    
+    class Meta:
+        model = ChatMessage
+        fields = ['id', 'user', 'message', 'is_user_message', 'timestamp', 'course', 'context_data']
+        read_only_fields = ['timestamp', 'user']

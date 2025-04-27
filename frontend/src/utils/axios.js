@@ -247,7 +247,10 @@ export const userApi = {
                     localStorage.removeItem('chatHistory');
                 }
                 
-                return response.data;
+                return {
+                    ...response.data,
+                    realApiUsed: true  // Flag indicating real API was used
+                };
             } catch (apiError) {
                 // If the endpoint doesn't exist (404) or has another issue,
                 // use a mock implementation for demo purposes
@@ -266,10 +269,11 @@ export const userApi = {
                     localStorage.removeItem('userProfile');
                     localStorage.removeItem('chatHistory');
                     
-                    // Return a mock success response
+                    // Return a mock success response with a flag
                     return { 
                         message: "Account has been marked for deletion. All your data will be removed within 30 days.",
-                        success: true 
+                        success: true,
+                        realApiUsed: false  // Flag indicating mock implementation was used
                     };
                 }
                 

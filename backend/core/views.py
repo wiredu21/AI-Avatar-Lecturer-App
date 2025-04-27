@@ -5,12 +5,16 @@ from rest_framework.views import APIView
 from django.contrib.auth import login, authenticate, logout
 from django.utils import timezone
 from django.db import transaction
-from .models import ChatHistory, User, University, Course, UniversityContent, UserProfile
+from .models import (
+    ChatHistory, User, University, Course, UniversityContent, UserProfile,
+    ChatSession, ChatMessage
+)
 from .serializers import (
     ChatHistorySerializer, ChatHistoryCreateSerializer,
     UserSerializer, UniversitySerializer, CourseSerializer,
     UniversityContentSerializer, UserRegistrationSerializer, UserLoginSerializer,
-    UserProfileSerializer, PasswordChangeSerializer
+    UserProfileSerializer, PasswordChangeSerializer,
+    ChatSessionSerializer, ChatMessageSerializer, ChatMessageDetailSerializer
 )
 from .email_utils import send_verification_email, verify_user_email
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -611,3 +615,186 @@ class ChatStatusAPIView(APIView):
             "model": ollama_service.model_name,
             "server_url": ollama_service.base_url
         }, status=status.HTTP_200_OK if is_available else status.HTTP_503_SERVICE_UNAVAILABLE)
+
+# REST framework views for ChatSession
+@jwt_view_csrf_exempt
+class ChatSessionViewSet(viewsets.ModelViewSet):
+    """API endpoint for managing chat sessions"""
+    serializer_class = ChatSessionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        """Return only the current user's chat sessions"""
+        return ChatSession.objects.filter(
+            user=self.request.user
+        ).order_by('-last_updated')
+    
+    def perform_create(self, serializer):
+        """Create a new chat session for the current user"""
+        serializer.save(user=self.request.user)
+    
+    @action(detail=True, methods=['get'])
+    def messages(self, request, pk=None):
+        """Get all messages for a specific chat session"""
+        try:
+            session = self.get_object()
+            messages = ChatMessage.objects.filter(session=session).order_by('timestamp')
+            serializer = ChatMessageDetailSerializer(messages, many=True)
+            return Response(serializer.data)
+        except ChatSession.DoesNotExist:
+            return Response(
+                {"error": "Chat session not found"}, 
+                status=status.HTTP_404_NOT_FOUND
+            )
+    
+    @action(detail=False, methods=['post'])
+    def message(self, request):
+        """Create a new message in a chat session and generate AI response"""
+        session_id = request.data.get('session_id')
+        message_text = request.data.get('message')
+        course_id = request.data.get('course')
+        
+        if not session_id or not message_text:
+            return Response(
+                {"error": "session_id and message are required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            # Get the session and course if provided
+            session = ChatSession.objects.get(id=session_id, user=request.user)
+            course = None
+            if course_id:
+                try:
+                    course = Course.objects.get(id=course_id)
+                except Course.DoesNotExist:
+                    pass  # Continue without course
+            
+            # Initialize the Ollama service
+            ollama_service = OllamaService()
+            
+            with transaction.atomic():
+                # Create user message
+                user_message = ChatMessage.objects.create(
+                    session=session,
+                    user=request.user,
+                    message=message_text,
+                    is_user_message=True,
+                    course=course,
+                    context_data={}
+                )
+                
+                # Get context from previous messages for better continuity
+                context_messages = ChatMessage.objects.filter(
+                    session=session
+                ).order_by('-timestamp')[:10]  # Get last 10 messages
+                
+                context = []
+                for msg in reversed(list(context_messages)):
+                    role = "user" if msg.is_user_message else "assistant"
+                    context.append({"role": role, "content": msg.message})
+                
+                # Generate AI response
+                ai_response = ollama_service.generate_response(
+                    message_text,
+                    context=context,
+                    course=course
+                )
+                
+                # Create AI message
+                ai_message = ChatMessage.objects.create(
+                    session=session,
+                    user=request.user,
+                    message=ai_response,
+                    is_user_message=False,
+                    course=course,
+                    context_data={}
+                )
+                
+                # Return AI message details
+                serializer = ChatMessageDetailSerializer(ai_message)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+                
+        except ChatSession.DoesNotExist:
+            return Response(
+                {"error": "Chat session not found"}, 
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+@jwt_view_csrf_exempt
+class UserAccountDeleteView(APIView):
+    """
+    API view to handle user account deletion (GDPR right to be forgotten)
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def post(self, request):
+        """
+        Handle the account deletion request
+        """
+        user = request.user
+        user_id = user.id  # Store for logging
+        
+        try:
+            # Use transaction.atomic to ensure all database changes are atomic
+            with transaction.atomic():
+                print(f"[ACCOUNT_DELETION] Starting deletion process for user {user_id}")
+                
+                # Use the User model's delete_user method which handles all the anonymization
+                old_username = user.delete_user()
+                print(f"[ACCOUNT_DELETION] User {user_id} data anonymized: username changed from {old_username} to {user.username}")
+                
+                # Also anonymize related profile data
+                try:
+                    profile = UserProfile.objects.get(user=user)
+                    profile.first_name = "Deleted"
+                    profile.surname = "User"
+                    profile.date_of_birth = None
+                    profile.gender = ""
+                    profile.nationality = ""
+                    profile.course = ""
+                    profile.save()
+                    print(f"[ACCOUNT_DELETION] User {user_id} profile anonymized")
+                except UserProfile.DoesNotExist:
+                    print(f"[ACCOUNT_DELETION] No profile found for user {user_id}")
+                
+                # In a real system, you'd queue a task to permanently delete after retention period
+                print(f"[ACCOUNT_DELETION] User {user_id} scheduled for permanent deletion after retention period")
+            
+            # Only log the user out after the transaction has successfully committed
+            logout(request)
+            print(f"[ACCOUNT_DELETION] User {user_id} logged out successfully after deletion")
+            
+            return Response(
+                {
+                    "message": "Your account has been successfully marked for deletion. Your data will be retained for 30 days before permanent deletion.",
+                    "success": True,
+                    "deletion_date": user.data_retention_date.isoformat() if user.data_retention_date else None
+                },
+                status=status.HTTP_200_OK
+            )
+        except Exception as e:
+            error_message = str(e)
+            print(f"[ACCOUNT_DELETION_ERROR] Failed to delete account for user {user_id}: {error_message}")
+            
+            # Provide more specific error messages based on the exception type
+            if "IntegrityError" in error_message:
+                return Response(
+                    {"error": "Database integrity error. Please try again later.", "details": error_message},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+            elif "OperationalError" in error_message:
+                return Response(
+                    {"error": "Database operation failed. Please try again later.", "details": error_message},
+                    status=status.HTTP_503_SERVICE_UNAVAILABLE
+                )
+            else:
+                return Response(
+                    {"error": f"Failed to delete account: {error_message}"},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )

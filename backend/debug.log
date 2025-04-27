@@ -7446,3 +7446,995 @@ DEBUG 2025-04-27 05:24:03,844 connectionpool 9984 5784 Starting new HTTP connect
 DEBUG 2025-04-27 05:24:05,915 connectionpool 9984 5784 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
 INFO 2025-04-27 05:24:05,925 basehttp 9984 5784 "GET /api/chat-status/ HTTP/1.1" 200 135
 INFO 2025-04-27 05:24:05,925 basehttp 9984 5784 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 05:59:22,241 basehttp 9984 8692 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 05:59:22,241 basehttp 9984 8692 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 05:59:22,263 basehttp 9984 8692 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 05:59:22,263 basehttp 9984 8692 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 05:59:22,305 basehttp 9984 8692 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 05:59:22,305 basehttp 9984 8692 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 05:59:22,329 basehttp 9984 8692 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 05:59:22,329 basehttp 9984 8692 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 05:59:22,363 basehttp 9984 8692 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 05:59:22,363 basehttp 9984 8692 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 05:59:22,402 basehttp 9984 8692 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 05:59:22,402 basehttp 9984 8692 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 05:59:23,422 basehttp 9984 8692 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 05:59:23,422 basehttp 9984 8692 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 05:59:23,427 basehttp 9984 13812 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 05:59:23,427 basehttp 9984 13812 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 05:59:23,444 basehttp 9984 8692 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 05:59:23,444 basehttp 9984 8692 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 05:59:23,449 basehttp 9984 13812 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 05:59:23,449 basehttp 9984 13812 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 05:59:25,345 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 05:59:25,345 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 05:59:25,376 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 05:59:25,376 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 05:59:25,407 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 05:59:25,407 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 05:59:25,412 basehttp 9984 8692 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 05:59:25,412 basehttp 9984 8692 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 05:59:25,426 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 05:59:25,426 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 05:59:25,454 basehttp 9984 13812 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 05:59:25,454 basehttp 9984 13812 "GET /api/user/profile/ HTTP/1.1" 200 238
+DEBUG 2025-04-27 06:01:15,742 connectionpool 9984 11556 Starting new HTTP connection (1): localhost:11434
+WARNING 2025-04-27 06:01:15,767 log 9984 7648 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 06:01:15,767 log 9984 7648 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 06:01:15,769 basehttp 9984 7648 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 5360
+WARNING 2025-04-27 06:01:15,769 basehttp 9984 7648 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 5360
+DEBUG 2025-04-27 06:01:17,807 connectionpool 9984 11556 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 06:01:17,819 basehttp 9984 11556 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:01:17,819 basehttp 9984 11556 "GET /api/chat-status/ HTTP/1.1" 200 135
+DEBUG 2025-04-27 06:01:17,858 connectionpool 9984 5396 Starting new HTTP connection (1): localhost:11434
+DEBUG 2025-04-27 06:01:19,901 connectionpool 9984 5396 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 06:01:19,915 basehttp 9984 5396 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:01:19,915 basehttp 9984 5396 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:01:20,809 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:20,809 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:20,840 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:20,840 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:20,880 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:20,880 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:20,887 basehttp 9984 8692 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:01:20,887 basehttp 9984 8692 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:01:20,919 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:20,919 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:20,961 basehttp 9984 13812 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:01:20,961 basehttp 9984 13812 "GET /api/user/profile/ HTTP/1.1" 200 238
+DEBUG 2025-04-27 06:01:21,837 connectionpool 9984 11808 Starting new HTTP connection (1): localhost:11434
+WARNING 2025-04-27 06:01:21,852 log 9984 6264 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 06:01:21,852 log 9984 6264 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 06:01:21,854 basehttp 9984 6264 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 5360
+WARNING 2025-04-27 06:01:21,854 basehttp 9984 6264 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 5360
+INFO 2025-04-27 06:01:23,500 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:23,500 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:23,543 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:23,543 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:23,586 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:23,586 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:23,591 basehttp 9984 8692 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:01:23,591 basehttp 9984 8692 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:01:23,627 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:23,627 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:23,681 basehttp 9984 13812 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:01:23,681 basehttp 9984 13812 "GET /api/user/profile/ HTTP/1.1" 200 238
+DEBUG 2025-04-27 06:01:23,903 connectionpool 9984 11808 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 06:01:23,914 basehttp 9984 11808 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:01:23,914 basehttp 9984 11808 "GET /api/chat-status/ HTTP/1.1" 200 135
+DEBUG 2025-04-27 06:01:23,960 connectionpool 9984 17080 Starting new HTTP connection (1): localhost:11434
+INFO 2025-04-27 06:01:24,121 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:24,121 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:24,138 basehttp 9984 8692 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:01:24,138 basehttp 9984 8692 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:01:24,146 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:24,146 basehttp 9984 13812 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:24,157 basehttp 9984 8692 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:01:24,157 basehttp 9984 8692 "GET /api/user/profile/ HTTP/1.1" 200 238
+DEBUG 2025-04-27 06:01:25,999 connectionpool 9984 17080 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 06:01:26,011 basehttp 9984 17080 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:01:26,011 basehttp 9984 17080 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:01:33,164 basehttp 9984 8692 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:33,164 basehttp 9984 8692 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:33,203 basehttp 9984 8692 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:33,203 basehttp 9984 8692 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:33,830 basehttp 9984 8692 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:33,830 basehttp 9984 8692 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:33,862 basehttp 9984 8692 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:01:33,862 basehttp 9984 8692 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:23:34,654 autoreload 9984 6712 C:\Users\Kofi Wiredu\VirtuAId\backend\core\models.py changed, reloading.
+INFO 2025-04-27 06:23:34,654 autoreload 9984 6712 C:\Users\Kofi Wiredu\VirtuAId\backend\core\models.py changed, reloading.
+INFO 2025-04-27 06:23:36,410 autoreload 11344 16296 Watching for file changes with StatReloader
+INFO 2025-04-27 06:23:36,410 autoreload 11344 16296 Watching for file changes with StatReloader
+INFO 2025-04-27 06:24:00,952 autoreload 11344 16296 C:\Users\Kofi Wiredu\VirtuAId\backend\core\admin.py changed, reloading.
+INFO 2025-04-27 06:24:00,952 autoreload 11344 16296 C:\Users\Kofi Wiredu\VirtuAId\backend\core\admin.py changed, reloading.
+INFO 2025-04-27 06:24:02,234 autoreload 7368 6712 Watching for file changes with StatReloader
+INFO 2025-04-27 06:24:02,234 autoreload 7368 6712 Watching for file changes with StatReloader
+INFO 2025-04-27 06:24:26,297 autoreload 7368 6712 C:\Users\Kofi Wiredu\VirtuAId\backend\core\serializers.py changed, reloading.
+INFO 2025-04-27 06:24:26,297 autoreload 7368 6712 C:\Users\Kofi Wiredu\VirtuAId\backend\core\serializers.py changed, reloading.
+INFO 2025-04-27 06:24:27,660 autoreload 10228 16868 Watching for file changes with StatReloader
+INFO 2025-04-27 06:24:27,660 autoreload 10228 16868 Watching for file changes with StatReloader
+INFO 2025-04-27 06:25:00,136 autoreload 10228 16868 C:\Users\Kofi Wiredu\VirtuAId\backend\core\views.py changed, reloading.
+INFO 2025-04-27 06:25:00,136 autoreload 10228 16868 C:\Users\Kofi Wiredu\VirtuAId\backend\core\views.py changed, reloading.
+INFO 2025-04-27 06:25:01,461 autoreload 8724 4080 Watching for file changes with StatReloader
+INFO 2025-04-27 06:25:01,461 autoreload 8724 4080 Watching for file changes with StatReloader
+INFO 2025-04-27 06:25:25,634 autoreload 8724 4080 C:\Users\Kofi Wiredu\VirtuAId\backend\core\urls.py changed, reloading.
+INFO 2025-04-27 06:25:25,634 autoreload 8724 4080 C:\Users\Kofi Wiredu\VirtuAId\backend\core\urls.py changed, reloading.
+INFO 2025-04-27 06:25:27,053 autoreload 12528 17224 Watching for file changes with StatReloader
+INFO 2025-04-27 06:25:27,053 autoreload 12528 17224 Watching for file changes with StatReloader
+INFO 2025-04-27 06:41:52,435 autoreload 11180 14108 Watching for file changes with StatReloader
+INFO 2025-04-27 06:41:52,435 autoreload 11180 14108 Watching for file changes with StatReloader
+INFO 2025-04-27 06:42:07,349 basehttp 11180 7228 "OPTIONS /api/auth/logout/ HTTP/1.1" 200 0
+INFO 2025-04-27 06:42:07,349 basehttp 11180 7228 "OPTIONS /api/auth/logout/ HTTP/1.1" 200 0
+INFO 2025-04-27 06:42:07,696 basehttp 11180 5928 "POST /api/auth/logout/ HTTP/1.1" 200 38
+INFO 2025-04-27 06:42:07,696 basehttp 11180 5928 "POST /api/auth/logout/ HTTP/1.1" 200 38
+INFO 2025-04-27 06:42:09,034 basehttp 11180 5928 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 06:42:09,034 basehttp 11180 5928 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 06:42:09,809 basehttp 11180 5928 "POST /api/auth/login/ HTTP/1.1" 200 935
+INFO 2025-04-27 06:42:09,809 basehttp 11180 5928 "POST /api/auth/login/ HTTP/1.1" 200 935
+INFO 2025-04-27 06:42:09,848 basehttp 11180 5928 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:42:09,848 basehttp 11180 5928 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:42:09,862 basehttp 11180 5928 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:42:09,862 basehttp 11180 5928 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:42:09,878 basehttp 11180 5928 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:42:09,878 basehttp 11180 5928 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:42:09,903 basehttp 11180 16392 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:42:09,903 basehttp 11180 16392 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:42:09,915 basehttp 11180 5928 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:42:09,915 basehttp 11180 5928 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:42:09,945 basehttp 11180 5928 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:42:09,945 basehttp 11180 5928 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:42:13,262 basehttp 11180 5928 "POST /api/auth/logout/ HTTP/1.1" 200 38
+INFO 2025-04-27 06:42:13,262 basehttp 11180 5928 "POST /api/auth/logout/ HTTP/1.1" 200 38
+INFO 2025-04-27 06:42:48,949 basehttp 11180 252 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 06:42:48,949 basehttp 11180 252 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 06:42:50,120 basehttp 11180 252 "POST /api/auth/login/ HTTP/1.1" 200 945
+INFO 2025-04-27 06:42:50,120 basehttp 11180 252 "POST /api/auth/login/ HTTP/1.1" 200 945
+INFO 2025-04-27 06:42:50,158 basehttp 11180 252 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:42:50,158 basehttp 11180 252 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:42:50,190 basehttp 11180 252 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:42:50,190 basehttp 11180 252 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:42:50,222 basehttp 11180 12792 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:42:50,222 basehttp 11180 12792 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:42:50,230 basehttp 11180 252 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:42:50,230 basehttp 11180 252 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:42:50,250 basehttp 11180 252 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:42:50,250 basehttp 11180 252 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:42:50,293 basehttp 11180 252 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:42:50,293 basehttp 11180 252 "GET /api/user/profile/ HTTP/1.1" 200 238
+DEBUG 2025-04-27 06:42:52,898 connectionpool 11180 8064 Starting new HTTP connection (1): localhost:11434
+INFO 2025-04-27 06:42:52,923 basehttp 11180 16780 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 06:42:52,923 basehttp 11180 16780 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 06:42:53,013 log 11180 7020 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 06:42:53,013 log 11180 7020 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 06:42:53,016 basehttp 11180 7020 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+WARNING 2025-04-27 06:42:53,016 basehttp 11180 7020 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+INFO 2025-04-27 06:42:53,053 basehttp 11180 16164 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 06:42:53,053 basehttp 11180 16164 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 06:42:53,099 log 11180 16284 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:42:53,099 log 11180 16284 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:42:53,101 basehttp 11180 16284 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:42:53,101 basehttp 11180 16284 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:42:53,155 log 11180 13060 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:42:53,155 log 11180 13060 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:42:53,157 basehttp 11180 13060 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:42:53,157 basehttp 11180 13060 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+DEBUG 2025-04-27 06:42:54,944 connectionpool 11180 8064 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 06:42:54,956 basehttp 11180 8064 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:42:54,956 basehttp 11180 8064 "GET /api/chat-status/ HTTP/1.1" 200 135
+DEBUG 2025-04-27 06:42:55,005 connectionpool 11180 13204 Starting new HTTP connection (1): localhost:11434
+DEBUG 2025-04-27 06:42:57,079 connectionpool 11180 13204 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 06:42:57,094 basehttp 11180 13204 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:42:57,094 basehttp 11180 13204 "GET /api/chat-status/ HTTP/1.1" 200 135
+WARNING 2025-04-27 06:43:14,812 log 11180 5644 Not Found: /api/chat-sessions/local-1745732573105/messages/
+WARNING 2025-04-27 06:43:14,812 log 11180 5644 Not Found: /api/chat-sessions/local-1745732573105/messages/
+WARNING 2025-04-27 06:43:14,815 basehttp 11180 5644 "GET /api/chat-sessions/local-1745732573105/messages/ HTTP/1.1" 404 23
+WARNING 2025-04-27 06:43:14,815 basehttp 11180 5644 "GET /api/chat-sessions/local-1745732573105/messages/ HTTP/1.1" 404 23
+WARNING 2025-04-27 06:43:16,327 log 11180 13468 Not Found: /api/chat-sessions/local-1745732573160/messages/
+WARNING 2025-04-27 06:43:16,327 log 11180 13468 Not Found: /api/chat-sessions/local-1745732573160/messages/
+WARNING 2025-04-27 06:43:16,328 basehttp 11180 13468 "GET /api/chat-sessions/local-1745732573160/messages/ HTTP/1.1" 404 23
+WARNING 2025-04-27 06:43:16,328 basehttp 11180 13468 "GET /api/chat-sessions/local-1745732573160/messages/ HTTP/1.1" 404 23
+INFO 2025-04-27 06:43:26,282 basehttp 11180 1184 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:26,282 basehttp 11180 1184 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:26,308 basehttp 11180 1184 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:26,308 basehttp 11180 1184 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:26,325 basehttp 11180 1184 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:26,325 basehttp 11180 1184 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:26,350 basehttp 11180 1184 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:43:26,350 basehttp 11180 1184 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:43:26,379 basehttp 11180 1184 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:26,379 basehttp 11180 1184 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:26,419 basehttp 11180 1184 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:43:26,419 basehttp 11180 1184 "GET /api/user/profile/ HTTP/1.1" 200 238
+DEBUG 2025-04-27 06:43:27,024 connectionpool 11180 7212 Starting new HTTP connection (1): localhost:11434
+INFO 2025-04-27 06:43:27,039 basehttp 11180 11896 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 06:43:27,039 basehttp 11180 11896 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 06:43:27,101 log 11180 7704 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 06:43:27,101 log 11180 7704 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 06:43:27,103 basehttp 11180 7704 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+WARNING 2025-04-27 06:43:27,103 basehttp 11180 7704 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+INFO 2025-04-27 06:43:27,150 basehttp 11180 16668 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 06:43:27,150 basehttp 11180 16668 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 06:43:27,194 log 11180 11076 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:43:27,194 log 11180 11076 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:43:27,197 basehttp 11180 11076 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:43:27,197 basehttp 11180 11076 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:43:27,223 log 11180 4880 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:43:27,223 log 11180 4880 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:43:27,224 basehttp 11180 4880 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:43:27,224 basehttp 11180 4880 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+DEBUG 2025-04-27 06:43:29,106 connectionpool 11180 7212 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 06:43:29,118 basehttp 11180 7212 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:43:29,118 basehttp 11180 7212 "GET /api/chat-status/ HTTP/1.1" 200 135
+DEBUG 2025-04-27 06:43:29,142 connectionpool 11180 13060 Starting new HTTP connection (1): localhost:11434
+INFO 2025-04-27 06:43:29,814 basehttp 11180 1184 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:29,814 basehttp 11180 1184 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:29,846 basehttp 11180 1184 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:29,846 basehttp 11180 1184 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:29,868 basehttp 11180 1184 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:29,868 basehttp 11180 1184 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:29,892 basehttp 11180 1184 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:29,892 basehttp 11180 1184 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:29,896 basehttp 11180 7784 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:43:29,896 basehttp 11180 7784 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:43:29,929 basehttp 11180 7784 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:43:29,929 basehttp 11180 7784 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:43:31,038 basehttp 11180 7784 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:31,038 basehttp 11180 7784 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:31,049 basehttp 11180 1184 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:43:31,049 basehttp 11180 1184 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:43:31,061 basehttp 11180 7784 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:31,061 basehttp 11180 7784 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:31,100 basehttp 11180 1184 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:43:31,100 basehttp 11180 1184 "GET /api/user/profile/ HTTP/1.1" 200 238
+DEBUG 2025-04-27 06:43:31,185 connectionpool 11180 13060 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 06:43:31,193 basehttp 11180 13060 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:43:31,193 basehttp 11180 13060 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:43:38,647 basehttp 11180 8556 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:43:38,647 basehttp 11180 8556 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:43:38,709 basehttp 11180 8556 "POST /api/user/profile/ HTTP/1.1" 200 283
+INFO 2025-04-27 06:43:38,709 basehttp 11180 8556 "POST /api/user/profile/ HTTP/1.1" 200 283
+INFO 2025-04-27 06:43:38,730 basehttp 11180 8556 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:43:38,730 basehttp 11180 8556 "GET /api/user/profile/ HTTP/1.1" 200 238
+DEBUG 2025-04-27 06:43:41,464 connectionpool 11180 10396 Starting new HTTP connection (1): localhost:11434
+INFO 2025-04-27 06:43:41,481 basehttp 11180 3804 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 06:43:41,481 basehttp 11180 3804 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 06:43:41,485 log 11180 15020 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 06:43:41,485 log 11180 15020 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 06:43:41,487 basehttp 11180 15020 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+WARNING 2025-04-27 06:43:41,487 basehttp 11180 15020 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+WARNING 2025-04-27 06:43:41,517 log 11180 14412 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:43:41,517 log 11180 14412 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:43:41,519 basehttp 11180 14412 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:43:41,519 basehttp 11180 14412 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+INFO 2025-04-27 06:43:41,521 basehttp 11180 12004 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 06:43:41,521 basehttp 11180 12004 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 06:43:41,568 log 11180 15656 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:43:41,568 log 11180 15656 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:43:41,570 basehttp 11180 15656 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:43:41,570 basehttp 11180 15656 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+DEBUG 2025-04-27 06:43:43,503 connectionpool 11180 10396 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 06:43:43,515 basehttp 11180 10396 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:43:43,515 basehttp 11180 10396 "GET /api/chat-status/ HTTP/1.1" 200 135
+DEBUG 2025-04-27 06:43:43,538 connectionpool 11180 10500 Starting new HTTP connection (1): localhost:11434
+INFO 2025-04-27 06:43:44,583 basehttp 11180 3172 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:44,583 basehttp 11180 3172 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:44,623 basehttp 11180 3172 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:44,623 basehttp 11180 3172 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:44,657 basehttp 11180 3172 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:44,657 basehttp 11180 3172 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:44,699 basehttp 11180 3172 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:43:44,699 basehttp 11180 3172 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:43:44,739 basehttp 11180 3172 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:44,739 basehttp 11180 3172 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:44,776 basehttp 11180 3172 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:43:44,776 basehttp 11180 3172 "GET /api/user/profile/ HTTP/1.1" 200 238
+DEBUG 2025-04-27 06:43:45,564 connectionpool 11180 10500 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 06:43:45,575 basehttp 11180 10500 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:43:45,575 basehttp 11180 10500 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:43:47,752 basehttp 11180 3172 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:47,752 basehttp 11180 3172 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:47,756 basehttp 11180 1512 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:43:47,756 basehttp 11180 1512 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:43:47,774 basehttp 11180 1512 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:43:47,774 basehttp 11180 1512 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:43:47,784 basehttp 11180 3172 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:47,784 basehttp 11180 3172 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:43:51,089 basehttp 11180 3172 "POST /api/user/profile/ HTTP/1.1" 200 283
+INFO 2025-04-27 06:43:51,089 basehttp 11180 3172 "POST /api/user/profile/ HTTP/1.1" 200 283
+INFO 2025-04-27 06:43:51,110 basehttp 11180 3172 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:43:51,110 basehttp 11180 3172 "GET /api/user/profile/ HTTP/1.1" 200 238
+DEBUG 2025-04-27 06:43:53,798 connectionpool 11180 11420 Starting new HTTP connection (1): localhost:11434
+INFO 2025-04-27 06:43:53,820 basehttp 11180 4292 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 06:43:53,820 basehttp 11180 4292 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 06:43:53,824 log 11180 5428 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 06:43:53,824 log 11180 5428 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 06:43:53,825 basehttp 11180 5428 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+WARNING 2025-04-27 06:43:53,825 basehttp 11180 5428 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+INFO 2025-04-27 06:43:53,851 basehttp 11180 15728 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 06:43:53,851 basehttp 11180 15728 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 06:43:53,873 log 11180 11496 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:43:53,873 log 11180 11496 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:43:53,875 basehttp 11180 11496 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:43:53,875 basehttp 11180 11496 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:43:53,904 log 11180 8544 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:43:53,904 log 11180 8544 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:43:53,906 basehttp 11180 8544 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:43:53,906 basehttp 11180 8544 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+DEBUG 2025-04-27 06:43:55,858 connectionpool 11180 11420 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 06:43:55,867 basehttp 11180 11420 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:43:55,867 basehttp 11180 11420 "GET /api/chat-status/ HTTP/1.1" 200 135
+DEBUG 2025-04-27 06:43:55,886 connectionpool 11180 9840 Starting new HTTP connection (1): localhost:11434
+DEBUG 2025-04-27 06:43:57,950 connectionpool 11180 9840 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 06:43:57,963 basehttp 11180 9840 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:43:57,963 basehttp 11180 9840 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:44:18,076 basehttp 11180 7084 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:18,076 basehttp 11180 7084 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:18,109 basehttp 11180 7084 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:18,109 basehttp 11180 7084 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:18,135 basehttp 11180 7084 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:18,135 basehttp 11180 7084 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:18,166 basehttp 11180 7084 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:44:18,166 basehttp 11180 7084 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:44:18,199 basehttp 11180 7084 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:18,199 basehttp 11180 7084 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:18,233 basehttp 11180 7084 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:44:18,233 basehttp 11180 7084 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 06:44:21,952 basehttp 11180 7084 "POST /api/auth/logout/ HTTP/1.1" 200 38
+INFO 2025-04-27 06:44:21,952 basehttp 11180 7084 "POST /api/auth/logout/ HTTP/1.1" 200 38
+INFO 2025-04-27 06:44:27,026 basehttp 11180 14140 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 06:44:27,026 basehttp 11180 14140 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 06:44:28,263 basehttp 11180 14140 "POST /api/auth/login/ HTTP/1.1" 200 935
+INFO 2025-04-27 06:44:28,263 basehttp 11180 14140 "POST /api/auth/login/ HTTP/1.1" 200 935
+INFO 2025-04-27 06:44:28,290 basehttp 11180 14140 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:28,290 basehttp 11180 14140 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:28,322 basehttp 11180 14140 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:28,322 basehttp 11180 14140 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:28,361 basehttp 11180 14140 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:28,361 basehttp 11180 14140 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:28,365 basehttp 11180 4684 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:44:28,365 basehttp 11180 4684 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:44:28,400 basehttp 11180 14140 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:28,400 basehttp 11180 14140 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:28,454 basehttp 11180 14140 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:44:28,454 basehttp 11180 14140 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:44:30,545 basehttp 11180 14140 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:30,545 basehttp 11180 14140 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:30,549 basehttp 11180 4684 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:44:30,549 basehttp 11180 4684 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:44:30,566 basehttp 11180 14140 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:30,566 basehttp 11180 14140 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:30,571 basehttp 11180 4684 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:44:30,571 basehttp 11180 4684 "GET /api/user/profile/ HTTP/1.1" 200 232
+WARNING 2025-04-27 06:44:40,059 log 11180 10916 Not Found: /api/auth/delete-account/
+WARNING 2025-04-27 06:44:40,059 log 11180 10916 Not Found: /api/auth/delete-account/
+WARNING 2025-04-27 06:44:40,061 basehttp 11180 10916 "POST /api/auth/delete-account/ HTTP/1.1" 404 7966
+WARNING 2025-04-27 06:44:40,061 basehttp 11180 10916 "POST /api/auth/delete-account/ HTTP/1.1" 404 7966
+INFO 2025-04-27 06:44:45,482 basehttp 11180 9420 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 06:44:45,482 basehttp 11180 9420 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 06:44:45,530 basehttp 11180 9420 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 06:44:45,530 basehttp 11180 9420 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 06:44:46,699 basehttp 11180 9420 "POST /api/auth/login/ HTTP/1.1" 200 935
+INFO 2025-04-27 06:44:46,699 basehttp 11180 9420 "POST /api/auth/login/ HTTP/1.1" 200 935
+INFO 2025-04-27 06:44:46,768 basehttp 11180 9420 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:46,768 basehttp 11180 9420 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:46,802 basehttp 11180 9420 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:46,802 basehttp 11180 9420 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:46,839 basehttp 11180 9420 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:46,839 basehttp 11180 9420 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:46,849 basehttp 11180 11252 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:44:46,849 basehttp 11180 11252 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:44:46,867 basehttp 11180 9420 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:46,867 basehttp 11180 9420 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:44:46,903 basehttp 11180 9420 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:44:46,903 basehttp 11180 9420 "GET /api/user/profile/ HTTP/1.1" 200 232
+DEBUG 2025-04-27 06:46:52,709 connectionpool 11180 14508 Starting new HTTP connection (1): localhost:11434
+INFO 2025-04-27 06:46:52,955 basehttp 11180 5964 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 06:46:52,955 basehttp 11180 5964 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 06:46:52,958 log 11180 14256 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 06:46:52,958 log 11180 14256 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 06:46:52,959 basehttp 11180 14256 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+WARNING 2025-04-27 06:46:52,959 basehttp 11180 14256 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+INFO 2025-04-27 06:46:52,982 basehttp 11180 16536 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 06:46:52,982 basehttp 11180 16536 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 06:46:53,001 log 11180 10060 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:46:53,001 log 11180 10060 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:46:53,002 basehttp 11180 10060 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:46:53,002 basehttp 11180 10060 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:46:53,015 log 11180 4160 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:46:53,015 log 11180 4160 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:46:53,017 basehttp 11180 4160 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:46:53,017 basehttp 11180 4160 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+DEBUG 2025-04-27 06:46:54,756 connectionpool 11180 14508 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 06:46:54,765 basehttp 11180 14508 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:46:54,765 basehttp 11180 14508 "GET /api/chat-status/ HTTP/1.1" 200 135
+DEBUG 2025-04-27 06:46:54,791 connectionpool 11180 13748 Starting new HTTP connection (1): localhost:11434
+DEBUG 2025-04-27 06:46:56,843 connectionpool 11180 13748 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 06:46:56,855 basehttp 11180 13748 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:46:56,855 basehttp 11180 13748 "GET /api/chat-status/ HTTP/1.1" 200 135
+WARNING 2025-04-27 06:53:11,514 log 11180 5128 Forbidden: /api/chat-sessions/message/
+WARNING 2025-04-27 06:53:11,514 log 11180 5128 Forbidden: /api/chat-sessions/message/
+WARNING 2025-04-27 06:53:11,516 basehttp 11180 5128 "POST /api/chat-sessions/message/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:53:11,516 basehttp 11180 5128 "POST /api/chat-sessions/message/ HTTP/1.1" 403 109
+INFO 2025-04-27 06:53:25,709 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:25,709 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:25,734 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:25,734 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:25,754 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:25,754 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:25,798 basehttp 11180 15596 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:25,798 basehttp 11180 15596 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:25,814 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:25,814 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:25,849 basehttp 11180 15596 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:25,849 basehttp 11180 15596 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:27,108 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:27,108 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:27,121 basehttp 11180 14308 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:27,121 basehttp 11180 14308 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:27,136 basehttp 11180 14308 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:27,136 basehttp 11180 14308 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:27,146 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:27,146 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:28,954 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:28,954 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:28,971 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:28,971 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:28,992 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:28,992 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:28,997 basehttp 11180 14308 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:28,997 basehttp 11180 14308 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:29,009 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:29,009 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:29,029 basehttp 11180 15596 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:29,029 basehttp 11180 15596 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:30,874 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:30,874 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:30,898 basehttp 11180 14308 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:30,898 basehttp 11180 14308 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:30,918 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:30,918 basehttp 11180 15596 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:30,923 basehttp 11180 14308 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:30,923 basehttp 11180 14308 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:35,936 basehttp 11180 2204 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:35,936 basehttp 11180 2204 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:35,964 basehttp 11180 2204 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:35,964 basehttp 11180 2204 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:35,998 basehttp 11180 2204 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:35,998 basehttp 11180 2204 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:36,036 basehttp 11180 2204 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:36,036 basehttp 11180 2204 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:36,077 basehttp 11180 2204 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:36,077 basehttp 11180 2204 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:36,117 basehttp 11180 2204 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:36,117 basehttp 11180 2204 "GET /api/user/profile/ HTTP/1.1" 200 232
+DEBUG 2025-04-27 06:53:39,603 connectionpool 11180 2480 Starting new HTTP connection (1): localhost:11434
+INFO 2025-04-27 06:53:39,609 basehttp 11180 5436 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 06:53:39,609 basehttp 11180 5436 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 06:53:39,674 log 11180 3464 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 06:53:39,674 log 11180 3464 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 06:53:39,676 basehttp 11180 3464 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+WARNING 2025-04-27 06:53:39,676 basehttp 11180 3464 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+INFO 2025-04-27 06:53:39,753 basehttp 11180 10664 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 06:53:39,753 basehttp 11180 10664 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 06:53:39,782 log 11180 5632 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:53:39,782 log 11180 5632 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:53:39,784 basehttp 11180 5632 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:53:39,784 basehttp 11180 5632 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:53:39,834 log 11180 6572 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:53:39,834 log 11180 6572 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:53:39,836 basehttp 11180 6572 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:53:39,836 basehttp 11180 6572 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+DEBUG 2025-04-27 06:53:41,680 connectionpool 11180 2480 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 06:53:41,691 basehttp 11180 2480 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:53:41,691 basehttp 11180 2480 "GET /api/chat-status/ HTTP/1.1" 200 135
+DEBUG 2025-04-27 06:53:41,715 connectionpool 11180 10644 Starting new HTTP connection (1): localhost:11434
+DEBUG 2025-04-27 06:53:43,794 connectionpool 11180 10644 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 06:53:43,808 basehttp 11180 10644 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:53:43,808 basehttp 11180 10644 "GET /api/chat-status/ HTTP/1.1" 200 135
+WARNING 2025-04-27 06:53:58,022 log 11180 1812 Forbidden: /api/chat-sessions/local-1745733219842/
+WARNING 2025-04-27 06:53:58,022 log 11180 1812 Forbidden: /api/chat-sessions/local-1745733219842/
+WARNING 2025-04-27 06:53:58,025 basehttp 11180 1812 "PATCH /api/chat-sessions/local-1745733219842/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:53:58,025 basehttp 11180 1812 "PATCH /api/chat-sessions/local-1745733219842/ HTTP/1.1" 403 109
+INFO 2025-04-27 06:53:59,812 basehttp 11180 7884 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:59,812 basehttp 11180 7884 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:59,827 basehttp 11180 7884 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:59,827 basehttp 11180 7884 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:59,843 basehttp 11180 7884 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:59,843 basehttp 11180 7884 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:59,860 basehttp 11180 7884 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:59,860 basehttp 11180 7884 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:59,875 basehttp 11180 7884 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:59,875 basehttp 11180 7884 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:53:59,908 basehttp 11180 7884 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:53:59,908 basehttp 11180 7884 "GET /api/user/profile/ HTTP/1.1" 200 232
+DEBUG 2025-04-27 06:54:00,493 connectionpool 11180 9004 Starting new HTTP connection (1): localhost:11434
+INFO 2025-04-27 06:54:00,519 basehttp 11180 8796 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 06:54:00,519 basehttp 11180 8796 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 06:54:00,556 log 11180 2000 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 06:54:00,556 log 11180 2000 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 06:54:00,559 basehttp 11180 2000 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+WARNING 2025-04-27 06:54:00,559 basehttp 11180 2000 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+INFO 2025-04-27 06:54:00,617 basehttp 11180 9364 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 06:54:00,617 basehttp 11180 9364 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 06:54:00,667 log 11180 7020 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:54:00,667 log 11180 7020 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:54:00,669 basehttp 11180 7020 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:54:00,669 basehttp 11180 7020 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:54:00,716 log 11180 2812 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:54:00,716 log 11180 2812 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:54:00,720 basehttp 11180 2812 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:54:00,720 basehttp 11180 2812 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+DEBUG 2025-04-27 06:54:02,546 connectionpool 11180 9004 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 06:54:02,556 basehttp 11180 9004 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:54:02,556 basehttp 11180 9004 "GET /api/chat-status/ HTTP/1.1" 200 135
+DEBUG 2025-04-27 06:54:02,605 connectionpool 11180 15728 Starting new HTTP connection (1): localhost:11434
+DEBUG 2025-04-27 06:54:04,663 connectionpool 11180 15728 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 06:54:04,676 basehttp 11180 15728 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:54:04,676 basehttp 11180 15728 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:59:33,609 basehttp 11180 3592 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:59:33,609 basehttp 11180 3592 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:59:33,644 basehttp 11180 3592 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:59:33,644 basehttp 11180 3592 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:59:33,676 basehttp 11180 3592 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:59:33,676 basehttp 11180 3592 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:59:33,715 basehttp 11180 3592 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:59:33,715 basehttp 11180 3592 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:59:33,731 basehttp 11180 3592 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:59:33,731 basehttp 11180 3592 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 06:59:33,766 basehttp 11180 3592 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 06:59:33,766 basehttp 11180 3592 "GET /api/user/profile/ HTTP/1.1" 200 232
+DEBUG 2025-04-27 06:59:34,590 connectionpool 11180 1012 Starting new HTTP connection (1): localhost:11434
+INFO 2025-04-27 06:59:34,603 basehttp 11180 5876 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 06:59:34,603 basehttp 11180 5876 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 06:59:34,642 log 11180 1360 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 06:59:34,642 log 11180 1360 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 06:59:34,644 basehttp 11180 1360 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+WARNING 2025-04-27 06:59:34,644 basehttp 11180 1360 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+INFO 2025-04-27 06:59:34,683 basehttp 11180 3156 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 06:59:34,683 basehttp 11180 3156 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 06:59:34,717 log 11180 10788 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:59:34,717 log 11180 10788 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:59:34,719 basehttp 11180 10788 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:59:34,719 basehttp 11180 10788 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:59:34,770 log 11180 4116 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:59:34,770 log 11180 4116 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 06:59:34,772 basehttp 11180 4116 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 06:59:34,772 basehttp 11180 4116 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+DEBUG 2025-04-27 06:59:36,672 connectionpool 11180 1012 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 06:59:36,686 basehttp 11180 1012 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:59:36,686 basehttp 11180 1012 "GET /api/chat-status/ HTTP/1.1" 200 135
+DEBUG 2025-04-27 06:59:36,735 connectionpool 11180 5100 Starting new HTTP connection (1): localhost:11434
+DEBUG 2025-04-27 06:59:38,793 connectionpool 11180 5100 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 06:59:38,803 basehttp 11180 5100 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 06:59:38,803 basehttp 11180 5100 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:02:10,321 basehttp 11180 2032 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:02:10,321 basehttp 11180 2032 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:02:10,356 basehttp 11180 2032 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:02:10,356 basehttp 11180 2032 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:02:10,375 basehttp 11180 2032 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:02:10,375 basehttp 11180 2032 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:02:10,406 basehttp 11180 2032 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:02:10,406 basehttp 11180 2032 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:02:10,422 basehttp 11180 2032 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:02:10,422 basehttp 11180 2032 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:02:10,440 basehttp 11180 2032 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:02:10,440 basehttp 11180 2032 "GET /api/user/profile/ HTTP/1.1" 200 232
+DEBUG 2025-04-27 07:02:11,242 connectionpool 11180 5016 Starting new HTTP connection (1): localhost:11434
+INFO 2025-04-27 07:02:11,256 basehttp 11180 15632 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 07:02:11,256 basehttp 11180 15632 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 07:02:11,305 log 11180 3560 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 07:02:11,305 log 11180 3560 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 07:02:11,307 basehttp 11180 3560 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+WARNING 2025-04-27 07:02:11,307 basehttp 11180 3560 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+INFO 2025-04-27 07:02:11,359 basehttp 11180 10648 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 07:02:11,359 basehttp 11180 10648 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 07:02:11,384 log 11180 14172 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:02:11,384 log 11180 14172 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:02:11,386 basehttp 11180 14172 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:02:11,386 basehttp 11180 14172 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:02:11,420 log 11180 7336 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:02:11,420 log 11180 7336 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:02:11,422 basehttp 11180 7336 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:02:11,422 basehttp 11180 7336 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+DEBUG 2025-04-27 07:02:13,299 connectionpool 11180 5016 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 07:02:13,309 basehttp 11180 5016 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:02:13,309 basehttp 11180 5016 "GET /api/chat-status/ HTTP/1.1" 200 135
+DEBUG 2025-04-27 07:02:13,347 connectionpool 11180 14216 Starting new HTTP connection (1): localhost:11434
+DEBUG 2025-04-27 07:02:15,401 connectionpool 11180 14216 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 07:02:15,413 basehttp 11180 14216 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:02:15,413 basehttp 11180 14216 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:03:33,438 basehttp 11180 5864 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:03:33,438 basehttp 11180 5864 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:03:33,472 basehttp 11180 5864 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:03:33,472 basehttp 11180 5864 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:03:33,501 basehttp 11180 5864 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:03:33,501 basehttp 11180 5864 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:03:33,541 basehttp 11180 5864 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:03:33,541 basehttp 11180 5864 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:03:33,561 basehttp 11180 5864 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:03:33,561 basehttp 11180 5864 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:03:33,598 basehttp 11180 5864 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:03:33,598 basehttp 11180 5864 "GET /api/user/profile/ HTTP/1.1" 200 232
+DEBUG 2025-04-27 07:03:34,070 connectionpool 11180 5664 Starting new HTTP connection (1): localhost:11434
+INFO 2025-04-27 07:03:34,080 basehttp 11180 5516 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 07:03:34,080 basehttp 11180 5516 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 07:03:34,136 log 11180 2584 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 07:03:34,136 log 11180 2584 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 07:03:34,138 basehttp 11180 2584 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+WARNING 2025-04-27 07:03:34,138 basehttp 11180 2584 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+INFO 2025-04-27 07:03:34,175 basehttp 11180 7548 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 07:03:34,175 basehttp 11180 7548 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 07:03:34,221 log 11180 6052 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:03:34,221 log 11180 6052 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:03:34,223 basehttp 11180 6052 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:03:34,223 basehttp 11180 6052 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:03:34,254 log 11180 7084 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:03:34,254 log 11180 7084 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:03:34,256 basehttp 11180 7084 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:03:34,256 basehttp 11180 7084 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+DEBUG 2025-04-27 07:03:36,131 connectionpool 11180 5664 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 07:03:36,144 basehttp 11180 5664 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:03:36,144 basehttp 11180 5664 "GET /api/chat-status/ HTTP/1.1" 200 135
+DEBUG 2025-04-27 07:03:36,169 connectionpool 11180 16972 Starting new HTTP connection (1): localhost:11434
+DEBUG 2025-04-27 07:03:38,240 connectionpool 11180 16972 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 07:03:38,251 basehttp 11180 16972 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:03:38,251 basehttp 11180 16972 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:03:47,932 basehttp 11180 1940 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:03:47,932 basehttp 11180 1940 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:03:47,966 basehttp 11180 1940 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:03:47,966 basehttp 11180 1940 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:03:47,983 basehttp 11180 1940 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:03:47,983 basehttp 11180 1940 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:03:48,003 basehttp 11180 1940 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:03:48,003 basehttp 11180 1940 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:03:48,029 basehttp 11180 1940 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:03:48,029 basehttp 11180 1940 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:03:48,050 basehttp 11180 1940 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:03:48,050 basehttp 11180 1940 "GET /api/user/profile/ HTTP/1.1" 200 232
+DEBUG 2025-04-27 07:03:54,795 connectionpool 11180 13204 Starting new HTTP connection (1): localhost:11434
+INFO 2025-04-27 07:03:54,808 basehttp 11180 13096 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 07:03:54,808 basehttp 11180 13096 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 07:03:54,841 log 11180 7212 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 07:03:54,841 log 11180 7212 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 07:03:54,851 basehttp 11180 7212 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+WARNING 2025-04-27 07:03:54,851 basehttp 11180 7212 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+WARNING 2025-04-27 07:03:54,856 log 11180 7256 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:03:54,856 log 11180 7256 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:03:54,857 basehttp 11180 7256 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:03:54,857 basehttp 11180 7256 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+INFO 2025-04-27 07:03:54,859 basehttp 11180 16248 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 07:03:54,859 basehttp 11180 16248 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 07:03:54,898 log 11180 11252 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:03:54,898 log 11180 11252 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:03:54,901 basehttp 11180 11252 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:03:54,901 basehttp 11180 11252 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+DEBUG 2025-04-27 07:03:56,854 connectionpool 11180 13204 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 07:03:56,865 basehttp 11180 13204 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:03:56,865 basehttp 11180 13204 "GET /api/chat-status/ HTTP/1.1" 200 135
+DEBUG 2025-04-27 07:03:56,902 connectionpool 11180 10156 Starting new HTTP connection (1): localhost:11434
+DEBUG 2025-04-27 07:03:58,933 connectionpool 11180 10156 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 07:03:58,945 basehttp 11180 10156 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:03:58,945 basehttp 11180 10156 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:06:52,317 basehttp 11180 6496 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:06:52,317 basehttp 11180 6496 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:06:52,334 basehttp 11180 6496 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:06:52,334 basehttp 11180 6496 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:06:52,351 basehttp 11180 6496 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:06:52,351 basehttp 11180 6496 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:06:52,389 basehttp 11180 6496 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:06:52,389 basehttp 11180 6496 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:06:52,418 basehttp 11180 6496 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:06:52,418 basehttp 11180 6496 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:06:52,450 basehttp 11180 6496 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:06:52,450 basehttp 11180 6496 "GET /api/user/profile/ HTTP/1.1" 200 232
+DEBUG 2025-04-27 07:06:53,263 connectionpool 11180 1332 Starting new HTTP connection (1): localhost:11434
+INFO 2025-04-27 07:06:53,278 basehttp 11180 12228 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 07:06:53,278 basehttp 11180 12228 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 07:06:53,321 log 11180 12276 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 07:06:53,321 log 11180 12276 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 07:06:53,323 basehttp 11180 12276 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+WARNING 2025-04-27 07:06:53,323 basehttp 11180 12276 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+INFO 2025-04-27 07:06:53,374 basehttp 11180 6036 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 07:06:53,374 basehttp 11180 6036 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 07:06:53,395 log 11180 14456 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:06:53,395 log 11180 14456 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:06:53,397 basehttp 11180 14456 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:06:53,397 basehttp 11180 14456 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:06:53,444 log 11180 1480 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:06:53,444 log 11180 1480 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:06:53,446 basehttp 11180 1480 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:06:53,446 basehttp 11180 1480 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+DEBUG 2025-04-27 07:06:55,329 connectionpool 11180 1332 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 07:06:55,342 basehttp 11180 1332 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:06:55,342 basehttp 11180 1332 "GET /api/chat-status/ HTTP/1.1" 200 135
+DEBUG 2025-04-27 07:06:55,369 connectionpool 11180 5236 Starting new HTTP connection (1): localhost:11434
+DEBUG 2025-04-27 07:06:57,395 connectionpool 11180 5236 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 07:06:57,406 basehttp 11180 5236 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:06:57,406 basehttp 11180 5236 "GET /api/chat-status/ HTTP/1.1" 200 135
+DEBUG 2025-04-27 07:08:18,585 connectionpool 11180 14464 Starting new HTTP connection (1): localhost:11434
+INFO 2025-04-27 07:08:18,604 basehttp 11180 14460 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 07:08:18,604 basehttp 11180 14460 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 07:08:18,621 log 11180 5888 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 07:08:18,621 log 11180 5888 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 07:08:18,622 basehttp 11180 5888 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+WARNING 2025-04-27 07:08:18,622 basehttp 11180 5888 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+INFO 2025-04-27 07:08:18,653 basehttp 11180 16652 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 07:08:18,653 basehttp 11180 16652 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 07:08:18,656 log 11180 5396 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:08:18,656 log 11180 5396 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:08:18,658 basehttp 11180 5396 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:08:18,658 basehttp 11180 5396 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:08:18,707 log 11180 13748 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:08:18,707 log 11180 13748 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:08:18,709 basehttp 11180 13748 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:08:18,709 basehttp 11180 13748 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+DEBUG 2025-04-27 07:08:20,643 connectionpool 11180 14464 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 07:08:20,653 basehttp 11180 14464 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:08:20,653 basehttp 11180 14464 "GET /api/chat-status/ HTTP/1.1" 200 135
+DEBUG 2025-04-27 07:08:20,670 connectionpool 11180 1492 Starting new HTTP connection (1): localhost:11434
+DEBUG 2025-04-27 07:08:22,715 connectionpool 11180 1492 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 07:08:22,728 basehttp 11180 1492 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:08:22,728 basehttp 11180 1492 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:08:23,425 basehttp 11180 12204 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:08:23,425 basehttp 11180 12204 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:08:23,457 basehttp 11180 12204 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:08:23,457 basehttp 11180 12204 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:08:23,488 basehttp 11180 12204 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:08:23,488 basehttp 11180 12204 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:08:23,524 basehttp 11180 12204 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:08:23,524 basehttp 11180 12204 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:08:23,556 basehttp 11180 12204 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:08:23,556 basehttp 11180 12204 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:08:23,595 basehttp 11180 12204 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:08:23,595 basehttp 11180 12204 "GET /api/user/profile/ HTTP/1.1" 200 232
+DEBUG 2025-04-27 07:08:23,927 connectionpool 11180 13492 Starting new HTTP connection (1): localhost:11434
+INFO 2025-04-27 07:08:23,935 basehttp 11180 1360 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 07:08:23,935 basehttp 11180 1360 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 07:08:23,960 log 11180 16140 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 07:08:23,960 log 11180 16140 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 07:08:23,966 basehttp 11180 16140 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+WARNING 2025-04-27 07:08:23,966 basehttp 11180 16140 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+INFO 2025-04-27 07:08:23,971 basehttp 11180 9780 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 07:08:23,971 basehttp 11180 9780 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 07:08:23,974 log 11180 848 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:08:23,974 log 11180 848 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:08:23,975 basehttp 11180 848 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:08:23,975 basehttp 11180 848 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:08:23,994 log 11180 7400 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:08:23,994 log 11180 7400 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:08:23,996 basehttp 11180 7400 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:08:23,996 basehttp 11180 7400 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+DEBUG 2025-04-27 07:08:25,972 connectionpool 11180 13492 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 07:08:25,984 basehttp 11180 13492 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:08:25,984 basehttp 11180 13492 "GET /api/chat-status/ HTTP/1.1" 200 135
+DEBUG 2025-04-27 07:08:26,012 connectionpool 11180 10588 Starting new HTTP connection (1): localhost:11434
+DEBUG 2025-04-27 07:08:28,055 connectionpool 11180 10588 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 07:08:28,066 basehttp 11180 10588 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:08:28,066 basehttp 11180 10588 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:08:55,531 autoreload 11180 14108 C:\Users\Kofi Wiredu\VirtuAId\backend\core\admin.py changed, reloading.
+INFO 2025-04-27 07:08:55,531 autoreload 11180 14108 C:\Users\Kofi Wiredu\VirtuAId\backend\core\admin.py changed, reloading.
+INFO 2025-04-27 07:08:56,908 autoreload 7076 1336 Watching for file changes with StatReloader
+INFO 2025-04-27 07:08:56,908 autoreload 7076 1336 Watching for file changes with StatReloader
+INFO 2025-04-27 07:23:42,469 autoreload 7076 1336 C:\Users\Kofi Wiredu\VirtuAId\backend\core\serializers.py changed, reloading.
+INFO 2025-04-27 07:23:42,469 autoreload 7076 1336 C:\Users\Kofi Wiredu\VirtuAId\backend\core\serializers.py changed, reloading.
+INFO 2025-04-27 07:23:43,765 autoreload 11524 11316 Watching for file changes with StatReloader
+INFO 2025-04-27 07:23:43,765 autoreload 11524 11316 Watching for file changes with StatReloader
+INFO 2025-04-27 07:23:59,611 autoreload 11524 11316 C:\Users\Kofi Wiredu\VirtuAId\backend\core\views.py changed, reloading.
+INFO 2025-04-27 07:23:59,611 autoreload 11524 11316 C:\Users\Kofi Wiredu\VirtuAId\backend\core\views.py changed, reloading.
+INFO 2025-04-27 07:24:00,794 autoreload 9008 14124 Watching for file changes with StatReloader
+INFO 2025-04-27 07:24:00,794 autoreload 9008 14124 Watching for file changes with StatReloader
+INFO 2025-04-27 07:24:12,202 basehttp 9008 7536 "OPTIONS /api/user/onboarding-status/ HTTP/1.1" 200 0
+INFO 2025-04-27 07:24:12,204 basehttp 9008 12472 "OPTIONS /api/user/onboarding-status/ HTTP/1.1" 200 0
+INFO 2025-04-27 07:24:12,202 basehttp 9008 7536 "OPTIONS /api/user/onboarding-status/ HTTP/1.1" 200 0
+INFO 2025-04-27 07:24:12,204 basehttp 9008 10228 "OPTIONS /api/user/onboarding-status/ HTTP/1.1" 200 0
+INFO 2025-04-27 07:24:12,204 basehttp 9008 12472 "OPTIONS /api/user/onboarding-status/ HTTP/1.1" 200 0
+INFO 2025-04-27 07:24:12,205 basehttp 9008 14076 "OPTIONS /api/user/onboarding-status/ HTTP/1.1" 200 0
+INFO 2025-04-27 07:24:12,204 basehttp 9008 10228 "OPTIONS /api/user/onboarding-status/ HTTP/1.1" 200 0
+INFO 2025-04-27 07:24:12,205 basehttp 9008 14076 "OPTIONS /api/user/onboarding-status/ HTTP/1.1" 200 0
+INFO 2025-04-27 07:24:12,526 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:24:12,526 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:24:12,567 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:24:12,567 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:24:12,571 basehttp 9008 14076 "OPTIONS /api/user/profile/ HTTP/1.1" 200 0
+INFO 2025-04-27 07:24:12,571 basehttp 9008 14076 "OPTIONS /api/user/profile/ HTTP/1.1" 200 0
+INFO 2025-04-27 07:24:12,581 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:24:12,581 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:24:12,613 basehttp 9008 17028 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:24:12,613 basehttp 9008 17028 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:24:12,642 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:24:12,642 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:24:12,676 basehttp 9008 17028 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:24:12,676 basehttp 9008 17028 "GET /api/user/profile/ HTTP/1.1" 200 232
+DEBUG 2025-04-27 07:24:13,365 connectionpool 9008 7936 Starting new HTTP connection (1): localhost:11434
+INFO 2025-04-27 07:24:13,367 basehttp 9008 17160 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 07:24:13,367 basehttp 9008 17160 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 07:24:13,422 log 9008 12136 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 07:24:13,422 log 9008 12136 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 07:24:13,424 basehttp 9008 12136 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+WARNING 2025-04-27 07:24:13,424 basehttp 9008 12136 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+INFO 2025-04-27 07:24:13,472 basehttp 9008 15700 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 07:24:13,472 basehttp 9008 15700 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 07:24:13,515 log 9008 2112 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:24:13,515 log 9008 2112 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:24:13,517 basehttp 9008 2112 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:24:13,517 basehttp 9008 2112 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:24:13,561 log 9008 9956 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:24:13,561 log 9008 9956 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:24:13,563 basehttp 9008 9956 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:24:13,563 basehttp 9008 9956 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+DEBUG 2025-04-27 07:24:15,456 connectionpool 9008 7936 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 07:24:15,474 basehttp 9008 7936 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:24:15,474 basehttp 9008 7936 "GET /api/chat-status/ HTTP/1.1" 200 135
+DEBUG 2025-04-27 07:24:15,491 connectionpool 9008 16456 Starting new HTTP connection (1): localhost:11434
+DEBUG 2025-04-27 07:24:17,540 connectionpool 9008 16456 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 07:24:17,550 basehttp 9008 16456 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:24:17,550 basehttp 9008 16456 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:26:58,983 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:26:58,983 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:26:59,008 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:26:59,008 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:26:59,023 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:26:59,023 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:26:59,058 basehttp 9008 17028 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:26:59,058 basehttp 9008 17028 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:26:59,086 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:26:59,086 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:26:59,118 basehttp 9008 17028 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:26:59,118 basehttp 9008 17028 "GET /api/user/profile/ HTTP/1.1" 200 232
+DEBUG 2025-04-27 07:27:00,504 connectionpool 9008 5896 Starting new HTTP connection (1): localhost:11434
+INFO 2025-04-27 07:27:00,519 basehttp 9008 17048 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 07:27:00,519 basehttp 9008 17048 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 07:27:00,563 log 9008 9544 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 07:27:00,563 log 9008 9544 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 07:27:00,565 basehttp 9008 9544 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+WARNING 2025-04-27 07:27:00,565 basehttp 9008 9544 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8001
+INFO 2025-04-27 07:27:00,608 basehttp 9008 9944 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 07:27:00,608 basehttp 9008 9944 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 07:27:00,637 log 9008 10000 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:27:00,637 log 9008 10000 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:27:00,639 basehttp 9008 10000 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:27:00,639 basehttp 9008 10000 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:27:00,671 log 9008 11660 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:27:00,671 log 9008 11660 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 07:27:00,673 basehttp 9008 11660 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 07:27:00,673 basehttp 9008 11660 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+DEBUG 2025-04-27 07:27:02,595 connectionpool 9008 5896 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 07:27:02,609 basehttp 9008 5896 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:27:02,609 basehttp 9008 5896 "GET /api/chat-status/ HTTP/1.1" 200 135
+DEBUG 2025-04-27 07:27:02,644 connectionpool 9008 4204 Starting new HTTP connection (1): localhost:11434
+DEBUG 2025-04-27 07:27:04,710 connectionpool 9008 4204 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 07:27:04,722 basehttp 9008 4204 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:27:04,722 basehttp 9008 4204 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 07:27:26,059 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:27:26,059 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:27:26,098 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:27:26,098 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:27:26,131 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:27:26,131 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:27:26,156 basehttp 9008 7024 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:27:26,156 basehttp 9008 7024 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:27:26,159 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:27:26,159 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:27:26,209 basehttp 9008 17028 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:27:26,209 basehttp 9008 17028 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:27:27,515 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:27:27,515 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:27:27,519 basehttp 9008 7024 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:27:27,519 basehttp 9008 7024 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:27:27,537 basehttp 9008 7024 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:27:27,537 basehttp 9008 7024 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:27:27,552 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:27:27,552 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:27:35,826 basehttp 9008 14076 "OPTIONS /api/auth/csrf/ HTTP/1.1" 200 0
+INFO 2025-04-27 07:27:35,826 basehttp 9008 14076 "OPTIONS /api/auth/csrf/ HTTP/1.1" 200 0
+INFO 2025-04-27 07:27:35,856 basehttp 9008 17028 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 07:27:35,856 basehttp 9008 17028 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 07:27:35,861 basehttp 9008 14076 "OPTIONS /api/auth/delete-account/ HTTP/1.1" 200 0
+INFO 2025-04-27 07:27:35,861 basehttp 9008 14076 "OPTIONS /api/auth/delete-account/ HTTP/1.1" 200 0
+WARNING 2025-04-27 07:27:35,895 log 9008 17028 Not Found: /api/auth/delete-account/
+WARNING 2025-04-27 07:27:35,895 log 9008 17028 Not Found: /api/auth/delete-account/
+WARNING 2025-04-27 07:27:35,897 basehttp 9008 17028 "POST /api/auth/delete-account/ HTTP/1.1" 404 7966
+WARNING 2025-04-27 07:27:35,897 basehttp 9008 17028 "POST /api/auth/delete-account/ HTTP/1.1" 404 7966
+INFO 2025-04-27 07:27:40,102 basehttp 9008 17028 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 07:27:40,102 basehttp 9008 17028 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 07:27:40,144 basehttp 9008 17028 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 07:27:40,144 basehttp 9008 17028 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 07:27:40,149 basehttp 9008 14076 "OPTIONS /api/auth/login/ HTTP/1.1" 200 0
+INFO 2025-04-27 07:27:40,149 basehttp 9008 14076 "OPTIONS /api/auth/login/ HTTP/1.1" 200 0
+INFO 2025-04-27 07:27:41,487 basehttp 9008 17028 "POST /api/auth/login/ HTTP/1.1" 200 935
+INFO 2025-04-27 07:27:41,487 basehttp 9008 17028 "POST /api/auth/login/ HTTP/1.1" 200 935
+INFO 2025-04-27 07:27:41,551 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:27:41,551 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:27:41,583 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:27:41,583 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:27:41,621 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:27:41,621 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:27:41,627 basehttp 9008 7024 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:27:41,627 basehttp 9008 7024 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:27:41,640 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:27:41,640 basehttp 9008 17028 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:27:41,681 basehttp 9008 17028 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:27:41,681 basehttp 9008 17028 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:44:18,766 autoreload 9008 14124 C:\Users\Kofi Wiredu\VirtuAId\backend\core\urls.py changed, reloading.
+INFO 2025-04-27 07:44:18,766 autoreload 9008 14124 C:\Users\Kofi Wiredu\VirtuAId\backend\core\urls.py changed, reloading.
+INFO 2025-04-27 07:44:19,768 autoreload 9000 10396 Watching for file changes with StatReloader
+INFO 2025-04-27 07:44:19,768 autoreload 9000 10396 Watching for file changes with StatReloader
+INFO 2025-04-27 07:47:01,626 basehttp 9000 12792 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:47:01,626 basehttp 9000 12792 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:47:01,655 basehttp 9000 12792 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:47:01,655 basehttp 9000 12792 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 07:47:01,689 basehttp 9000 12792 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:47:01,689 basehttp 9000 12792 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 07:51:14,339 autoreload 9000 10396 C:\Users\Kofi Wiredu\VirtuAId\backend\core\views.py changed, reloading.
+INFO 2025-04-27 07:51:14,339 autoreload 9000 10396 C:\Users\Kofi Wiredu\VirtuAId\backend\core\views.py changed, reloading.
+INFO 2025-04-27 07:51:15,356 autoreload 15796 7020 Watching for file changes with StatReloader
+INFO 2025-04-27 07:51:15,356 autoreload 15796 7020 Watching for file changes with StatReloader
+INFO 2025-04-27 07:51:45,933 autoreload 15796 7020 C:\Users\Kofi Wiredu\VirtuAId\backend\core\models.py changed, reloading.
+INFO 2025-04-27 07:51:45,933 autoreload 15796 7020 C:\Users\Kofi Wiredu\VirtuAId\backend\core\models.py changed, reloading.
+INFO 2025-04-27 07:51:46,875 autoreload 4408 16796 Watching for file changes with StatReloader
+INFO 2025-04-27 07:51:46,875 autoreload 4408 16796 Watching for file changes with StatReloader
+INFO 2025-04-27 07:52:14,132 autoreload 4408 16796 C:\Users\Kofi Wiredu\VirtuAId\backend\core\views.py changed, reloading.
+INFO 2025-04-27 07:52:14,132 autoreload 4408 16796 C:\Users\Kofi Wiredu\VirtuAId\backend\core\views.py changed, reloading.
+INFO 2025-04-27 07:52:15,080 autoreload 11500 16812 Watching for file changes with StatReloader
+INFO 2025-04-27 07:52:15,080 autoreload 11500 16812 Watching for file changes with StatReloader
+INFO 2025-04-27 08:12:22,309 basehttp 11500 8808 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 08:12:22,309 basehttp 11500 8808 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 08:12:22,328 basehttp 11500 5496 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 08:12:22,328 basehttp 11500 5496 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 08:12:22,342 basehttp 11500 8808 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 08:12:22,342 basehttp 11500 8808 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 08:12:22,372 basehttp 11500 5496 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 08:12:22,372 basehttp 11500 5496 "GET /api/user/profile/ HTTP/1.1" 200 232
+INFO 2025-04-27 08:12:31,143 basehttp 11500 5496 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 08:12:31,143 basehttp 11500 5496 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 08:12:31,208 basehttp 11500 5496 "POST /api/auth/delete-account/ HTTP/1.1" 200 201
+INFO 2025-04-27 08:12:31,208 basehttp 11500 5496 "POST /api/auth/delete-account/ HTTP/1.1" 200 201
+INFO 2025-04-27 08:12:36,615 basehttp 11500 5496 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 08:12:36,615 basehttp 11500 5496 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 08:12:36,663 basehttp 11500 5496 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 08:12:36,663 basehttp 11500 5496 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+WARNING 2025-04-27 08:12:37,278 log 11500 5496 Bad Request: /api/auth/login/
+WARNING 2025-04-27 08:12:37,278 log 11500 5496 Bad Request: /api/auth/login/
+WARNING 2025-04-27 08:12:37,280 basehttp 11500 5496 "POST /api/auth/login/ HTTP/1.1" 400 44
+WARNING 2025-04-27 08:12:37,280 basehttp 11500 5496 "POST /api/auth/login/ HTTP/1.1" 400 44
+INFO 2025-04-27 08:13:18,944 basehttp 11500 5496 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 08:13:18,944 basehttp 11500 5496 "GET /api/auth/csrf/ HTTP/1.1" 200 80
+INFO 2025-04-27 08:13:20,069 basehttp 11500 5496 "POST /api/auth/login/ HTTP/1.1" 200 945
+INFO 2025-04-27 08:13:20,069 basehttp 11500 5496 "POST /api/auth/login/ HTTP/1.1" 200 945
+INFO 2025-04-27 08:13:20,130 basehttp 11500 5496 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 08:13:20,130 basehttp 11500 5496 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 08:13:20,168 basehttp 11500 5496 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 08:13:20,168 basehttp 11500 5496 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 08:13:20,218 basehttp 11500 5496 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 08:13:20,218 basehttp 11500 5496 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 08:13:20,223 basehttp 11500 8808 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 08:13:20,223 basehttp 11500 8808 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 08:13:20,259 basehttp 11500 5496 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 08:13:20,259 basehttp 11500 5496 "GET /api/user/onboarding-status/ HTTP/1.1" 200 61
+INFO 2025-04-27 08:13:20,311 basehttp 11500 5496 "GET /api/user/profile/ HTTP/1.1" 200 238
+INFO 2025-04-27 08:13:20,311 basehttp 11500 5496 "GET /api/user/profile/ HTTP/1.1" 200 238
+DEBUG 2025-04-27 08:13:23,069 connectionpool 11500 13052 Starting new HTTP connection (1): localhost:11434
+INFO 2025-04-27 08:13:23,394 basehttp 11500 2868 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 08:13:23,394 basehttp 11500 2868 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 08:13:23,411 log 11500 1420 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 08:13:23,411 log 11500 1420 Not Found: /api/chat-history/by_course/
+WARNING 2025-04-27 08:13:23,413 basehttp 11500 1420 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8200
+WARNING 2025-04-27 08:13:23,413 basehttp 11500 1420 "GET /api/chat-history/by_course/?course_id=computer-science HTTP/1.1" 404 8200
+INFO 2025-04-27 08:13:23,427 basehttp 11500 7112 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+INFO 2025-04-27 08:13:23,427 basehttp 11500 7112 "GET /api/chat-sessions/ HTTP/1.1" 200 52
+WARNING 2025-04-27 08:13:23,446 log 11500 8796 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 08:13:23,446 log 11500 8796 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 08:13:23,450 basehttp 11500 8796 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 08:13:23,450 basehttp 11500 8796 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 08:13:23,459 log 11500 12044 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 08:13:23,459 log 11500 12044 Forbidden: /api/chat-sessions/
+WARNING 2025-04-27 08:13:23,462 basehttp 11500 12044 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+WARNING 2025-04-27 08:13:23,462 basehttp 11500 12044 "POST /api/chat-sessions/ HTTP/1.1" 403 109
+DEBUG 2025-04-27 08:13:25,141 connectionpool 11500 13052 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 08:13:25,154 basehttp 11500 13052 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 08:13:25,154 basehttp 11500 13052 "GET /api/chat-status/ HTTP/1.1" 200 135
+DEBUG 2025-04-27 08:13:25,187 connectionpool 11500 14464 Starting new HTTP connection (1): localhost:11434
+DEBUG 2025-04-27 08:13:27,242 connectionpool 11500 14464 http://localhost:11434 "GET /api/tags HTTP/1.1" 200 1313
+INFO 2025-04-27 08:13:27,252 basehttp 11500 14464 "GET /api/chat-status/ HTTP/1.1" 200 135
+INFO 2025-04-27 08:13:27,252 basehttp 11500 14464 "GET /api/chat-status/ HTTP/1.1" 200 135

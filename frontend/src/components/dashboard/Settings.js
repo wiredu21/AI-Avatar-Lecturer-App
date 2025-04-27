@@ -662,10 +662,17 @@ const Settings = () => {
     
     try {
       // Call the API to delete the account
-      await userApi.deleteAccount();
+      const response = await userApi.deleteAccount();
       
-      // Show success message
-      showToast("Your account has been deleted successfully", "success");
+      // Check if real API was used
+      if (response.realApiUsed === false) {
+        // Mock implementation was used - inform the user with a special message
+        showToast("Account marked for deletion (Note: Using frontend-only implementation)", "warning");
+        console.warn("Account deletion used mock implementation. Backend API not reached.");
+      } else {
+        // Real API was used
+        showToast("Your account has been deleted successfully", "success");
+      }
       
       // Close the modal
       setShowDeleteModal(false);
