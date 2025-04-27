@@ -8,6 +8,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import LoginAvatar from "./LoginAvatar";
 import iconImage from "../../assets/images/icon.png";
+import api from "../../utils/axios";
 
 export default function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
@@ -24,47 +25,108 @@ export default function LoginPage() {
     const onSubmit = async (data) => {
         setIsLoading(true);
         setLoginError("");
-
+        
         try {
-            // In a real implementation, this would be an API call to your authentication endpoint
-            // const response = await fetch('/api/auth/login', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify(data)
-            // });
-            // const userData = await response.json();
+            // Check if we have stored credentials for demo purposes
+            const storedCredentialsJSON = localStorage.getItem("userCredentials");
             
-            // Simulate API call for demo purposes
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            
-            // For demo purposes, show error for specific email
-            if (data.email === "test@error.com") {
-                setLoginError("Incorrect email or password");
-                setIsLoading(false);
-                return;
+            if (storedCredentialsJSON) {
+                // Parse stored credentials
+                const storedCredentials = JSON.parse(storedCredentialsJSON);
+                
+                // Check if this is the same email
+                if (storedCredentials.email === data.email) {
+                    // Verify password matches
+                    if (storedCredentials.password === data.password) {
+                        console.log("Login successful using stored credentials");
+                        
+                        // Set authentication state
+                        localStorage.setItem("isLoggedIn", "true");
+                        localStorage.setItem("userEmail", data.email);
+                        
+                        // Need to actually authenticate with the backend to get a real token
+                        // Will continue to API login below instead of using demo auth
+                    } else {
+                        // Password doesn't match - continue to normal login flow
+                        console.log("Stored password doesn't match, trying API login");
+                    }
+                }
             }
             
-            // For demo purposes, check if this is a first-time user
-            // In a real app, this information would come from the backend
-            const isFirstTimeUser = data.email === "new@example.com";
+            // Normal login flow with API
+            // Get CSRF token first
+            await api.get('/api/auth/csrf/');
             
-            // Store authentication token and user info in localStorage or context
-            localStorage.setItem("authToken", "demo-token-" + Date.now());
-            localStorage.setItem("userEmail", data.email);
-            localStorage.setItem("isFirstTimeLogin", isFirstTimeUser.toString());
+            // Make actual login API call with withCredentials explicitly set
+            const response = await api.post('/api/auth/login/', {
+                username: data.email.split('@')[0], // Use email username as the username
+                password: data.password
+            }, {
+                withCredentials: true // Ensure cookies are included
+            });
             
-            console.log("Login successful", data);
-            
-            if (isFirstTimeUser) {
-                // Redirect first-time users to the About You page
-                navigate("/about-you");
-            } else {
-                // Redirect returning users to the dashboard
-                navigate("/dashboard");
+            // Store user info and authentication data
+            if (response.data) {
+                console.log("Login response:", response.data);
+                
+                // Set authentication state
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("userEmail", data.email);
+                
+                // Store the tokens from response - prioritize JWT tokens
+                if (response.data.token) {
+                    localStorage.setItem("authToken", response.data.token);
+                    console.log("JWT access token stored");
+                
+                    // Also store refresh token if available
+                    if (response.data.refresh) {
+                        localStorage.setItem("refreshToken", response.data.refresh);
+                        console.log("JWT refresh token stored");
+                    }
+                } else if (response.data.key) {
+                    // Fallback for legacy token format
+                    localStorage.setItem("authToken", response.data.key);
+                    console.log("Auth token stored from response (key)");
+                } else {
+                    // If no token in response, authentication is incomplete
+                    console.log("No token in response. Authentication may be incomplete.");
+                    // Display warning to user
+                    setLoginError("Authentication partially complete. Some features may not work correctly.");
+                }
+                
+                // Get onboarding status from login response
+                const { has_completed_onboarding, is_first_time_login } = response.data.onboarding_status;
+                
+                // Store flags in localStorage for easy access in components
+                localStorage.setItem("hasCompletedOnboarding", has_completed_onboarding.toString());
+                localStorage.setItem("isFirstTimeLogin", is_first_time_login.toString());
+                
+                console.log("Login successful", response.data);
+                
+                // Also store the credentials for our password change feature
+                const credentials = {
+                    email: data.email,
+                    password: data.password,
+                    lastUpdated: new Date().toISOString()
+                };
+                localStorage.setItem("userCredentials", JSON.stringify(credentials));
+                
+                // Redirect based on onboarding status
+                if (is_first_time_login || !has_completed_onboarding) {
+                    // First-time users go to onboarding
+                    navigate("/about-you");
+                } else {
+                    // Returning users go directly to dashboard
+                    navigate("/dashboard");
+                }
             }
         } catch (error) {
             console.error("Login error:", error);
-            setLoginError("An error occurred during login. Please try again.");
+            const errorMsg = error.response?.data?.detail || 
+                            error.response?.data?.message ||
+                            error.response?.data?.non_field_errors?.[0] ||
+                            "An error occurred during login. Please try again.";
+            setLoginError(errorMsg);
         } finally {
             setIsLoading(false);
         }

@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import api, { userApi } from '../../utils/axios';
 
 // This component provides a consistent layout for all dashboard pages
 const DashboardLayout = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  
+  console.log("[DEBUG] DashboardLayout - Component rendering", {
+    path: location.pathname
+  });
   
   // Get current path to highlight active menu item
   const currentPath = location.pathname;
@@ -14,16 +19,123 @@ const DashboardLayout = ({ children }) => {
     return currentPath === path;
   };
 
-  // Handle logout
-  const handleLogout = () => {
-    // Clear local storage
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('isFirstTimeLogin');
-    localStorage.removeItem('userProfile');
+  // Check if user has completed onboarding
+  useEffect(() => {
+    console.log("[DEBUG] DashboardLayout - useEffect running", {
+      authToken: localStorage.getItem('authToken'),
+      sessionFlag: sessionStorage.getItem('justCompletedOnboarding'),
+      hasCompleted: localStorage.getItem('hasCompletedOnboarding'),
+      isFirstTime: localStorage.getItem('isFirstTimeLogin'),
+      timestamp: new Date().toISOString()
+    });
     
-    // Redirect to login page
-    navigate('/login');
+    // First check if user is authenticated
+    const authToken = localStorage.getItem('authToken');
+    
+    if (!authToken) {
+      navigate('/login');
+      return;
+    }
+    
+    // Check if user just completed onboarding (set in AboutYouPage)
+    const justCompletedOnboarding = sessionStorage.getItem('justCompletedOnboarding');
+    if (justCompletedOnboarding === 'true') {
+      console.log('[DEBUG] DashboardLayout - Flag found, bypassing API check');
+      return;
+    }
+    
+    // Fetch onboarding status from the API
+    const checkOnboardingStatus = async () => {
+      try {
+        const onboardingStatus = await userApi.getOnboardingStatus();
+        console.log('Dashboard Layout - Onboarding status from API:', onboardingStatus);
+        
+        // If user hasn't completed onboarding, redirect to about-you
+        if (!onboardingStatus.has_completed_onboarding) {
+          console.log('User has not completed onboarding according to database, redirecting to about-you');
+          
+          // Update localStorage to match the backend state
+          localStorage.setItem('hasCompletedOnboarding', 'false');
+          localStorage.setItem('isFirstTimeLogin', onboardingStatus.is_first_time_login.toString());
+          
+          navigate('/about-you');
+        } else {
+          // Ensure localStorage reflects the backend state
+          localStorage.setItem('hasCompletedOnboarding', 'true');
+          localStorage.setItem('isFirstTimeLogin', 'false');
+        }
+      } catch (error) {
+        console.error('Error checking onboarding status:', error);
+        
+        // Fallback to localStorage if API call fails
+        const hasCompletedOnboarding = localStorage.getItem('hasCompletedOnboarding') === 'true';
+        if (!hasCompletedOnboarding) {
+      navigate('/about-you');
+    }
+      }
+    };
+    
+    checkOnboardingStatus();
+  }, [navigate]);
+
+  // Handle logout
+  const handleLogout = async () => {
+    try {
+      // Save the onboarding completion status and user profile before clearing
+      const hasCompletedOnboarding = localStorage.getItem('hasCompletedOnboarding');
+      const userProfile = localStorage.getItem('userProfile');
+      
+      // Call the logout API endpoint with withCredentials explicitly set
+      await api.post('/api/auth/logout/', {}, {
+        withCredentials: true
+      });
+      
+      // Clear all authentication-related items
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('isFirstTimeLogin');
+      localStorage.removeItem('userCredentials');
+      
+      // Clear any session cookies by removing document cookies
+      document.cookie.split(";").forEach(function(c) {
+        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+      });
+      
+      // Restore the onboarding completion status and user profile
+      if (hasCompletedOnboarding === 'true') {
+        localStorage.setItem('hasCompletedOnboarding', 'true');
+      }
+      if (userProfile) {
+        localStorage.setItem('userProfile', userProfile);
+      }
+      
+      // Redirect to login page
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Even if API call fails, still handle logout
+      const hasCompletedOnboarding = localStorage.getItem('hasCompletedOnboarding');
+      const userProfile = localStorage.getItem('userProfile');
+      
+      // Clear all localStorage items
+      localStorage.clear();
+      
+      // Clear any session cookies by removing document cookies
+      document.cookie.split(";").forEach(function(c) {
+        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+      });
+      
+      // Restore the onboarding completion status and user profile
+      if (hasCompletedOnboarding === 'true') {
+        localStorage.setItem('hasCompletedOnboarding', 'true');
+      }
+      if (userProfile) {
+        localStorage.setItem('userProfile', userProfile);
+      }
+      
+      navigate('/login');
+    }
   };
 
   return (

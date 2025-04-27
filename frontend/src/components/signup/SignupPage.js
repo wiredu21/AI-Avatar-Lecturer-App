@@ -310,8 +310,9 @@ export default function SignupPage() {
                                 {...register("terms", {
                                     required: "You must accept the terms and privacy policy"
                                 })}
+                                className="cursor-pointer"
                             />
-                            <Label htmlFor="terms" className="text-sm">
+                            <Label htmlFor="terms" className="text-sm cursor-pointer">
                                 I agree to the{" "}
                                 <Link to="/terms" className="text-teal-500 hover:text-teal-600">
                                     Terms of Service

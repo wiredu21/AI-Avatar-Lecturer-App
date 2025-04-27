@@ -47,24 +47,6 @@ const OnboardingAvatar = ({ currentStep }) => {
                     </div>
                 </motion.div>
             </motion.div>
-
-            {/* Chat Bubble */}
-            <motion.div
-                className="absolute -top-16 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg max-w-[280px] z-10"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{
-                    opacity: 1,
-                    y: 0,
-                }}
-                key={currentStep} // Force re-render animation when step changes
-                transition={{
-                    duration: 0.5,
-                    ease: "easeOut",
-                }}
-            >
-                <p className="text-gray-900 text-center">{messages[currentStep]}</p>
-                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-4 h-4 bg-white/90 rotate-45"></div>
-            </motion.div>
         </div>
     );
 };

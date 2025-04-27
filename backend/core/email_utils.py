@@ -35,15 +35,20 @@ def send_verification_email(user, request=None):
     try:
         # Generate verification token
         uid, token = generate_verification_token(user)
+        logger.debug(f"Generated verification token for user id: {user.id}, username: {user.username}")
         
         # Generate verification URL
         verification_url = get_verification_url(request, uid, token)
+        logger.debug(f"Generated verification URL: {verification_url}")
         
         # Get SendGrid API key from environment
         sg_api_key = os.getenv('SENDGRID_API_KEY')
         if not sg_api_key:
             logger.error("SendGrid API key not found in environment variables")
             return False
+        
+        # Log user email value for debugging
+        logger.debug(f"User email type: {type(user.email)}, value: '{user.email}'")
         
         # Create email message
         message = Mail(
@@ -66,15 +71,27 @@ def send_verification_email(user, request=None):
         
         # Send email using SendGrid
         sg = SendGridAPIClient(sg_api_key)
+        logger.debug(f"Attempting to send email to: {user.email}")
         response = sg.send(message)
         
-        # Log success and return True
+        # Log success with detailed information
         logger.info(f"Verification email sent to {user.email}, status code: {response.status_code}")
+        logger.debug(f"SendGrid response headers: {response.headers}")
         return True
     
     except Exception as e:
-        # Log error and return False
+        # Enhanced error logging with exception details
         logger.error(f"Failed to send verification email: {str(e)}")
+        logger.error(f"Exception type: {type(e).__name__}")
+        
+        # Log user information for debugging
+        try:
+            logger.error(f"User data: id={user.id}, username={user.username}, email={user.email}")
+        except Exception as user_error:
+            logger.error(f"Could not log user data: {str(user_error)}")
+            
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
         return False
 
 def verify_user_email(uidb64, token):

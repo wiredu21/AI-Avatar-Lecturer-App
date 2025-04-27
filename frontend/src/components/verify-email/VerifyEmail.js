@@ -24,11 +24,18 @@ const VerifyEmail = () => {
                 if (response.data.user) {
                     localStorage.setItem("user", JSON.stringify(response.data.user));
                     localStorage.setItem("isLoggedIn", "true");
+                    
+                    // Generate and store an auth token
+                    const generatedToken = "auth-token-" + Date.now();
+                    localStorage.setItem("authToken", generatedToken);
+                    
+                    // New account is always a first-time login
+                    localStorage.setItem("isFirstTimeLogin", "true");
                 }
                 
-                // Redirect to dashboard after a delay
+                // Redirect to about-you page for onboarding after a delay
                 setTimeout(() => {
-                    navigate("/dashboard");
+                    navigate("/about-you");
                 }, 3000);
                 
             } catch (error) {

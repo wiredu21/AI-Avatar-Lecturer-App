@@ -10,18 +10,23 @@ from .serializers import (
     ChatHistorySerializer, ChatHistoryCreateSerializer,
     UserSerializer, UniversitySerializer, CourseSerializer,
     UniversityContentSerializer, UserRegistrationSerializer, UserLoginSerializer,
-    UserProfileSerializer
+    UserProfileSerializer, PasswordChangeSerializer
 )
 from .email_utils import send_verification_email, verify_user_email
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from rest_framework import generics, status
 from rest_framework.response import Response
 from .models import University, Course
 from .serializers import UniversitySerializer, CourseSerializer
 
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.utils.decorators import method_decorator
 from django.middleware.csrf import get_token
+from .decorators import jwt_view_csrf_exempt
+
+# Import the OllamaService from the ai app
+from ai.ai_service import OllamaService
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
@@ -64,6 +69,7 @@ class CourseViewSet(viewsets.ReadOnlyModelViewSet):
 
 from .ai import ai_response_generator
 
+@jwt_view_csrf_exempt
 class ChatHistoryViewSet(viewsets.ModelViewSet):
     queryset = ChatHistory.objects.all()
     permission_classes = [permissions.IsAuthenticated]
@@ -143,6 +149,7 @@ class CourseListAPIView(generics.ListAPIView):
             queryset = queryset.filter(university_id=university_id)
         return queryset
 
+@jwt_view_csrf_exempt
 class ChatAPIView(APIView):
     """API view for chat interactions with the AI"""
 
@@ -221,15 +228,21 @@ class UserLoginView(APIView):
                 username=serializer.validated_data['username'],
                 password=serializer.validated_data['password']
             )
+            # Log the user in using Django's session-based auth (for backward compatibility)
             login(request, user)
             
-            # Return user data with onboarding status
+            # Generate JWT tokens
+            refresh = RefreshToken.for_user(user)
+            
+            # Return user data with onboarding status and tokens
             return Response({
                 "user": UserSerializer(user).data,
                 "onboarding_status": {
                     "has_completed_onboarding": user.has_completed_onboarding,
                     "is_first_time_login": user.is_first_time_login
-                }
+                },
+                "token": str(refresh.access_token),
+                "refresh": str(refresh)
             })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -243,6 +256,7 @@ class CsrfTokenView(APIView):
         csrf_token = get_token(request)
         return Response({'csrfToken': csrf_token})
 
+@jwt_view_csrf_exempt
 class UserLogoutView(APIView):
     """
     API view to handle user logout
@@ -254,6 +268,7 @@ class UserLogoutView(APIView):
         logout(request)
         return Response({"message": "Successfully logged out."}, status=status.HTTP_200_OK)
 
+@jwt_view_csrf_exempt
 class UserProfileView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     
@@ -372,6 +387,7 @@ class UserProfileView(APIView):
                 print(f"Validation errors: {serializer.errors}")
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@jwt_view_csrf_exempt
 class UserOnboardingStatusView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     
@@ -410,3 +426,188 @@ class UserOnboardingStatusView(APIView):
             "has_completed_onboarding": user.has_completed_onboarding,
             "is_first_time_login": user.is_first_time_login
         })
+
+@jwt_view_csrf_exempt
+class PasswordChangeView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def post(self, request):
+        """
+        Change user password
+        """
+        serializer = PasswordChangeSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            # Get the authenticated user
+            user = request.user
+            
+            # Set the new password for the user
+            user.set_password(serializer.validated_data['new_password'])
+            user.save()
+            
+            # Update stored credentials (needed for session-based auth)
+            # Log the user back in since password change logs them out
+            login(request, user)
+            
+            # Generate new JWT tokens
+            refresh = RefreshToken.for_user(user)
+            
+            return Response({
+                "message": "Password changed successfully.",
+                "token": str(refresh.access_token),
+                "refresh": str(refresh)
+            }, status=status.HTTP_200_OK)
+            
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@jwt_view_csrf_exempt
+class ChatHistoryAPIView(APIView):
+    """
+    API view for chat history and interaction with the Ollama LLM
+    This endpoint handles the chat requests from the frontend
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get(self, request):
+        """
+        Get chat history for the current user
+        """
+        # Optional filtering by course ID
+        course_id = request.query_params.get('course', None)
+        
+        # Get the user's chat history
+        queryset = ChatHistory.objects.filter(user=request.user)
+        
+        # Filter by course if provided
+        if course_id:
+            queryset = queryset.filter(course_id=course_id)
+        
+        # Order by timestamp (oldest first)
+        queryset = queryset.order_by('timestamp')
+        
+        # Serialize and return the data
+        serializer = ChatHistorySerializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        """
+        Process a new chat message and generate a response using Ollama
+        """
+        # Initialize the Ollama service
+        ollama_service = OllamaService()
+        
+        # Extract data from the request
+        user_message = request.data.get('message', '')
+        course_id = request.data.get('course')
+        is_user_message = request.data.get('is_user_message', True)
+        context_data = request.data.get('context_data', {})
+        
+        # Validate required fields
+        if not user_message:
+            return Response(
+                {"error": "Message is required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            # Get course if ID provided
+            course = None
+            if course_id:
+                try:
+                    course = Course.objects.get(id=course_id)
+                except Course.DoesNotExist:
+                    # Course not found, but we'll still process the message
+                    pass
+            
+            # Create a new chat history entry for the user message
+            chat_entry = ChatHistory.objects.create(
+                user=request.user,
+                course=course,
+                message=user_message,
+                is_user_message=is_user_message,
+                context_data=context_data
+            )
+            
+            # Only generate a response for user messages
+            if is_user_message:
+                # Check for availability of LLM service
+                if not ollama_service.is_model_available():
+                    # Try to pull the model
+                    ollama_service.pull_model()
+                    
+                # Check if message might be inappropriate
+                if ollama_service.is_off_topic(user_message):
+                    ai_response = "I'm sorry, but I can't assist with that type of request. Please ask something related to your academic studies."
+                else:
+                    # Generate AI response using Ollama
+                    try:
+                        # Include user details for personalization
+                        course_name = course.name if course else "general topic"
+                        user_prompt = f"""
+                        The user is asking about {course_name}. 
+                        Their message is: {user_message}
+                        
+                        Provide a helpful, educational response.
+                        """
+                        
+                        # Get response from Ollama
+                        ai_response = ollama_service.generate_response(user_prompt)
+                        
+                        # If generation fails, use fallback
+                        if ai_response.startswith("Error"):
+                            ai_response = ollama_service.get_fallback_message()
+                    except Exception as e:
+                        # Use fallback response if generation fails
+                        print(f"Error generating response: {str(e)}")
+                        ai_response = ollama_service.get_fallback_message()
+                
+                # Create a new chat entry for the AI response
+                ai_entry = ChatHistory.objects.create(
+                    user=request.user,
+                    course=course,
+                    message=ai_response,
+                    is_user_message=False,
+                    context_data=context_data
+                )
+                
+                # Return both the user message and AI response
+                serialized_ai_response = ChatHistorySerializer(ai_entry).data
+                return Response(serialized_ai_response)
+            
+            # If not a user message, just return the created entry
+            return Response(
+                ChatHistorySerializer(chat_entry).data,
+                status=status.HTTP_201_CREATED
+            )
+            
+        except Exception as e:
+            # Handle any unexpected errors
+            print(f"Error processing chat message: {str(e)}")
+            return Response(
+                {"error": f"Failed to process message: {str(e)}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+@jwt_view_csrf_exempt
+class ChatStatusAPIView(APIView):
+    """
+    API view for checking the status of the chat service (Ollama)
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get(self, request):
+        """
+        Check if the Ollama service is available and functioning properly
+        """
+        # Initialize the Ollama service
+        ollama_service = OllamaService()
+        
+        # Check service status
+        is_available, message = ollama_service.get_service_status()
+        
+        # Return status information
+        return Response({
+            "service_available": is_available,
+            "message": message,
+            "model": ollama_service.model_name,
+            "server_url": ollama_service.base_url
+        }, status=status.HTTP_200_OK if is_available else status.HTTP_503_SERVICE_UNAVAILABLE)

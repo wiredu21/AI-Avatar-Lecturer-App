@@ -216,8 +216,20 @@ export default function AboutYouPage() {
 
             console.log("Profile saved to database:", profileResponse);
 
-            // Also update localStorage for backup
-            localStorage.setItem("userProfile", JSON.stringify(data));
+            // Also update localStorage for backup with consistent field names
+            localStorage.setItem("userProfile", JSON.stringify({
+                firstName: data.firstName,
+                surname: data.surname,
+                dateOfBirth: data.dateOfBirth,
+                gender: data.gender,
+                nationality: data.nationality,
+                university: data.university,
+                course: data.course,
+                courseYear: data.courseYear,
+                academicLevel: data.academicLevel,
+                avatar: data.avatar,
+                voiceId: data.voiceId
+            }));
             localStorage.setItem("isFirstTimeLogin", "false");
             localStorage.setItem("hasCompletedOnboarding", "true");
             
@@ -241,7 +253,19 @@ export default function AboutYouPage() {
                 setValidationErrors(error.response.data);
             } else {
                 // Fallback to localStorage-only if API fails
-                localStorage.setItem("userProfile", JSON.stringify(data));
+                localStorage.setItem("userProfile", JSON.stringify({
+                    firstName: data.firstName,
+                    surname: data.surname,
+                    dateOfBirth: data.dateOfBirth,
+                    gender: data.gender,
+                    nationality: data.nationality,
+                    university: data.university,
+                    course: data.course,
+                    courseYear: data.courseYear,
+                    academicLevel: data.academicLevel,
+                    avatar: data.avatar,
+                    voiceId: data.voiceId
+                }));
                 localStorage.setItem("isFirstTimeLogin", "false");
                 localStorage.setItem("hasCompletedOnboarding", "true");
                 sessionStorage.setItem("justCompletedOnboarding", "true");

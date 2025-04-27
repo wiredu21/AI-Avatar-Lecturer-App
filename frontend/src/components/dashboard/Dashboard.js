@@ -1,28 +1,176 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardLayout from "./DashboardLayout";
+import { userApi } from "../../utils/axios";
+import { getUniversityName } from "../../utils/universityUtils";
 
 export default function Dashboard() {
     const navigate = useNavigate();
+    const [lastLogin, setLastLogin] = useState('');
+    const [universityName, setUniversityName] = useState('University not set');
+    
+    console.log("[DEBUG] Dashboard - Component rendering");
+
+    // Function to update university from localStorage
+    const updateUniversityFromStorage = () => {
+        const userProfile = JSON.parse(localStorage.getItem("userProfile") || "{}");
+        setUniversityName(getUniversityName(userProfile.university));
+    };
 
     useEffect(() => {
-        // Check for authentication
-        const authToken = localStorage.getItem("authToken");
-        const isFirstTimeLogin = localStorage.getItem("isFirstTimeLogin") === "true";
+        // Check authentication and onboarding status from API
+        const checkAuth = async () => {
+            console.log("[DEBUG] Dashboard - checkAuth running", {
+                authToken: localStorage.getItem('authToken'),
+                sessionFlag: sessionStorage.getItem('justCompletedOnboarding'),
+                hasCompleted: localStorage.getItem('hasCompletedOnboarding'),
+                isFirstTime: localStorage.getItem('isFirstTimeLogin'),
+                timestamp: new Date().toISOString()
+            });
+            
+            const authToken = localStorage.getItem("authToken");
+            
+            if (!authToken) {
+                console.log("Dashboard - Not authenticated, redirecting to login");
+                navigate("/login");
+                return;
+            }
+            
+            // Check if user just completed onboarding
+            const justCompletedOnboarding = sessionStorage.getItem("justCompletedOnboarding");
+            if (justCompletedOnboarding === "true") {
+                console.log("[DEBUG] Dashboard - Flag found, removing flag and continuing");
+                sessionStorage.removeItem("justCompletedOnboarding");
+                
+                // Set last login time since we're skipping the rest of the function
+                const now = new Date();
+                const formattedTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                setLastLogin(`Today at ${formattedTime}`);
+                return;
+            }
+            
+            try {
+                // Get onboarding status from API
+                const onboardingStatus = await userApi.getOnboardingStatus();
+                console.log("[DEBUG] Dashboard - API response:", {
+                    rawResponse: onboardingStatus,
+                    timestamp: new Date().toISOString()
+                });
+                
+                // If user hasn't completed onboarding, redirect to about-you
+                if (!onboardingStatus.has_completed_onboarding || onboardingStatus.is_first_time_login) {
+                    console.log("Dashboard - User needs to complete onboarding, redirecting");
+                    
+                    // Update localStorage to match the backend
+                    localStorage.setItem("hasCompletedOnboarding", onboardingStatus.has_completed_onboarding.toString());
+                    localStorage.setItem("isFirstTimeLogin", onboardingStatus.is_first_time_login.toString());
+                    
+                    navigate("/about-you");
+                    return;
+                }
+                
+                // Get user profile
+                const userProfileFromApi = await userApi.getUserProfile();
+                if (userProfileFromApi) {
+                    // If we have a profile in the database, use it
+                    console.log("Dashboard - User profile from API:", userProfileFromApi);
+                    localStorage.setItem("userProfile", JSON.stringify({
+                        firstName: userProfileFromApi.first_name,
+                        surname: userProfileFromApi.surname,
+                        dateOfBirth: userProfileFromApi.date_of_birth,
+                        gender: userProfileFromApi.gender,
+                        nationality: userProfileFromApi.nationality,
+                        university: userProfileFromApi.university,
+                        course: userProfileFromApi.course,
+                        courseYear: userProfileFromApi.course_year,
+                        academicLevel: userProfileFromApi.academic_level,
+                        avatar: userProfileFromApi.avatar,
+                        voiceId: userProfileFromApi.voice_id,
+                        email: userProfileFromApi.email
+                    }));
+                }
+                
+            } catch (error) {
+                console.error("[DEBUG] Dashboard - API error:", error);
+                
+                // Fall back to localStorage if API call fails
+                const isFirstTimeLogin = localStorage.getItem("isFirstTimeLogin") === "true";
+                if (isFirstTimeLogin) {
+                    navigate("/about-you");
+                    return;
+                }
+            }
+            
+            // Set last login time for authenticated users
+            const now = new Date();
+            const formattedTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            setLastLogin(`Today at ${formattedTime}`);
+        };
         
-        if (!authToken) {
-            // Redirect to login if not authenticated
-            navigate("/login");
-        } else if (isFirstTimeLogin) {
-            // If authenticated but first-time user, redirect to about-you
-            navigate("/about-you");
-        }
+        checkAuth();
     }, [navigate]);
+
+    // Listen for changes to localStorage from other components
+    useEffect(() => {
+        // Initial load from localStorage
+        updateUniversityFromStorage();
+        
+        // Function to handle storage events
+        const handleStorageChange = (event) => {
+            if (event.key === 'userProfile' && event.newValue) {
+                console.log('[DEBUG] Dashboard - userProfile changed in localStorage, updating university...');
+                updateUniversityFromStorage();
+            }
+        };
+        
+        // Add event listener
+        window.addEventListener('storage', handleStorageChange);
+        
+        // Clean up on unmount
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+        };
+    }, []);
 
     // Get user profile data from localStorage
     const userEmail = localStorage.getItem("userEmail");
     const userProfile = JSON.parse(localStorage.getItem("userProfile") || "{}");
     const userName = userProfile.firstName || userEmail?.split('@')[0] || 'User';
+    
+    // This is kept for compatibility but we use the state variable instead
+    const university = getUniversityName(userProfile.university);
+    
+    // Map course values to labels
+    const courses = {
+        "computer-science": "Computer Science",
+        "business": "Business Administration",
+        "nursing": "Nursing",
+        "education": "Education",
+        "psychology": "Psychology",
+        "mathematics": "Mathematics",
+        "physics": "Physics",
+        "engineering": "Engineering",
+        "chemistry": "Chemistry",
+        "economics": "Economics",
+        "management": "Management", 
+        "finance": "Finance",
+        "accounting": "Accounting",
+        "law": "Law"
+    };
+    
+    // Map course year values to labels
+    const courseYears = {
+        "foundational": "Foundation Year",
+        "year1": "Year 1",
+        "year2": "Year 2",
+        "year3": "Year 3",
+        "year4": "Year 4",
+        "year5": "Year 5+"
+    };
+    
+    // Get user's course and course year
+    const course = courses[userProfile.course] || "Course not set";
+    const courseYear = courseYears[userProfile.courseYear] || "Year not set";
 
     return (
         <DashboardLayout>
@@ -31,8 +179,8 @@ export default function Dashboard() {
                 <div className="flex justify-between items-center mb-8">
                     <div className="space-y-1">
                         <h1 className="text-2xl font-bold text-teal-500">Welcome back, {userName}!</h1>
-                        <p className="text-sm text-gray-500">University of Northampton • Computer Science • Year 2</p>
-                        <p className="text-xs text-gray-500">Last login: Today at 9:30 AM</p>
+                        <p className="text-sm text-gray-500">{universityName} • {course} • {courseYear}</p>
+                        <p className="text-xs text-gray-500">Last login: {lastLogin}</p>
                     </div>
                     <div className="flex items-center">
                         <button className="relative p-2 rounded-full hover:bg-gray-100">

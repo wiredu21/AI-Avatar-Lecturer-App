@@ -1,11 +1,26 @@
 from rest_framework import serializers
-from .models import ChatHistory, User, Course, University, UniversityContent, Avatar
+from .models import ChatHistory, User, Course, University, UniversityContent, Avatar, UserProfile
 from django.contrib.auth import authenticate
 
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = [
+            'id', 'first_name', 'surname', 'date_of_birth', 
+            'gender', 'nationality', 'university', 'course', 
+            'course_year', 'academic_level', 'avatar', 'voice_id'
+        ]
+
 class UserSerializer(serializers.ModelSerializer):
+    profile = UserProfileSerializer(read_only=True)
+    
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'bio']
+        fields = [
+            'id', 'username', 'email', 'bio', 
+            'has_completed_onboarding', 'is_first_time_login',
+            'profile'
+        ]
 
 class AvatarSerializer(serializers.ModelSerializer):
     class Meta:
@@ -77,3 +92,25 @@ class UserLoginSerializer(serializers.Serializer):
         if not user:
             raise serializers.ValidationError('Invalid credentials')
         return attrs
+
+class PasswordChangeSerializer(serializers.Serializer):
+    current_password = serializers.CharField(required=True, style={'input_type': 'password'})
+    new_password = serializers.CharField(required=True, style={'input_type': 'password'})
+    confirm_password = serializers.CharField(required=True, style={'input_type': 'password'})
+    
+    def validate(self, attrs):
+        # Check if new passwords match
+        if attrs['new_password'] != attrs['confirm_password']:
+            raise serializers.ValidationError({"new_password": "New password fields didn't match."})
+        
+        # Password complexity validation
+        if len(attrs['new_password']) < 8:
+            raise serializers.ValidationError({"new_password": "Password must be at least 8 characters long."})
+            
+        return attrs
+        
+    def validate_current_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError("Current password is incorrect.")
+        return value

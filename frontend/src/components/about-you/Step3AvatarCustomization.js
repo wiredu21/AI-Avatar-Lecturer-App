@@ -1,26 +1,53 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Label } from "../ui/label";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Controller } from "react-hook-form";
-import { Play, Pause } from "lucide-react";
+import VoiceSelector from "../VoiceSelector";
+
+// Import all avatar options
+import AvatarOption1 from "../../assets/images/AvatarOption1.png";
+import AvatarOption2 from "../../assets/images/AvatarOption2.png";
+import AvatarOption3 from "../../assets/images/AvatarOption3.png";
+import AvatarOption4 from "../../assets/images/AvatarOption4.png";
+import AvatarOption5 from "../../assets/images/AvatarOption5.png";
+import AvatarOption6 from "../../assets/images/AvatarOption6.png";
+import AvatarOption7 from "../../assets/images/AvatarOption7.png";
+import AvatarOption8 from "../../assets/images/AvatarOption8.png";
 
 const avatars = [
-    { value: "1", label: "Avatar 1", src: "/assets/images/AvatarOption1.png" },
-    { value: "2", label: "Avatar 2", src: "/assets/images/AvatarOption2.png" },
-    { value: "3", label: "Avatar 3", src: "/assets/images/AvatarOption3.png" },
-    { value: "4", label: "Avatar 4", src: "/assets/images/AvatarOption4.png" },
-    { value: "5", label: "Avatar 5", src: "/assets/images/AvatarOption5.png" },
-    { value: "6", label: "Avatar 6", src: "/assets/images/AvatarOption6.png" },
-    { value: "7", label: "Avatar 7", src: "/assets/images/AvatarOption7.png" },
-    { value: "8", label: "Avatar 8", src: "/assets/images/AvatarOption8.png" },
+    { value: "1", src: AvatarOption1, label: "Professional male lecturer", gender: "male" },
+    { value: "2", src: AvatarOption2, label: "Professional female lecturer", gender: "female" },
+    { value: "3", src: AvatarOption3, label: "Casual male lecturer", gender: "male" },
+    { value: "4", src: AvatarOption4, label: "Casual female lecturer", gender: "female" },
+    { value: "5", src: AvatarOption5, label: "Young male lecturer", gender: "male" },
+    { value: "6", src: AvatarOption6, label: "Young female lecturer", gender: "female" },
+    { value: "7", src: AvatarOption7, label: "Senior male lecturer", gender: "male" },
+    { value: "8", src: AvatarOption8, label: "Senior female lecturer", gender: "female" },
 ];
 
 const Step3AvatarCustomization = ({ control, errors }) => {
-    const handleVoiceSample = (voiceGender) => {
-        // Placeholder for voice sample playback
-        console.log(`Playing voice sample for ${voiceGender} voice`);
-    };
+    // State to manage the gender for voice selection
+    const [voiceGender, setVoiceGender] = useState('female');
+
+    // Update voice gender based on selected avatar
+    useEffect(() => {
+        const handleWatchAvatar = (value) => {
+            if (value) {
+                // Find the selected avatar
+                const selectedAvatar = avatars.find(avatar => avatar.value === value);
+                if (selectedAvatar) {
+                    // Update voice gender to match avatar gender
+                    setVoiceGender(selectedAvatar.gender);
+                }
+            }
+        };
+
+        // Get the current avatar value
+        const subscription = control._formValues && control._formValues.avatar && 
+            handleWatchAvatar(control._formValues.avatar);
+
+        return () => subscription;
+    }, [control._formValues]);
 
     return (
         <motion.div
@@ -36,6 +63,9 @@ const Step3AvatarCustomization = ({ control, errors }) => {
             {/* Avatar Selection */}
             <div className="space-y-4">
                 <Label>Choose Your Avatar</Label>
+                <p className="text-sm text-gray-600 mb-4">
+                    Select an avatar that will represent your AI lecturer throughout your learning journey.
+                </p>
                 <Controller
                     name="avatar"
                     control={control}
@@ -43,70 +73,66 @@ const Step3AvatarCustomization = ({ control, errors }) => {
                     render={({ field }) => (
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                             {avatars.map((avatar) => (
-                                <div
+                                <motion.div
                                     key={avatar.value}
-                                    className={`relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${field.value === avatar.value
+                                    className={`relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
+                                        field.value === avatar.value
                                             ? "border-teal-500 ring-2 ring-teal-200"
                                             : "border-gray-200 hover:border-teal-300"
-                                        }`}
+                                    }`}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
                                     onClick={() => field.onChange(avatar.value)}
                                 >
                                     <img
                                         src={avatar.src}
                                         alt={avatar.label}
-                                        className="w-full h-auto object-cover"
+                                        className="w-full h-auto aspect-square object-cover"
                                     />
-                                </div>
+                                    {field.value === avatar.value && (
+                                        <div className="absolute top-2 right-2 bg-teal-500 text-white rounded-full p-1">
+                                            <svg 
+                                                xmlns="http://www.w3.org/2000/svg" 
+                                                width="16" 
+                                                height="16" 
+                                                viewBox="0 0 24 24" 
+                                                fill="none" 
+                                                stroke="currentColor" 
+                                                strokeWidth="2" 
+                                                strokeLinecap="round" 
+                                                strokeLinejoin="round"
+                                            >
+                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                            </svg>
+                                        </div>
+                                    )}
+                                </motion.div>
                             ))}
                         </div>
                     )}
                 />
-                {errors.avatar && <p className="text-sm text-red-500">{errors.avatar.message}</p>}
+                {errors.avatar && (
+                    <p className="text-sm text-red-500">{errors.avatar.message}</p>
+                )}
             </div>
 
-            {/* Voice Selection */}
-            <div className="space-y-4">
-                <Label>Choose Voice</Label>
-                <Controller
-                    name="voiceGender"
-                    control={control}
-                    defaultValue="female"
-                    render={({ field }) => (
-                        <RadioGroup
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                            className="flex flex-col space-y-2"
-                        >
-                            <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50">
-                                <div className="flex items-center space-x-3">
-                                    <RadioGroupItem value="female" id="female" />
-                                    <Label htmlFor="female">Female Voice</Label>
-                                </div>
-                                <button
-                                    type="button"
-                                    onClick={() => handleVoiceSample("female")}
-                                    className="p-2 rounded-full hover:bg-gray-100"
-                                >
-                                    <Play className="h-5 w-5 text-gray-600" />
-                                </button>
-                            </div>
-                            <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50">
-                                <div className="flex items-center space-x-3">
-                                    <RadioGroupItem value="male" id="male" />
-                                    <Label htmlFor="male">Male Voice</Label>
-                                </div>
-                                <button
-                                    type="button"
-                                    onClick={() => handleVoiceSample("male")}
-                                    className="p-2 rounded-full hover:bg-gray-100"
-                                >
-                                    <Play className="h-5 w-5 text-gray-600" />
-                                </button>
-                            </div>
-                        </RadioGroup>
-                    )}
-                />
-            </div>
+            {/* Voice Selection with Murf AI */}
+            <Controller
+                name="voiceId"
+                control={control}
+                rules={{ required: "Please select a voice" }}
+                render={({ field }) => (
+                    <VoiceSelector
+                        selectedVoice={field.value}
+                        setSelectedVoice={field.onChange}
+                        gender={voiceGender}
+                        setGender={setVoiceGender}
+                    />
+                )}
+            />
+            {errors.voiceId && (
+                <p className="text-sm text-red-500">{errors.voiceId.message}</p>
+            )}
         </motion.div>
     );
 };

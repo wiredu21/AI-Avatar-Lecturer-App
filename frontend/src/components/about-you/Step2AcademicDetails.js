@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Controller } from "react-hook-form";
 
 const universities = [
+    { value: "northampton", label: "University of Northampton" },
     { value: "oxford", label: "University of Oxford" },
     { value: "cambridge", label: "University of Cambridge" },
     { value: "imperial", label: "Imperial College London" },
@@ -18,6 +19,13 @@ const universities = [
 ];
 
 const courses = {
+    northampton: [
+        { value: "computer-science", label: "Computer Science" },
+        { value: "business", label: "Business Administration" },
+        { value: "nursing", label: "Nursing" },
+        { value: "education", label: "Education" },
+        { value: "psychology", label: "Psychology" },
+    ],
     oxford: [
         { value: "computer-science", label: "Computer Science" },
         { value: "mathematics", label: "Mathematics" },
@@ -116,7 +124,12 @@ const Step2AcademicDetails = ({ control, watch, errors }) => {
                             <SelectTrigger className={errors.university ? "border-red-500 focus-visible:ring-red-500" : ""}>
                                 <SelectValue placeholder="Select your university" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent 
+                                position="popper" 
+                                align="start" 
+                                side="bottom"
+                                className="max-h-[200px] overflow-y-auto"
+                            >
                                 {universities.map((university) => (
                                     <SelectItem key={university.value} value={university.value}>
                                         {university.label}
@@ -145,7 +158,12 @@ const Step2AcademicDetails = ({ control, watch, errors }) => {
                             <SelectTrigger className={errors.course ? "border-red-500 focus-visible:ring-red-500" : ""}>
                                 <SelectValue placeholder="Select your course" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent
+                                position="popper" 
+                                align="start" 
+                                side="bottom"
+                                className="max-h-[200px] overflow-y-auto"
+                            >
                                 {selectedUniversity &&
                                     courses[selectedUniversity].map((course) => (
                                         <SelectItem key={course.value} value={course.value}>
