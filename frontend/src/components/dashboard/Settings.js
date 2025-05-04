@@ -702,15 +702,53 @@ const Settings = () => {
   };
 
   // GDPR - Handle data export
-  const handleDataExport = () => {
-    // In a real app, you would make an API call here
-    setDataRequestSent(true);
-    setTimeout(() => {
-      // Simulate data preparation delay
+  const handleDataExport = async () => {
+    try {
+      // Show loading state
+      setDataRequestSent(true);
+      
+      // Make the actual API call to get user data
+      const response = await userApi.exportUserData();
+      
+      // Check if we got data back
+      if (!response || !response.data) {
+        throw new Error("Failed to retrieve user data");
+      }
+      
+      // Convert the data to a JSON string with pretty formatting
+      const jsonData = JSON.stringify(response.data, null, 2);
+      
+      // Create a Blob with the JSON data
+      const blob = new Blob([jsonData], { type: 'application/json' });
+      
+      // Create a URL for the Blob
+      const url = URL.createObjectURL(blob);
+      
+      // Create a temporary link element
+      const link = document.createElement('a');
+      link.href = url;
+      
+      // Set filename with current date
+      const date = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+      link.download = `virtuaid_user_data_${date}.json`;
+      
+      // Append to body, click to trigger download, then clean up
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Release the URL object
+      URL.revokeObjectURL(url);
+      
+      // Show success message
+      showToast("Your data has been exported successfully", "success");
+    } catch (error) {
+      console.error("Error exporting user data:", error);
+      showToast("Failed to export your data. Please try again.", "error");
+    } finally {
+      // Reset loading state
       setDataRequestSent(false);
-      alert("Your data has been prepared. Download starting...");
-      // In a real app, you would trigger a file download here
-    }, 2000);
+    }
   };
 
   // Handle password change

@@ -6,7 +6,6 @@ import { Button } from "../ui/button";
 export default function Hero() {
     return (
         <section id="hero" className="relative min-h-screen overflow-hidden bg-gradient-to-br from-teal-400 to-blue-600">
-            <div className="absolute inset-0 bg-circuit-pattern opacity-10"></div>
             <div className="container mx-auto px-4 py-12 flex flex-col lg:flex-row items-center justify-between">
                 <motion.div
                     className="lg:w-3/5 text-white"

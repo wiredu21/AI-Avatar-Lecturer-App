@@ -4,6 +4,7 @@ from celery import shared_task
 from django.utils import timezone
 from .models import ContentSource, ScrapedContent, ContentProcessingLog, ContentType
 from .scrapers.northampton import scrape_northampton_news_page, scrape_northampton_events_page
+from .embeddings import content_embedding_service
 
 logger = logging.getLogger(__name__)
 
@@ -104,9 +105,10 @@ def scrape_northampton_events():
                     'title': item['title'],
                     'content': item['content'],
                     'summary': item.get('summary', ''),
-                    'published_date': item.get('event_date'),
+                    'published_date': item.get('published_date'),
                     'image_url': item.get('image_url'),
                     'content_type': ContentType.EVENT
+                    # We're not using the detailed event fields anymore
                 }
             )
             
@@ -151,4 +153,16 @@ def refresh_all_content():
             result = scrape_northampton_events.delay()
             results.append(f"Started events scraping task: {result.id}")
     
-    return ", ".join(results) 
+    return ", ".join(results)
+
+@shared_task
+def update_content_embeddings():
+    """Task to update content embeddings for RAG"""
+    try:
+        logger.info("Starting content embeddings update")
+        count = content_embedding_service.update_content_embeddings()
+        logger.info(f"Content embeddings updated successfully for {count} items")
+        return f"Updated embeddings for {count} content items"
+    except Exception as e:
+        logger.error(f"Error updating content embeddings: {str(e)}")
+        return f"Error updating content embeddings: {str(e)}" 

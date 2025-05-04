@@ -10,7 +10,12 @@ import {
   ChevronDown, 
   ChevronUp 
 } from "lucide-react";
-import { getVoicesByGender, generateVoiceSample } from "../services/MurfAIService";
+import { 
+  getAvailableVoices, 
+  speak, 
+  stopSpeaking,
+  isSpeechSynthesisSupported
+} from "../components/chat/TextToSpeechService";
 
 // Sample text for voice preview
 const SAMPLE_TEXT = "Hello, I'm your AI lecturer. I'm here to help you learn.";
@@ -22,35 +27,143 @@ const VoiceSelector = ({ selectedVoice, setSelectedVoice, gender, setGender }) =
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentAudio, setCurrentAudio] = useState(null);
   const [loadingVoice, setLoadingVoice] = useState(null);
-  const audioRef = useRef(null);
+  // Store all browser voices
+  const [browserVoices, setBrowserVoices] = useState([]);
 
-  // Load voices for both genders on component mount
+  // Load voices from browser's speech synthesis
   useEffect(() => {
-    setFemaleVoices(getVoicesByGender('female'));
-    setMaleVoices(getVoicesByGender('male'));
-  }, []);
+    const loadVoices = () => {
+      // Check if TTS is supported
+      if (!isSpeechSynthesisSupported()) {
+        console.error("Speech synthesis not supported in this browser");
+        return;
+      }
 
-  // Remove gender mismatch check - let the parent component handle this instead
-  // The parent will decide which voices to show and will prevent mismatches
+      // Get all available voices
+      const voices = getAvailableVoices();
+      console.log("All available voices:", voices.map(v => `${v.name} (${v.lang})`));
+      
+      // Store all voices for lookup
+      setBrowserVoices(voices);
+      
+      // Filter voices by likely gender (based on voice name)
+      const female = voices.filter(voice => {
+        const name = voice.name.toLowerCase();
+        // Expanded patterns for female voices
+        return name.includes('female') || name.includes('woman') || 
+               name.includes('girl') || name.includes('fiona') || 
+               name.includes('samantha') || name.includes('karen') || 
+               name.includes('moira') || name.includes('lisa') ||
+               name.includes('victoria') || name.includes('zira') ||
+               name.includes('susan') || name.includes('mary') || 
+               name.includes('catherine') || name.includes('donna') ||
+               name.includes('emily') || name.includes('linda') ||
+               name.includes('sandy') || name.includes('serena') ||
+               name.includes('veena') || name.includes('alex') || // Alex on Mac is female
+               name.includes('allison') || name.includes('ava') ||
+               name.includes('evelyn') || name.includes('samantha') ||
+               name.includes('tessa') || name.includes('kathy') ||
+               name.includes('kimberly') || name.includes('laura') ||
+               // Voice IDs that don't include clear gender names but are female
+               name === 'microsoft hazel desktop' || 
+               name === 'microsoft zira desktop' ||
+               name === 'microsoft elsa desktop' ||
+               name === 'google us english' || // Often female in Chrome
+               name === 'google uk english female';
+      });
+      
+      const male = voices.filter(voice => {
+        const name = voice.name.toLowerCase();
+        // Expanded patterns for male voices
+        return name.includes('male') || name.includes('man') || 
+               name.includes('boy') || name.includes('guy') || 
+               name.includes('david') || name.includes('mark') || 
+               name.includes('daniel') || name.includes('lee') ||
+               name.includes('tom') || name.includes('eric') ||
+               name.includes('george') || name.includes('james') ||
+               name.includes('john') || name.includes('josh') ||
+               name.includes('paul') || name.includes('richard') ||
+               name.includes('steve') || name.includes('tim') ||
+               name.includes('bruce') || name.includes('fred') ||
+               name.includes('reed') || name.includes('ryan') ||
+               name.includes('sean') || name.includes('wayne') ||
+               // Voice IDs that don't include clear gender names but are male
+               name === 'microsoft david desktop' ||
+               name === 'microsoft mark desktop' ||
+               name === 'microsoft george desktop' ||
+               name === 'google uk english male';
+      });
+      
+      console.log("Voices initially categorized as female:", female.map(v => v.name));
+      console.log("Voices initially categorized as male:", male.map(v => v.name));
+      
+      // Track categorized voices to avoid duplicates
+      const categorized = new Set([...female, ...male].map(v => v.name));
+      
+      // If we couldn't identify by name, make a best guess based on pitch
+      // Add remaining voices to gender categories based on default criterion
+      const uncategorized = voices.filter(voice => !categorized.has(voice.name));
+      console.log("Uncategorized voices (will be auto-assigned):", uncategorized.map(v => v.name));
+      
+      voices.forEach(voice => {
+        if (!female.includes(voice) && !male.includes(voice)) {
+          // A rough heuristic - many female voices have higher default pitch
+          if (female.length <= male.length) {
+            female.push(voice);
+          } else {
+            male.push(voice);
+          }
+        }
+      });
+      
+      console.log("Final female voices count:", female.length);
+      console.log("Final male voices count:", male.length);
+      
+      // Set the categorized voices
+      setFemaleVoices(female.map(voice => ({
+        id: voice.voiceURI,
+        name: voice.name,
+        accent: voice.lang,
+        style: "Natural",
+        // Store the actual SpeechSynthesisVoice object for use with speak()
+        voiceObject: voice
+      })));
+      
+      setMaleVoices(male.map(voice => ({
+        id: voice.voiceURI,
+        name: voice.name,
+        accent: voice.lang,
+        style: "Natural",
+        // Store the actual SpeechSynthesisVoice object for use with speak()
+        voiceObject: voice
+      })));
+    };
+
+    // Load voices initially
+    loadVoices();
+
+    // The voiceschanged event fires when the list of voices is loaded or changes
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+
+    // Cleanup
+    return () => {
+      window.speechSynthesis.onvoiceschanged = null;
+    };
+  }, []);
 
   // Stop audio playback when component unmounts
   useEffect(() => {
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
+      stopSpeaking();
     };
   }, []);
 
   // Handle voice sample playback
-  const handleVoiceSample = async (voiceId) => {
+  const handleVoiceSample = (voiceId) => {
     try {
-      // Stop current audio if playing
-      if (audioRef.current) {
-        audioRef.current.pause();
-        setIsPlaying(false);
-      }
-
+      // Stop any current speech if playing
+      stopSpeaking();
+      
       // If the same voice is clicked and was playing, just stop it
       if (isPlaying && currentAudio === voiceId) {
         setIsPlaying(false);
@@ -61,37 +174,45 @@ const VoiceSelector = ({ selectedVoice, setSelectedVoice, gender, setGender }) =
       setLoadingVoice(voiceId);
       setCurrentAudio(voiceId);
 
-      // Get voice sample from Murf AI service
-      const response = await generateVoiceSample(voiceId, SAMPLE_TEXT);
+      // Find the voice object from our voice lists
+      let voiceObject = null;
+      const allVoices = [...femaleVoices, ...maleVoices];
+      const voiceData = allVoices.find(v => v.id === voiceId);
       
-      // Create new audio element
-      const audio = new Audio(response.audioUrl);
-      audioRef.current = audio;
+      if (voiceData) {
+        voiceObject = voiceData.voiceObject;
+      }
       
-      // Add event listeners for audio
-      audio.addEventListener('ended', () => {
-        setIsPlaying(false);
-        setCurrentAudio(null);
-      });
-      
-      audio.addEventListener('error', () => {
-        console.error('Error playing audio');
+      if (!voiceObject) {
+        console.error('Voice not found:', voiceId);
         setIsPlaying(false);
         setCurrentAudio(null);
         setLoadingVoice(null);
-      });
+        return;
+      }
 
-      // Play the audio
-      audio.play().then(() => {
-        setIsPlaying(true);
-        setLoadingVoice(null);
-      }).catch(error => {
-        console.error('Error playing audio:', error);
-        setIsPlaying(false);
-        setLoadingVoice(null);
+      // Use the browser's speech synthesis
+      speak(SAMPLE_TEXT, {
+        voice: voiceObject,
+        rate: 1.0,
+        pitch: 1.0,
+        onStart: () => {
+          setIsPlaying(true);
+          setLoadingVoice(null);
+        },
+        onEnd: () => {
+          setIsPlaying(false);
+          setCurrentAudio(null);
+        },
+        onError: (error) => {
+          console.error('Error playing speech:', error);
+          setIsPlaying(false);
+          setCurrentAudio(null);
+          setLoadingVoice(null);
+        }
       });
     } catch (error) {
-      console.error('Error generating voice sample:', error);
+      console.error('Error playing voice sample:', error);
       setIsPlaying(false);
       setCurrentAudio(null);
       setLoadingVoice(null);

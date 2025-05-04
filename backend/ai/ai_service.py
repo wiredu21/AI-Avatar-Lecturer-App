@@ -2,8 +2,16 @@ import os
 import requests
 import logging
 import time
-from typing import Optional, Dict, Any, Tuple
+import re
+from typing import Optional, Dict, Any, Tuple, List
 from django.conf import settings
+
+# Import content embedding service for RAG
+try:
+    from content.embeddings import content_embedding_service
+    CONTENT_RAG_AVAILABLE = True
+except ImportError:
+    CONTENT_RAG_AVAILABLE = False
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -14,22 +22,91 @@ class OllamaService:
         self.model_name = os.getenv("OLLAMA_MODEL", "llama3")
         self.connection_timeout = int(os.getenv("OLLAMA_TIMEOUT", "5"))
         self.max_retries = int(os.getenv("OLLAMA_MAX_RETRIES", "2"))
+        self.use_rag = os.getenv("USE_CONTENT_RAG", "True").lower() == "true"
+        
+    def _get_relevant_university_content(self, query: str) -> Optional[str]:
+        """Retrieve relevant university content using RAG"""
+        if not self.use_rag or not CONTENT_RAG_AVAILABLE:
+            return None
+            
+        try:
+            # Check if query is related to university content
+            university_keywords = [
+                "university", "campus", "lecture", "course", "professor", 
+                "student", "class", "study", "academic", "faculty", "event", 
+                "news", "deadline", "program", "department", "school", "college",
+                "northampton", "graduation", "semester", "exam", "research",
+                "what's happening", "upcoming", "this week", "announcement"
+            ]
+            
+            # Simple keyword check - could be replaced with a more sophisticated classifier
+            if not any(keyword in query.lower() for keyword in university_keywords):
+                return None
+                
+            # Get relevant content
+            logger.info(f"Searching for university content related to: {query}")
+            results = content_embedding_service.retrieve_relevant_content(query, k=3)
+            
+            if not results:
+                logger.info("No relevant university content found")
+                return None
+                
+            # Format the content as context for the AI
+            context_parts = ["Here is some relevant information about the university:"]
+            
+            for idx, item in enumerate(results):
+                if item['content_type'] == 'news':
+                    context_parts.append(f"NEWS: {item['title']}. {item['summary']}")
+                elif item['content_type'] == 'event':
+                    date_info = f"Date: {item['published_date']}" if item['published_date'] else ""
+                    context_parts.append(f"EVENT: {item['title']}. {date_info}. {item['summary']}")
+                else:
+                    context_parts.append(f"{item['title']}. {item['summary']}")
+                    
+                # Add source information
+                if item['source_name'] and item['university_name']:
+                    context_parts.append(f"Source: {item['source_name']} at {item['university_name']}")
+                
+                # Add URL if available
+                if item['url']:
+                    context_parts.append(f"More information: {item['url']}")
+                    
+                # Add separator between items
+                if idx < len(results) - 1:
+                    context_parts.append("---")
+            
+            context = "\n".join(context_parts)
+            logger.info(f"Added university content context using RAG")
+            return context
+        
+        except Exception as e:
+            logger.error(f"Error retrieving university content: {str(e)}")
+            return None
         
     def generate_response(self, prompt: str, max_length: int = 512) -> str:
-        """Generate a response using Ollama API with improved error handling."""
+        """Generate a response using Ollama API with RAG enhancement for university content."""
+        # Try to get relevant university content
+        university_context = self._get_relevant_university_content(prompt)
+        
+        # Add university context to prompt if available
+        enriched_prompt = prompt
+        if university_context:
+            enriched_prompt = f"{university_context}\n\nUser query: {prompt}\n\nPlease answer the query using the provided university information when relevant:"
+            
         for attempt in range(self.max_retries + 1):
             try:
                 url = f"{self.base_url}/api/generate"
                 payload = {
                     "model": self.model_name,
-                    "prompt": prompt,
+                    "prompt": enriched_prompt,
                     "max_tokens": max_length,
                     "temperature": 0.7,
                     "top_p": 0.9,
                     "stream": False
                 }
                 
-                logger.info(f"Sending request to Ollama API: model={self.model_name}, length={max_length}")
+                log_prompt = enriched_prompt[:100] + "..." if len(enriched_prompt) > 100 else enriched_prompt
+                logger.info(f"Sending request to Ollama API: model={self.model_name}, length={max_length}, prompt={log_prompt}")
                 response = requests.post(url, json=payload, timeout=self.connection_timeout)
                 response.raise_for_status()
                 
@@ -67,7 +144,7 @@ class OllamaService:
             except Exception as e:
                 logger.error(f"Unexpected error generating response: {str(e)}")
                 return f"Error: An unexpected error occurred when generating a response."
-    
+                
     def is_model_available(self) -> bool:
         """Check if the Ollama service and model are available."""
         try:

@@ -798,3 +798,103 @@ class UserAccountDeleteView(APIView):
                     {"error": f"Failed to delete account: {error_message}"},
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
+
+@jwt_view_csrf_exempt
+class UserDataExportView(APIView):
+    """
+    API view to export all user data (GDPR right to data portability)
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get(self, request):
+        """
+        Export all data related to the current user
+        """
+        user = request.user
+        
+        try:
+            # Gather all user-related data in a structured format
+            
+            # 1. Basic user information
+            user_data = UserSerializer(user).data
+            
+            # 2. User profile (more detailed information)
+            try:
+                profile = UserProfile.objects.get(user=user)
+                profile_data = UserProfileSerializer(profile).data
+            except UserProfile.DoesNotExist:
+                profile_data = None
+            
+            # 3. Chat history
+            chat_sessions = ChatSession.objects.filter(user=user)
+            chat_sessions_data = ChatSessionSerializer(chat_sessions, many=True).data
+            
+            # Get detailed messages for each session
+            for i, session in enumerate(chat_sessions_data):
+                session_id = session.get('id')
+                messages = ChatMessage.objects.filter(chat_session_id=session_id)
+                chat_sessions_data[i]['messages'] = ChatMessageDetailSerializer(messages, many=True).data
+            
+            # 4. Other user data (you can expand this for other data types)
+            chat_history = ChatHistory.objects.filter(user=user)
+            chat_history_data = ChatHistorySerializer(chat_history, many=True).data
+            
+            # 5. Data modification log
+            # For a real system, this would come from an audit log table
+            # Here we'll just use created/updated timestamps from various models
+            data_modifications = [
+                {
+                    "date": user.date_joined.isoformat(),
+                    "action": "Account created",
+                    "details": "Initial account registration"
+                }
+            ]
+            
+            # Add profile creation/updates
+            if profile_data:
+                if profile.created_at:
+                    data_modifications.append({
+                        "date": profile.created_at.isoformat(),
+                        "action": "Profile created",
+                        "details": "Initial profile setup"
+                    })
+                
+                if profile.updated_at and profile.updated_at != profile.created_at:
+                    data_modifications.append({
+                        "date": profile.updated_at.isoformat(),
+                        "action": "Profile updated",
+                        "details": "Profile information modified"
+                    })
+            
+            # Add onboarding completion if applicable
+            if user.onboarding_completed_date:
+                data_modifications.append({
+                    "date": user.onboarding_completed_date.isoformat(),
+                    "action": "Onboarding completed",
+                    "details": "User completed the onboarding process"
+                })
+            
+            # Sort modifications by date (most recent first)
+            data_modifications.sort(key=lambda x: x['date'], reverse=True)
+            
+            # Compile the complete export
+            export_data = {
+                "user": user_data,
+                "profile": profile_data,
+                "chat_sessions": chat_sessions_data,
+                "chat_history": chat_history_data,
+                "account_activity": {
+                    "data_modifications": data_modifications,
+                    "last_login": user.last_login.isoformat() if user.last_login else None
+                },
+                "export_date": timezone.now().isoformat()
+            }
+            
+            return Response(export_data)
+            
+        except Exception as e:
+            print(f"Error exporting user data: {str(e)}")
+            return Response(
+                {"detail": f"Error exporting user data: {str(e)}"}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

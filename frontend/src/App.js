@@ -9,6 +9,7 @@ import Courses from './components/dashboard/Courses';
 import Insights from './components/dashboard/Insights';
 import Settings from './components/dashboard/Settings';
 import Chat from './components/dashboard/Chat';
+import UniversityContent from './components/dashboard/UniversityContent';
 import VerifyEmail from './components/verify-email/VerifyEmail';
 import './index.css';
 
@@ -26,6 +27,7 @@ function App() {
         <Route path="/dashboard/insights" element={<Insights />} />
         <Route path="/dashboard/settings" element={<Settings />} />
         <Route path="/dashboard/chat" element={<Chat />} />
+        <Route path="/dashboard/university-content" element={<UniversityContent />} />
         {/* Add more routes as needed */}
       </Routes>
     </Router>

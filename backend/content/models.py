@@ -37,6 +37,15 @@ class ScrapedContent(models.Model):
     content_type = models.CharField(max_length=20, choices=ContentType.choices)
     scraped_at = models.DateTimeField(auto_now_add=True)
     
+    # Additional fields for events
+    event_day = models.CharField(max_length=10, blank=True, null=True, help_text="Day of the event (e.g., '28')")
+    event_month = models.CharField(max_length=10, blank=True, null=True, help_text="Month of the event (e.g., 'APR')")
+    event_year = models.CharField(max_length=10, blank=True, null=True, help_text="Year of the event (e.g., '2025')")
+    event_start_time = models.CharField(max_length=10, blank=True, null=True, help_text="Start time (e.g., '17:30')")
+    event_end_time = models.CharField(max_length=10, blank=True, null=True, help_text="End time (e.g., '18:15')")
+    event_date_display = models.CharField(max_length=100, blank=True, null=True, help_text="Formatted date display")
+    location = models.CharField(max_length=255, blank=True, null=True, help_text="Event location")
+    
     def __str__(self):
         return self.title
     

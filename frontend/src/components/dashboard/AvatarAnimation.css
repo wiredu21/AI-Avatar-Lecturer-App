@@ -1,0 +1,144 @@
+.avatar-animation-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background-color: #f0f9ff;
+}
+
+.avatar-animation-canvas {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.avatar-animation-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background-color: #f0f9ff;
+}
+
+.avatar-static-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Animation transitions */
+.avatar-state-transition {
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Responsive scaling */
+@media (max-width: 768px) {
+  .avatar-animation-container,
+  .avatar-animation-fallback {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .avatar-animation-container,
+  .avatar-animation-fallback {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+/* Loading state */
+.avatar-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #f0f9ff;
+  border-radius: 50%;
+}
+
+.avatar-loading::after {
+  content: "";
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: #3b82f6;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Speech indicator animation */
+.speech-indicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  background-color: #10b981;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 0 3px white;
+}
+
+.speech-waves {
+  width: 12px;
+  height: 12px;
+  position: relative;
+}
+
+.speech-wave {
+  position: absolute;
+  background-color: white;
+  width: 2px;
+  height: 8px;
+  animation: wave 1s infinite ease-in-out;
+}
+
+.speech-wave:nth-child(1) {
+  left: 0;
+  animation-delay: 0s;
+}
+
+.speech-wave:nth-child(2) {
+  left: 3px;
+  animation-delay: 0.15s;
+}
+
+.speech-wave:nth-child(3) {
+  left: 6px;
+  animation-delay: 0.3s;
+}
+
+.speech-wave:nth-child(4) {
+  left: 9px;
+  animation-delay: 0.45s;
+}
+
+@keyframes wave {
+  0%, 100% {
+    height: 4px;
+  }
+  50% {
+    height: 10px;
+  }
+} 

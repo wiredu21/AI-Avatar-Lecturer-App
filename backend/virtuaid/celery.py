@@ -17,6 +17,7 @@ app.autodiscover_tasks()
 
 # Configure the periodic tasks
 app.conf.beat_schedule = {
+    # Run content scraping daily
     'scrape-northampton-news-daily': {
         'task': 'content.tasks.scrape_northampton_news',
         'schedule': crontab(hour=3, minute=0),  # Run at 3:00 AM daily
@@ -24,6 +25,18 @@ app.conf.beat_schedule = {
     'scrape-northampton-events-daily': {
         'task': 'content.tasks.scrape_northampton_events',
         'schedule': crontab(hour=4, minute=0),  # Run at 4:00 AM daily
+    },
+    
+    # Refresh all content once a week to ensure we catch any missed updates
+    'refresh-all-content-weekly': {
+        'task': 'content.tasks.refresh_all_content',
+        'schedule': crontab(day_of_week='sunday', hour=2, minute=0),  # Run at 2:00 AM every Sunday
+    },
+    
+    # Update content embeddings after new content is scraped
+    'update-content-embeddings-daily': {
+        'task': 'content.tasks.update_content_embeddings',
+        'schedule': crontab(hour=5, minute=0),  # Run at 5:00 AM daily (after scraping is done)
     },
 }
 

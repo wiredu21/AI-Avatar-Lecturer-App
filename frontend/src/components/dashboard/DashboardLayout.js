@@ -197,6 +197,22 @@ const DashboardLayout = ({ children }) => {
               </li>
               <li>
                 <Link 
+                  to="/dashboard/university-content" 
+                  className={`flex items-center p-2 rounded-lg ${
+                    isActive('/dashboard/university-content') 
+                      ? 'bg-purple-600 text-white' 
+                      : 'hover:bg-teal-600 transition-colors'
+                  }`}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                    <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                  </svg>
+                  <span>University Updates</span>
+                </Link>
+              </li>
+              <li>
+                <Link 
                   to="/dashboard/insights" 
                   className={`flex items-center p-2 rounded-lg ${
                     isActive('/dashboard/insights') 

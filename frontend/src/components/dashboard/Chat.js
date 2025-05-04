@@ -14,6 +14,7 @@ import {
   stopSpeaking
 } from '../chat/TextToSpeechService';
 import { getUniversityName } from '../../utils/universityUtils';
+import AvatarAnimation from './AvatarAnimation';
 
 // Import avatar images
 import AvatarOption1 from "../../assets/images/AvatarOption1.png";
@@ -39,6 +40,10 @@ const ChatComponent = ({ courseId, userId }) => {
   const [preferredVoiceGender, setPreferredVoiceGender] = useState('female');
   const [userUniversity, setUserUniversity] = useState('University');
   const [userAvatarId, setUserAvatarId] = useState(null);
+  const [isAvatarSpeaking, setIsAvatarSpeaking] = useState(false);
+  const [isAvatarListening, setIsAvatarListening] = useState(false);
+  const [isAvatarThinking, setIsAvatarThinking] = useState(false);
+  const [avatarAnimationLoaded, setAvatarAnimationLoaded] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const navigate = useNavigate();
@@ -74,6 +79,9 @@ const ChatComponent = ({ courseId, userId }) => {
     message: '',
     model: ''
   });
+
+  // New state for selected voice
+  const [selectedVoiceId, setSelectedVoiceId] = useState(null);
 
   // Check authentication and fetch chat sessions on mount
   useEffect(() => {
@@ -281,6 +289,56 @@ const ChatComponent = ({ courseId, userId }) => {
     scrollToBottom();
   }, [messages]);
 
+  // Load selected voice from localStorage on mount
+  useEffect(() => {
+    const loadSelectedVoice = () => {
+      try {
+        const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+        if (userProfile && userProfile.voiceId) {
+          setSelectedVoiceId(userProfile.voiceId);
+        }
+      } catch (error) {
+        console.error('Error loading selected voice from localStorage:', error);
+      }
+    };
+    loadSelectedVoice();
+  }, []);
+
+  // NEW: Reload selected voice when location changes
+  useEffect(() => {
+    const loadSelectedVoice = () => {
+      try {
+        const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+        if (userProfile && userProfile.voiceId) {
+          setSelectedVoiceId(userProfile.voiceId);
+        }
+      } catch (error) {
+        console.error('Error loading selected voice from localStorage on location change:', error);
+      }
+    };
+    loadSelectedVoice();
+  }, [location]);
+
+  // Listen for changes to localStorage (userProfile) and update selectedVoiceId
+  useEffect(() => {
+    const handleStorageChange = (event) => {
+      if (event.key === 'userProfile' && event.newValue) {
+        try {
+          const userProfile = JSON.parse(event.newValue);
+          if (userProfile && userProfile.voiceId) {
+            setSelectedVoiceId(userProfile.voiceId);
+          }
+        } catch (error) {
+          console.error('Error updating selected voice from storage event:', error);
+        }
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
   const fetchChatHistory = async () => {
     try {
       const response = await axios.get(`/api/chat-history/by_course/?course_id=${courseId}`);
@@ -438,6 +496,7 @@ const ChatComponent = ({ courseId, userId }) => {
     setTranscription('');
     setInterimTranscript('');
     setIsLoading(true);
+    setIsAvatarThinking(true);
 
     try {
       // Send message to API with the chat session ID
@@ -446,74 +505,46 @@ const ChatComponent = ({ courseId, userId }) => {
         message: messageToSend,
         course: courseId // Optional course context
       });
-
-      // Stop any current speech when new message arrives
-      if (isSpeaking) {
-        stopSpeaking();
-        setIsSpeaking(false);
-        setSpeakingMessageId(null);
-      }
-
-      // Once we get a response, update the messages
+      
+      // Add AI response to UI
       if (response.data) {
-        console.log('Received API response:', response.data);
+        // First update the messages state
+        setMessages(prev => [...prev, response.data]);
         
-        // The backend returns the AI response
-        const aiResponse = response.data;
-        
-        // Update messages by removing the temporary user message
-        // and adding both the user message and AI response
-        setMessages(prev => [
-          ...prev.filter(msg => msg.id !== userMessage.id), // Remove temporary message
-          {
-            id: Date.now() - 100, // Generate stable ID for user message
-            message: messageToSend,
-            is_user_message: true,
-            timestamp: new Date().toISOString(),
-            chat_session: currentSessionId
-          },
-          {
-            ...aiResponse,
-            chat_session: currentSessionId
-          } // Add the AI response from server
-        ]);
-        
-        // Automatically speak the AI's response if it's not a code block
-        if (isTtsSupported && !aiResponse.message.includes('```')) {
-          speakMessage(aiResponse.message, aiResponse.id);
+        // Auto-play the response with TTS if enabled
+        if (isTtsSupported && response.data.message && !response.data.is_user_message) {
+          // Small delay to ensure message is rendered first
+          setTimeout(() => {
+            speakMessage(response.data.message, response.data.id);
+          }, 300);
         }
         
-        // If this is the first message in a new conversation, update the session title
-        if (chatSessions.find(s => s.id === currentSessionId)?.title === "New Conversation") {
-          // Use the first few words as the new title (max 5 words)
-          const newTitle = messageToSend.split(' ').slice(0, 5).join(' ') + 
-            (messageToSend.split(' ').length > 5 ? '...' : '');
+        // If this is a new session, add it to the list or update title if needed
+        if (response.data.chat_session && (!activeChatSession || activeChatSession === 'temp-' + Date.now())) {
+          setActiveChatSession(response.data.chat_session);
           
-          renameChatSession(currentSessionId, newTitle);
+          // Fetch updated session list to get the new title
+          fetchChatSessions();
         }
       }
     } catch (error) {
       console.error('Error sending message:', error);
-      // Show more detailed error in console
-      if (error.response) {
-        console.error('Error response data:', error.response.data);
-        console.error('Error response status:', error.response.status);
-      }
       
-      // Show user-friendly error in UI
+      // Add error message to UI
       setMessages(prev => [
-        ...prev, 
-        { 
-          id: Date.now(), 
-          message: 'Sorry, there was an error sending your message. Please try again.',
+        ...prev,
+        {
+          id: Date.now(),
+          message: 'Sorry, something went wrong. Please try again later.',
           is_user_message: false,
           timestamp: new Date().toISOString(),
+          is_system_message: true,
           chat_session: currentSessionId
         }
       ]);
     } finally {
       setIsLoading(false);
-      // Ensure we scroll to bottom to show the new messages
+      setIsAvatarThinking(false); // Stop thinking animation
       setTimeout(scrollToBottom, 100);
     }
   };
@@ -530,52 +561,41 @@ const ChatComponent = ({ courseId, userId }) => {
   };
 
   const startRecording = () => {
-    if (!isSpeechSupported) {
-      alert("Speech recognition is not supported in your browser.");
-      return;
-    }
+    if (!isSpeechSupported) return;
     
-    // Reset transcription
     setTranscription('');
     setInterimTranscript('');
     setIsRecording(true);
+    setIsAvatarListening(true); // Activate listening animation
     
-    // Start speech recognition
     startRecognition({
-      onResult: (results) => {
-        // Process recognition results
-        let finalTranscript = '';
+      onResult: (event) => {
+        // Get transcript
         let interimTranscript = '';
+        let finalTranscript = '';
         
-        results.forEach(result => {
-          if (result.isFinal) {
-            finalTranscript += result.transcript + ' ';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          
+          if (event.results[i].isFinal) {
+            finalTranscript += transcript;
           } else {
-            interimTranscript += result.transcript;
+            interimTranscript += transcript;
           }
-        });
-        
-        if (finalTranscript) {
-          setTranscription(prev => (prev + ' ' + finalTranscript).trim());
         }
         
-        if (interimTranscript) {
-          setInterimTranscript(interimTranscript);
-        }
+        // Update state with transcription
+        setTranscription(prevTranscription => prevTranscription + finalTranscript);
+        setInterimTranscript(interimTranscript);
       },
       onEnd: () => {
         setIsRecording(false);
-        // If transcription exists, set it as input message
-        if (transcription) {
-          setInputMessage(transcription);
-          setInterimTranscript('');
-          inputRef.current?.focus();
-        }
+        setIsAvatarListening(false); // Deactivate listening animation
       },
-      onError: (error) => {
-        console.error('Speech recognition error:', error);
+      onError: (event) => {
+        console.error('Speech recognition error', event.error);
         setIsRecording(false);
-        alert(`Speech recognition error: ${error.message}`);
+        setIsAvatarListening(false); // Deactivate listening animation
       }
     });
   };
@@ -584,6 +604,7 @@ const ChatComponent = ({ courseId, userId }) => {
     if (isRecording) {
       stopRecognition();
       setIsRecording(false);
+      setIsAvatarListening(false); // Deactivate listening animation
       
       // If we have transcription, set it as input
       if (transcription || interimTranscript) {
@@ -608,21 +629,27 @@ const ChatComponent = ({ courseId, userId }) => {
     
     setIsSpeaking(true);
     setSpeakingMessageId(messageId);
+    setIsAvatarSpeaking(true); // Trigger avatar speaking animation
     
+    // Pass selectedVoiceId to speak
     speak(cleanText, {
       rate: 1.0,
       pitch: 1.0,
+      voiceId: selectedVoiceId || undefined, // Use selectedVoiceId if available
       onStart: () => {
         setIsSpeaking(true);
+        setIsAvatarSpeaking(true);
       },
       onEnd: () => {
         setIsSpeaking(false);
         setSpeakingMessageId(null);
+        setIsAvatarSpeaking(false);
       },
       onError: (error) => {
         console.error('Text-to-speech error:', error);
         setIsSpeaking(false);
         setSpeakingMessageId(null);
+        setIsAvatarSpeaking(false);
       }
     });
   };
@@ -632,6 +659,7 @@ const ChatComponent = ({ courseId, userId }) => {
       stopSpeaking();
       setIsSpeaking(false);
       setSpeakingMessageId(null);
+      setIsAvatarSpeaking(false);
     } else {
       speakMessage(messageText, messageId);
     }
@@ -1040,31 +1068,36 @@ const ChatComponent = ({ courseId, userId }) => {
         <div className="avatar-preview-section">
           <div className="avatar-preview-container">
             <div className="avatar-circle">
-              {console.log('Rendering avatar component:', {
-                userAvatarIdExists: !!userAvatarId,
-                userAvatarIdValue: userAvatarId
-              })}
               {userAvatarId ? (
-                <>
-                  {console.log('Rendering avatar with ID:', userAvatarId)}
-                  {(() => {
-                    const selectedAvatar = avatars.find(avatar => avatar.id === userAvatarId);
-                    return selectedAvatar ? (
-                      <img
-                        src={selectedAvatar.src}
-                        alt={selectedAvatar.alt}
-                        className="user-avatar-image"
-                      />
-                    ) : (
-                      <span className="avatar-text">AI</span>
-                    );
-                  })()}
-                </>
+                (() => {
+                  const selectedAvatar = avatars.find(avatar => avatar.id === userAvatarId);
+                  return selectedAvatar ? (
+                    <AvatarAnimation
+                      avatarId={userAvatarId}
+                      avatarSrc={selectedAvatar.src}
+                      isSpeaking={isAvatarSpeaking}
+                      isListening={isAvatarListening}
+                      isThinking={isAvatarThinking}
+                      onLoad={() => setAvatarAnimationLoaded(true)}
+                    />
+                  ) : (
+                    <span className="avatar-text">AI</span>
+                  );
+                })()
               ) : (
-                <>
-                  {console.log('Rendering fallback AI text')}
-                  <span className="avatar-text">AI</span>
-                </>
+                <span className="avatar-text">AI</span>
+              )}
+              
+              {/* Speech indicator */}
+              {isAvatarSpeaking && (
+                <div className="speech-indicator">
+                  <div className="speech-waves">
+                    <div className="speech-wave"></div>
+                    <div className="speech-wave"></div>
+                    <div className="speech-wave"></div>
+                    <div className="speech-wave"></div>
+                  </div>
+                </div>
               )}
             </div>
             <div className="avatar-info">
@@ -1074,9 +1107,9 @@ const ChatComponent = ({ courseId, userId }) => {
                 I'm your personal AI lecturer assistant. Ask me anything about your courses, assignments, or university resources.
               </p>
             </div>
-            </div>
           </div>
-          
+        </div>
+        
         {/* Right Section - Chat Messages */}
         <div className="chat-message-section">
           {/* Message Thread */}

@@ -28,6 +28,7 @@ urlpatterns = [
     # User data endpoints
     path('user/profile/', views.UserProfileView.as_view(), name='user-profile'),
     path('user/onboarding-status/', views.UserOnboardingStatusView.as_view(), name='user-onboarding-status'),
+    path('user/export-data/', views.UserDataExportView.as_view(), name='user-data-export'),
     
     # University & course data endpoints
     path('universities/', views.UniversityListAPIView.as_view(), name='university-list'),

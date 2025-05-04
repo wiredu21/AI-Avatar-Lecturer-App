@@ -21,7 +21,10 @@ class ScrapedContentSerializer(serializers.ModelSerializer):
         model = ScrapedContent
         fields = ['id', 'title', 'summary', 'content', 'url', 'published_date', 
                   'image_url', 'content_type', 'scraped_at', 'source', 
-                  'source_name', 'university_name']
+                  'source_name', 'university_name',
+                  'event_day', 'event_month', 'event_year', 
+                  'event_start_time', 'event_end_time', 'event_date_display',
+                  'location']
     
     def get_source_name(self, obj):
         return obj.source.name if obj.source else None
