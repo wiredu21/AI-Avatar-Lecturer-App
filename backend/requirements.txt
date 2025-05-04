@@ -18,6 +18,8 @@ torch==2.2.1
 accelerate==0.27.2
 sentence-transformers==2.5.1
 langchain==0.1.9
+playwright==1.49.0
+selenium==4.11.0
 
 # Web Scraping
 beautifulsoup4==4.12.2
